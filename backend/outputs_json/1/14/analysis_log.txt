@@ -1,0 +1,11 @@
+Starting analysis at 2025-05-16 21:28:31
+Command: C:/Users/singn/.conda/envs/mmpose_env/python.exe G:/python/FYP/backend/ml_pipeline/demo/topdown_demo_mmdet_no_heatmap.py G:/python/FYP/backend/ml_pipeline/demo/faster_rcnn_r50_fpn_coco.py https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth C:/Users/singn/.conda/envs/mmpose_env/lib/site-packages/mmpose/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w32_8xb64-210e_coco-256x192.py https://download.openmmlab.com/mmpose/top_down/hrnet/hrnet_w32_coco_256x192-c78dce93_20200708.pth --input G:/python/FYP/backend/uploads/videos/1/b9d9da3d-98cb-4778-9c59-762b0b2b3a82.mp4 --output-root G:/python/FYP/backend/outputs_json/1/14 --device cuda:0 --bbox-thr 0.5 --kpt-thr 0.5 --nms-thr 0.5 --draw-bbox --save-predictions
+
+Analysis completed successfully at 2025-05-16 21:30:42
+Results JSON: G:/python/FYP/backend/outputs_json/1/14/results_b9d9da3d-98cb-4778-9c59-762b0b2b3a82.json
+Running FFmpeg conversion for web compatibility:
+Command: ffmpeg -i G:/python/FYP/backend/outputs_json/1/14\b9d9da3d-98cb-4778-9c59-762b0b2b3a82.mp4 -c:v libx264 -profile:v baseline -level 3.0 -pix_fmt yuv420p -r 30 -c:a aac -b:a 128k -movflags +faststart -y G:/python/FYP/backend/outputs_json/1/14\b9d9da3d-98cb-4778-9c59-762b0b2b3a82_web.mp4
+FFmpeg conversion successful. Using web-compatible file: G:/python/FYP/backend/outputs_json/1/14\b9d9da3d-98cb-4778-9c59-762b0b2b3a82_web.mp4
+Found analyzed video: G:/python/FYP/backend/outputs_json/1/14/b9d9da3d-98cb-4778-9c59-762b0b2b3a82_english.mp4
+Relative JSON path: outputs_json/1/14/results_b9d9da3d-98cb-4778-9c59-762b0b2b3a82.json
+Relative analyzed video path: outputs_json/1/14/b9d9da3d-98cb-4778-9c59-762b0b2b3a82_english.mp4

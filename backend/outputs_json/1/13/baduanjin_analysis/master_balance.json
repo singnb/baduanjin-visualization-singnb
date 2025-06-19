@@ -1,0 +1,133 @@
+{
+  "title": "Master Performer Balance Metrics",
+  "description": "Center of mass trajectory and stability analysis",
+  "performer_type": "master",
+  "balanceMetrics": {
+    "com_stability_x": 0.82,
+    "com_stability_y": 14.18,
+    "com_velocity_mean": 0.32
+  },
+  "comTrajectory": {
+    "sampleFrames": [
+      0,
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900,
+      1000,
+      1100
+    ],
+    "x": [
+      360.93386430129544,
+      361.9841789249201,
+      359.63716324321416,
+      361.3880512224684,
+      362.22292138552586,
+      362.19297450343197,
+      362.4006676793656,
+      361.3075530885851,
+      360.49528276391743,
+      362.7327913590156,
+      363.06333181468835,
+      363.4628202504814
+    ],
+    "y": [
+      403.09550156425354,
+      404.1217371381231,
+      403.8472757807613,
+      404.1108409203561,
+      403.33100025928087,
+      403.0936670300555,
+      403.3274919785867,
+      403.16601629966925,
+      402.13714368768865,
+      402.84117277988423,
+      405.1045164883723,
+      403.8125847250959
+    ]
+  },
+  "keyPoseBalance": [
+    {
+      "poseName": "Starting Pose",
+      "frameIndex": 77,
+      "comPosition": {
+        "x": 362.0,
+        "y": 404.1
+      },
+      "stabilityScore": 0.91
+    },
+    {
+      "poseName": "Holding Up The Sky",
+      "frameIndex": 166,
+      "comPosition": {
+        "x": 359.6,
+        "y": 403.8
+      },
+      "stabilityScore": 0.9
+    },
+    {
+      "poseName": "Drawing The Bow",
+      "frameIndex": 329,
+      "comPosition": {
+        "x": 361.4,
+        "y": 404.1
+      },
+      "stabilityScore": 0.88
+    },
+    {
+      "poseName": "Separating Heaven and Earth",
+      "frameIndex": 429,
+      "comPosition": {
+        "x": 362.2,
+        "y": 403.3
+      },
+      "stabilityScore": 0.89
+    },
+    {
+      "poseName": "Looking Backward",
+      "frameIndex": 645,
+      "comPosition": {
+        "x": 362.4,
+        "y": 403.3
+      },
+      "stabilityScore": 0.89
+    },
+    {
+      "poseName": "Swinging Head and Tail",
+      "frameIndex": 674,
+      "comPosition": {
+        "x": 361.3,
+        "y": 403.2
+      },
+      "stabilityScore": 0.92
+    },
+    {
+      "poseName": "Bouncing on Toes",
+      "frameIndex": 871,
+      "comPosition": {
+        "x": 362.7,
+        "y": 402.8
+      },
+      "stabilityScore": 0.88
+    },
+    {
+      "poseName": "Closing Pose",
+      "frameIndex": 897,
+      "comPosition": {
+        "x": 362.7,
+        "y": 402.8
+      },
+      "stabilityScore": 0.9
+    }
+  ],
+  "overallStability": 0.9,
+  "optimalStabilityRange": [
+    0.85,
+    1.0
+  ]
+}

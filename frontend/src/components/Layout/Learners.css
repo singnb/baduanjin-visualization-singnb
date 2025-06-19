@@ -1,0 +1,209 @@
+/* src/components/Layout/Learners.css */
+/* This file now only contains styles specific to the Learners page */
+
+.learners-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+}
+
+.table-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.learners-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.learners-table th {
+  background-color: #f8f9fa;
+  font-size: 14px;
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #2a3f5f;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.learners-table td {
+  padding: 15px;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.learners-table tr {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.learners-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.learners-table tr.selected-row {
+  background-color: #e8f4f8;
+}
+
+.detail-panel {
+  background: white;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.learner-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 25px 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-weight: 500;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+
+.learner-videos {
+  margin: 30px 0;
+}
+
+.learner-videos h4 {
+  margin-bottom: 20px;
+  color: #2a3f5f;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.video-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.video-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.video-info {
+  padding: 15px;
+}
+
+.video-info h5 {
+  margin: 0 0 8px 0;
+  color: #2a3f5f;
+}
+
+.video-status {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.video-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.learner-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.empty-state p {
+  margin: 10px 0;
+}
+
+/* Video Modal Styles (same as Masters.css) */
+.video-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.video-modal {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.video-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.video-modal-header h3 {
+  margin: 0;
+  color: #2a3f5f;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+}
+
+.close-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.video-modal-content {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modal-video-player {
+  width: 100%;
+  max-height: 500px;
+  background: black;
+  border-radius: 4px;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 14px;
+}

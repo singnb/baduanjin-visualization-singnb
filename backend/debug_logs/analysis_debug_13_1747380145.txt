@@ -1,0 +1,78 @@
+=== Analysis Debug Log ===
+Time: 2025-05-16 15:22:25
+Root directory: G:\python\FYP\backend
+ML Pipeline directory: G:/python/FYP/backend/ml_pipeline
+MMPose demo path: G:/python/FYP/backend/ml_pipeline/demo/topdown_demo_mmdet_no_heatmap.py
+Video Path: G:/python/FYP/backend/uploads/videos/1/858d056b-b06a-4d28-aab3-e7987b1dc5bb.mp4
+User ID: 1
+Video ID: 13
+
+MMPose installation path: C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose
+
+File existence checks:
+- MMPose demo exists: True
+- Detection config exists: True
+- Pose config exists: True
+- Video file exists: True
+
+PyTorch version: 2.0.0+cu118
+CUDA available: True
+CUDA device: NVIDIA GeForce RTX 3070
+
+Running command:
+C:/Users/singn/.conda/envs/mmpose_env/python.exe G:/python/FYP/backend/ml_pipeline/demo/topdown_demo_mmdet_no_heatmap.py G:/python/FYP/backend/ml_pipeline/demo/faster_rcnn_r50_fpn_coco.py https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth C:/Users/singn/.conda/envs/mmpose_env/lib/site-packages/mmpose/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w32_8xb64-210e_coco-256x192.py https://download.openmmlab.com/mmpose/top_down/hrnet/hrnet_w32_coco_256x192-c78dce93_20200708.pth --input G:/python/FYP/backend/uploads/videos/1/858d056b-b06a-4d28-aab3-e7987b1dc5bb.mp4 --output-root G:/python/FYP/backend/outputs_json/1/13 --device cuda:0 --bbox-thr 0.5 --kpt-thr 0.5 --nms-thr 0.5 --draw-bbox --save-predictions
+
+===== STDOUT FROM MMPOSE =====
+
+===== STDERR FROM MMPOSE =====
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.5 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "G:\python\FYP\backend\ml_pipeline\demo\topdown_demo_mmdet_no_heatmap.py", line 13, in <module>
+    from mmpose.apis import inference_topdown
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\apis\__init__.py", line 2, in <module>
+    from .inference import (collect_multi_frames, inference_bottomup,
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\apis\inference.py", line 11, in <module>
+    from mmengine.model.utils import revert_sync_batchnorm
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmengine\model\__init__.py", line 6, in <module>
+    from .base_model import BaseDataPreprocessor, BaseModel, ImgDataPreprocessor
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmengine\model\base_model\__init__.py", line 2, in <module>
+    from .base_model import BaseModel
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmengine\model\base_model\base_model.py", line 9, in <module>
+    from mmengine.optim import OptimWrapper
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmengine\optim\__init__.py", line 2, in <module>
+    from .optimizer import (OPTIM_WRAPPER_CONSTRUCTORS, OPTIMIZERS,
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmengine\optim\optimizer\__init__.py", line 10, in <module>
+    from .zero_optimizer import ZeroRedundancyOptimizer
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmengine\optim\optimizer\zero_optimizer.py", line 11, in <module>
+    from torch.distributed.optim import \
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\torch\distributed\optim\__init__.py", line 30, in <module>
+    from .zero_redundancy_optimizer import ZeroRedundancyOptimizer
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\torch\distributed\optim\zero_redundancy_optimizer.py", line 74, in <module>
+    device: torch.device = torch.device("cpu"),
+C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\torch\distributed\optim\zero_redundancy_optimizer.py:74: UserWarning: Failed to initialize NumPy: _ARRAY_API not found (Triggered internally at ..\torch\csrc\utils\tensor_numpy.cpp:84.)
+  device: torch.device = torch.device("cpu"),
+Traceback (most recent call last):
+  File "G:\python\FYP\backend\ml_pipeline\demo\topdown_demo_mmdet_no_heatmap.py", line 13, in <module>
+    from mmpose.apis import inference_topdown
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\apis\__init__.py", line 2, in <module>
+    from .inference import (collect_multi_frames, inference_bottomup,
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\apis\inference.py", line 16, in <module>
+    from mmpose.datasets.datasets.utils import parse_pose_metainfo
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\datasets\__init__.py", line 3, in <module>
+    from .dataset_wrappers import CombinedDataset
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\datasets\dataset_wrappers.py", line 11, in <module>
+    from .datasets.utils import parse_pose_metainfo
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\datasets\datasets\__init__.py", line 2, in <module>
+    from .animal import *  # noqa: F401, F403
+  File "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\datasets\datasets\animal\__init__.py", line 2, in <module>
+    from .animalkingdom_dataset import AnimalKingdomDataset
+
+Return code: 3221225786

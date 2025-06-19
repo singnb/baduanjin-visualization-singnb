@@ -1,0 +1,141 @@
+Baduanjin Movement Analysis Report
+=================================
+
+1. Key Poses
+-----------
+Pose 1: Frame 82
+Pose 2: Frame 148
+Pose 3: Frame 407
+Pose 4: Frame 489
+Pose 5: Frame 549
+Pose 6: Frame 618
+Pose 7: Frame 760
+Pose 8: Frame 816
+
+2. Joint Angles at Key Poses
+--------------------------
+Pose 1 (Frame 82):
+  right_elbow: 128.84 degrees
+  left_elbow: 121.78 degrees
+  right_shoulder: 23.82 degrees
+  left_shoulder: 22.78 degrees
+  right_hip: 164.90 degrees
+  left_hip: 168.04 degrees
+  right_knee: 179.74 degrees
+  left_knee: 176.85 degrees
+  spine_top: 135.55 degrees
+  spine_bottom: 95.59 degrees
+
+Pose 2 (Frame 148):
+  right_elbow: 18.39 degrees
+  left_elbow: 22.69 degrees
+  right_shoulder: 98.35 degrees
+  left_shoulder: 106.67 degrees
+  right_hip: 171.12 degrees
+  left_hip: 172.15 degrees
+  right_knee: 177.86 degrees
+  left_knee: 172.75 degrees
+  spine_top: 135.93 degrees
+  spine_bottom: 92.65 degrees
+
+Pose 3 (Frame 407):
+  right_elbow: 164.24 degrees
+  left_elbow: 157.98 degrees
+  right_shoulder: 85.70 degrees
+  left_shoulder: 80.18 degrees
+  right_hip: 163.86 degrees
+  left_hip: 160.83 degrees
+  right_knee: 178.32 degrees
+  left_knee: 172.97 degrees
+  spine_top: 130.26 degrees
+  spine_bottom: 96.65 degrees
+
+Pose 4 (Frame 489):
+  right_elbow: 163.85 degrees
+  left_elbow: 164.98 degrees
+  right_shoulder: 22.25 degrees
+  left_shoulder: 21.17 degrees
+  right_hip: 163.70 degrees
+  left_hip: 160.32 degrees
+  right_knee: 175.70 degrees
+  left_knee: 172.79 degrees
+  spine_top: 138.50 degrees
+  spine_bottom: 99.03 degrees
+
+Pose 5 (Frame 549):
+  right_elbow: 66.62 degrees
+  left_elbow: 66.05 degrees
+  right_shoulder: 44.25 degrees
+  left_shoulder: 38.44 degrees
+  right_hip: 169.50 degrees
+  left_hip: 168.57 degrees
+  right_knee: 176.79 degrees
+  left_knee: 175.32 degrees
+  spine_top: 135.11 degrees
+  spine_bottom: 94.08 degrees
+
+Pose 6 (Frame 618):
+  right_elbow: 100.75 degrees
+  left_elbow: 102.07 degrees
+  right_shoulder: 150.55 degrees
+  left_shoulder: 149.93 degrees
+  right_hip: 170.94 degrees
+  left_hip: 171.02 degrees
+  right_knee: 176.96 degrees
+  left_knee: 176.81 degrees
+  spine_top: 140.00 degrees
+  spine_bottom: 93.63 degrees
+
+Pose 7 (Frame 760):
+  right_elbow: 155.68 degrees
+  left_elbow: 153.10 degrees
+  right_shoulder: 172.38 degrees
+  left_shoulder: 168.01 degrees
+  right_hip: 171.84 degrees
+  left_hip: 169.84 degrees
+  right_knee: 177.02 degrees
+  left_knee: 173.57 degrees
+  spine_top: 139.00 degrees
+  spine_bottom: 94.54 degrees
+
+Pose 8 (Frame 816):
+  right_elbow: 144.08 degrees
+  left_elbow: 153.89 degrees
+  right_shoulder: 126.51 degrees
+  left_shoulder: 127.73 degrees
+  right_hip: 170.91 degrees
+  left_hip: 168.62 degrees
+  right_knee: 173.15 degrees
+  left_knee: 175.64 degrees
+  spine_top: 126.93 degrees
+  spine_bottom: 95.60 degrees
+
+3. Movement Smoothness
+--------------------
+keypoint_9: 8.7176
+keypoint_10: 8.3540
+keypoint_15: 8.4490
+keypoint_16: 8.2554
+
+4. Movement Symmetry
+------------------
+keypoint_5_keypoint_6: 2.3441
+keypoint_7_keypoint_8: 2.8985
+keypoint_9_keypoint_10: 4.6943
+keypoint_11_keypoint_12: 2.6443
+keypoint_13_keypoint_14: 2.8586
+keypoint_15_keypoint_16: 3.9643
+
+5. Balance Metrics
+---------------
+com_stability_x: 64.6742
+com_stability_y: 7.4065
+com_velocity_mean: 6.3030
+
+6. Teaching Recommendations
+-------------------------
+Based on this analysis, students should focus on:
+1. Maintaining proper joint angles, especially in the key poses
+2. Smooth transitions between poses (low jerk)
+3. Symmetrical movement between left and right sides
+4. Stable center of mass for good balance

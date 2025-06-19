@@ -1,0 +1,68 @@
+{
+  "title": "Learner Performer Movement Symmetry",
+  "description": "Comparison of left and right side movements",
+  "performer_type": "learner",
+  "symmetryScores": {
+    "keypoint_5_keypoint_6": 3.56,
+    "keypoint_7_keypoint_8": 3.63,
+    "keypoint_9_keypoint_10": 4.93,
+    "keypoint_11_keypoint_12": 3.47,
+    "keypoint_13_keypoint_14": 4.0,
+    "keypoint_15_keypoint_16": 7.35
+  },
+  "keypointPairNames": {
+    "keypoint_5_keypoint_6": "Left/Right Shoulders",
+    "keypoint_7_keypoint_8": "Left/Right Elbows",
+    "keypoint_9_keypoint_10": "Left/Right Wrists",
+    "keypoint_11_keypoint_12": "Left/Right Hips",
+    "keypoint_13_keypoint_14": "Left/Right Knees",
+    "keypoint_15_keypoint_16": "Left/Right Ankles"
+  },
+  "keyPoseSymmetry": [
+    {
+      "poseName": "Initial Position",
+      "frameIndex": 51,
+      "symmetryScore": 0.98
+    },
+    {
+      "poseName": "Transition Phase",
+      "frameIndex": 425,
+      "symmetryScore": 0.94
+    },
+    {
+      "poseName": "Peak Position",
+      "frameIndex": 500,
+      "symmetryScore": 0.96
+    },
+    {
+      "poseName": "Holding Phase",
+      "frameIndex": 548,
+      "symmetryScore": 0.97
+    },
+    {
+      "poseName": "Return Phase",
+      "frameIndex": 702,
+      "symmetryScore": 0.93
+    },
+    {
+      "poseName": "Final Position",
+      "frameIndex": 930,
+      "symmetryScore": 0.9
+    },
+    {
+      "poseName": "Stabilization Phase",
+      "frameIndex": 998,
+      "symmetryScore": 0.95
+    },
+    {
+      "poseName": "Ready Position",
+      "frameIndex": 1109,
+      "symmetryScore": 0.98
+    }
+  ],
+  "overallSymmetry": 4.49,
+  "optimalSymmetryRange": [
+    0.9,
+    1.0
+  ]
+}

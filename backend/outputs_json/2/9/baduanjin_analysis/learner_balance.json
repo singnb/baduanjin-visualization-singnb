@@ -1,0 +1,133 @@
+{
+  "title": "Learner Performer Balance Metrics",
+  "description": "Center of mass trajectory and stability analysis",
+  "performer_type": "learner",
+  "balanceMetrics": {
+    "com_stability_x": 1.29,
+    "com_stability_y": 16.57,
+    "com_velocity_mean": 0.19
+  },
+  "comTrajectory": {
+    "sampleFrames": [
+      0,
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900,
+      1000,
+      1100
+    ],
+    "x": [
+      362.985977225762,
+      363.47526593094653,
+      361.5615899566954,
+      362.052216613299,
+      361.6622547895536,
+      360.78451108614985,
+      362.3049000632872,
+      362.25979801091626,
+      364.0259132554431,
+      361.5429112385557,
+      362.5434260274828,
+      363.4463334695446
+    ],
+    "y": [
+      403.80326125871346,
+      403.44852556541116,
+      403.64149366004995,
+      403.23088494910195,
+      403.41102659779983,
+      401.5728934733007,
+      403.7585629510987,
+      403.23006879930097,
+      404.13779832751976,
+      401.65682563424866,
+      404.19419882443,
+      402.5834390662753
+    ]
+  },
+  "keyPoseBalance": [
+    {
+      "poseName": "Initial Position",
+      "frameIndex": 51,
+      "comPosition": {
+        "x": 363.5,
+        "y": 403.4
+      },
+      "stabilityScore": 0.94
+    },
+    {
+      "poseName": "Transition Phase",
+      "frameIndex": 425,
+      "comPosition": {
+        "x": 361.7,
+        "y": 403.4
+      },
+      "stabilityScore": 0.88
+    },
+    {
+      "poseName": "Peak Position",
+      "frameIndex": 500,
+      "comPosition": {
+        "x": 360.8,
+        "y": 401.6
+      },
+      "stabilityScore": 0.94
+    },
+    {
+      "poseName": "Holding Phase",
+      "frameIndex": 548,
+      "comPosition": {
+        "x": 360.8,
+        "y": 401.6
+      },
+      "stabilityScore": 0.93
+    },
+    {
+      "poseName": "Return Phase",
+      "frameIndex": 702,
+      "comPosition": {
+        "x": 362.3,
+        "y": 403.2
+      },
+      "stabilityScore": 0.88
+    },
+    {
+      "poseName": "Final Position",
+      "frameIndex": 930,
+      "comPosition": {
+        "x": 361.5,
+        "y": 401.7
+      },
+      "stabilityScore": 0.96
+    },
+    {
+      "poseName": "Stabilization Phase",
+      "frameIndex": 998,
+      "comPosition": {
+        "x": 362.5,
+        "y": 404.2
+      },
+      "stabilityScore": 0.88
+    },
+    {
+      "poseName": "Ready Position",
+      "frameIndex": 1109,
+      "comPosition": {
+        "x": 363.4,
+        "y": 402.6
+      },
+      "stabilityScore": 0.92
+    }
+  ],
+  "overallStability": 0.9,
+  "optimalStabilityRange": [
+    0.85,
+    1.0
+  ]
+}

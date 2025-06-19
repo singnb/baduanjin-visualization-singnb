@@ -1,0 +1,88 @@
+{
+  "title": "Learner Performer Movement Smoothness",
+  "description": "Jerk measurements for key joints to evaluate movement control",
+  "performer_type": "learner",
+  "jerkMetrics": {
+    "keypoint_9": 8.7176,
+    "keypoint_10": 8.354,
+    "keypoint_15": 8.449,
+    "keypoint_16": 8.2554
+  },
+  "keypointNames": {
+    "keypoint_9": "Left Wrist",
+    "keypoint_10": "Right Wrist",
+    "keypoint_15": "Left Ankle",
+    "keypoint_16": "Right Ankle"
+  },
+  "movementPhases": [
+    {
+      "name": "Initial Position",
+      "frameRange": [
+        82,
+        147
+      ],
+      "averageJerk": 7.19
+    },
+    {
+      "name": "Transition Phase",
+      "frameRange": [
+        148,
+        406
+      ],
+      "averageJerk": 7.9
+    },
+    {
+      "name": "Peak Position",
+      "frameRange": [
+        407,
+        488
+      ],
+      "averageJerk": 8.02
+    },
+    {
+      "name": "Holding Phase",
+      "frameRange": [
+        489,
+        548
+      ],
+      "averageJerk": 7.57
+    },
+    {
+      "name": "Return Phase",
+      "frameRange": [
+        549,
+        617
+      ],
+      "averageJerk": 7.87
+    },
+    {
+      "name": "Final Position",
+      "frameRange": [
+        618,
+        759
+      ],
+      "averageJerk": 7.69
+    },
+    {
+      "name": "Stabilization Phase",
+      "frameRange": [
+        760,
+        815
+      ],
+      "averageJerk": 7.27
+    },
+    {
+      "name": "Ready Position",
+      "frameRange": [
+        816,
+        966
+      ],
+      "averageJerk": 7.41
+    }
+  ],
+  "overallSmoothness": 8.44,
+  "optimalJerkRange": [
+    0.85,
+    0.95
+  ]
+}

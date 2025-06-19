@@ -1,0 +1,360 @@
+/* Relationships.css */
+
+.relationships-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.relationships-container h2 {
+  color: #2c3e50;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  text-align: center;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 15px;
+}
+
+.relationships-container h3 {
+  color: #34495e;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 25px 0 15px 0;
+  padding-left: 10px;
+  border-left: 4px solid #3498db;
+}
+
+.relationships-container h4 {
+  color: #2c3e50;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 20px 0 10px 0;
+}
+
+/* Loading and Error States */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 18px;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.relationships-error {
+  background-color: #fee;
+  color: #c33;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #e74c3c;
+  font-weight: 500;
+}
+
+/* Search Section */
+.search-section {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.search-box {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.search-box input[type="text"] {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.search-box input[type="text"]:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.search-box button {
+  padding: 12px 24px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.search-box button:hover:not(:disabled) {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.search-box button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Search Results */
+.search-results {
+  margin-top: 20px;
+}
+
+/* Main Sections */
+.pending-requests,
+.my-masters,
+.my-learners {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+/* User Lists */
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 12px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.user-item:hover {
+  background-color: #e9ecef;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.user-item:last-child {
+  margin-bottom: 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.user-username {
+  font-size: 14px;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+/* Buttons */
+.request-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.accept-button,
+.reject-button,
+.request-button,
+.view-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 90px;
+}
+
+.accept-button {
+  background-color: #27ae60;
+  color: white;
+}
+
+.accept-button:hover {
+  background-color: #229954;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(39, 174, 96, 0.3);
+}
+
+.reject-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.reject-button:hover {
+  background-color: #c0392b;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(231, 76, 60, 0.3);
+}
+
+.request-button {
+  background-color: #3498db;
+  color: white;
+}
+
+.request-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(52, 152, 219, 0.3);
+}
+
+.view-button {
+  background-color: #9b59b6;
+  color: white;
+}
+
+.view-button:hover {
+  background-color: #8e44ad;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(155, 89, 182, 0.3);
+}
+
+/* Status Badges */
+.master-badge {
+  background-color: #f39c12;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.request-status {
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.request-status.pending {
+  background-color: #f39c12;
+  color: white;
+}
+
+/* No Results Message */
+.no-results {
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 16px;
+  font-style: italic;
+  padding: 40px 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #bdc3c7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .relationships-container {
+    padding: 20px 15px;
+  }
+  
+  .relationships-container h2 {
+    font-size: 24px;
+  }
+  
+  .relationships-container h3 {
+    font-size: 20px;
+  }
+  
+  .search-section,
+  .pending-requests,
+  .my-masters,
+  .my-learners {
+    padding: 20px;
+  }
+  
+  .search-box {
+    flex-direction: column;
+  }
+  
+  .search-box button {
+    width: 100%;
+  }
+  
+  .user-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .request-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .accept-button,
+  .reject-button,
+  .request-button,
+  .view-button {
+    min-width: 80px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .relationships-container {
+    padding: 15px 10px;
+  }
+  
+  .relationships-container h2 {
+    font-size: 22px;
+  }
+  
+  .user-name {
+    font-size: 16px;
+  }
+  
+  .user-username {
+    font-size: 13px;
+  }
+  
+  .request-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .accept-button,
+  .reject-button,
+  .request-button,
+  .view-button {
+    width: 100%;
+    min-width: auto;
+  }
+}

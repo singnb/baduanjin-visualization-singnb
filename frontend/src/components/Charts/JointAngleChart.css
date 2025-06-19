@@ -1,0 +1,269 @@
+/* JointAngleChart.css */
+.joint-angle-chart-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.chart-header h2 {
+  font-size: 24px;
+  margin: 0;
+  color: #333;
+}
+
+.chart-controls {
+  display: flex;
+  gap: 30px;
+}
+
+.chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-line {
+  width: 20px;
+  height: 2px;
+}
+
+.master-line {
+  background-color: #0066FF;
+}
+
+.learner-line {
+  background-color: #FF3333;
+  border-top: 2px dashed #FF3333;
+  height: 0;
+}
+
+.legend-area {
+  width: 20px;
+  height: 10px;
+}
+
+.problem-area {
+  background-color: rgba(255, 255, 0, 0.3);
+}
+
+.optimal-area {
+  background-color: rgba(0, 255, 200, 0.2);
+}
+
+.joint-selector {
+  margin-bottom: 20px;
+}
+
+.joint-selector h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.joint-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.joint-button {
+  padding: 8px 16px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.joint-button.selected {
+  background-color: #4285F4;
+  color: white;
+}
+
+.focus-range-control {
+  margin-bottom: 20px;
+}
+
+.focus-range-control h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.range-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.range-slider {
+  flex-grow: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #d3d3d3;
+  outline: none;
+  border-radius: 3px;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4285F4;
+  cursor: pointer;
+}
+
+.range-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4285F4;
+  cursor: pointer;
+}
+
+.problem-areas-section {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.problem-areas-section h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #d32f2f;
+}
+
+.problem-areas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.problem-area-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+}
+
+.diff-value {
+  font-weight: bold;
+  color: #d32f2f;
+}
+
+.positive-diff {
+  color: #d32f2f;
+}
+
+.negative-diff {
+  color: #0066FF;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+}
+
+.error {
+  color: #d32f2f;
+}
+
+/* Range of Motion table styles */
+.range-of-motion {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.range-of-motion h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.range-of-motion table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.range-of-motion th, 
+.range-of-motion td {
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.range-of-motion th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.range-of-motion tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Chart mode specific styles */
+.plot-container {
+  display: block;
+  width: 100%;
+  margin-left: 50 auto;
+  text-align: left;
+}
+
+.chart-plot.chart-mode-sideBySide {
+  border: 1px solid #f0f0f0;
+}
+
+.chart-plot.chart-mode-overlay {
+  border: 1px solid #e0e0ff;
+  background-color: #fafcff;
+}
+
+.chart-plot.chart-mode-masterOnly {
+  border: 1px solid #e0ffe0;
+  background-color: #fafffa;
+}
+
+@media (max-width: 768px) {
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .chart-controls {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .joint-buttons {
+    flex-direction: column;
+  }
+  
+  .range-of-motion table {
+    display: block;
+    overflow-x: auto;
+  }
+}

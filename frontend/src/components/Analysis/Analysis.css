@@ -1,0 +1,41 @@
+/* src/components/Analysis/Analysis.css */
+.analysis-view {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .video-info-header {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .analysis-content {
+    display: flex;
+  }
+  
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    font-size: 18px;
+  }
+  
+  .processing-message {
+    text-align: center;
+    padding: 40px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+  
+  .error-message {
+    color: #ff4d4f;
+    padding: 20px;
+    background-color: #fff1f0;
+    border: 1px solid #ffccc7;
+    border-radius: 4px;
+    margin: 20px 0;
+  }

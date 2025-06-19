@@ -1,0 +1,68 @@
+{
+  "title": "Learner Performer Movement Symmetry",
+  "description": "Comparison of left and right side movements",
+  "performer_type": "learner",
+  "symmetryScores": {
+    "keypoint_5_keypoint_6": 12.57,
+    "keypoint_7_keypoint_8": 51.88,
+    "keypoint_9_keypoint_10": 116.79,
+    "keypoint_11_keypoint_12": 11.52,
+    "keypoint_13_keypoint_14": 11.24,
+    "keypoint_15_keypoint_16": 13.3
+  },
+  "keypointPairNames": {
+    "keypoint_5_keypoint_6": "Left/Right Shoulders",
+    "keypoint_7_keypoint_8": "Left/Right Elbows",
+    "keypoint_9_keypoint_10": "Left/Right Wrists",
+    "keypoint_11_keypoint_12": "Left/Right Hips",
+    "keypoint_13_keypoint_14": "Left/Right Knees",
+    "keypoint_15_keypoint_16": "Left/Right Ankles"
+  },
+  "keyPoseSymmetry": [
+    {
+      "poseName": "Starting Pose",
+      "frameIndex": 9,
+      "symmetryScore": 0.93
+    },
+    {
+      "poseName": "Holding Up The Sky",
+      "frameIndex": 290,
+      "symmetryScore": 0.92
+    },
+    {
+      "poseName": "Drawing The Bow",
+      "frameIndex": 600,
+      "symmetryScore": 0.94
+    },
+    {
+      "poseName": "Separating Heaven and Earth",
+      "frameIndex": 869,
+      "symmetryScore": 0.96
+    },
+    {
+      "poseName": "Looking Backward",
+      "frameIndex": 989,
+      "symmetryScore": 0.93
+    },
+    {
+      "poseName": "Swinging Head and Tail",
+      "frameIndex": 1667,
+      "symmetryScore": 0.91
+    },
+    {
+      "poseName": "Bouncing on Toes",
+      "frameIndex": 1736,
+      "symmetryScore": 0.96
+    },
+    {
+      "poseName": "Closing Pose",
+      "frameIndex": 1965,
+      "symmetryScore": 0.97
+    }
+  ],
+  "overallSymmetry": 36.22,
+  "optimalSymmetryRange": [
+    0.9,
+    1.0
+  ]
+}

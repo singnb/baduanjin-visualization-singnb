@@ -1,0 +1,115 @@
+=== Analysis Debug Log ===
+Time: 2025-05-12 08:39:09
+Root directory: G:\python\FYP\backend
+ML Pipeline directory: G:/python/FYP/backend/ml_pipeline
+MMPose demo path: G:/python/FYP/backend/ml_pipeline/demo/topdown_demo_mmdet_no_heatmap.py
+Video Path: G:/python/FYP/backend/uploads/videos/2/1666d29a-6b05-4943-af08-a02a9647dd14.mp4
+User ID: 2
+Video ID: 3
+
+MMPose installation path: C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose
+
+File existence checks:
+- MMPose demo exists: True
+- Detection config exists: True
+- Pose config exists: True
+- Video file exists: True
+
+PyTorch version: 2.0.0+cu118
+CUDA available: True
+CUDA device: NVIDIA GeForce RTX 3070
+
+Running command:
+C:/Users/singn/.conda/envs/mmpose_env/python.exe G:/python/FYP/backend/ml_pipeline/demo/topdown_demo_mmdet_no_heatmap.py G:/python/FYP/backend/ml_pipeline/demo/faster_rcnn_r50_fpn_coco.py https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth C:/Users/singn/.conda/envs/mmpose_env/lib/site-packages/mmpose/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w32_8xb64-210e_coco-256x192.py https://download.openmmlab.com/mmpose/top_down/hrnet/hrnet_w32_coco_256x192-c78dce93_20200708.pth --input G:/python/FYP/backend/uploads/videos/2/1666d29a-6b05-4943-af08-a02a9647dd14.mp4 --output-root G:/python/FYP/backend/outputs_json/2/3 --device cuda:0 --bbox-thr 0.5 --kpt-thr 0.2 --nms-thr 0.3 --draw-bbox --save-predictions
+
+===== STDOUT FROM MMPOSE =====
+Loads checkpoint by http backend from path: https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth
+Loads checkpoint by http backend from path: https://download.openmmlab.com/mmpose/top_down/hrnet/hrnet_w32_coco_256x192-c78dce93_20200708.pth
+predictions have been saved at G:/python/FYP/backend/outputs_json/2/3/results_1666d29a-6b05-4943-af08-a02a9647dd14.json
+
+===== STDERR FROM MMPOSE =====
+C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\datasets\datasets\utils.py:102: UserWarning: The metainfo config file "configs/_base_/datasets/coco.py" does not exist. A matched config file "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\.mim\configs\_base_\datasets\coco.py" will be used instead.
+  warnings.warn(
+C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\json_tricks\encoders.py:419: UserWarning: json-tricks: numpy scalar serialization is experimental and may work differently in future versions
+  warnings.warn('json-tricks: numpy scalar serialization is experimental and may work differently in future versions')
+
+Return code: 0
+
+Checking for results JSON: G:/python/FYP/backend/outputs_json/2/3/results_1666d29a-6b05-4943-af08-a02a9647dd14.json
+Results JSON exists: True
+Files in outputs_json_dir:
+- 1666d29a-6b05-4943-af08-a02a9647dd14.mp4
+- analysis_log.txt
+- results_1666d29a-6b05-4943-af08-a02a9647dd14.json
+
+Attempting FFmpeg conversion for web compatibility
+Original file: G:/python/FYP/backend/outputs_json/2/3\1666d29a-6b05-4943-af08-a02a9647dd14.mp4
+Target web file: G:/python/FYP/backend/outputs_json/2/3\1666d29a-6b05-4943-af08-a02a9647dd14_web.mp4
+
+FFmpeg command:
+ffmpeg -i G:/python/FYP/backend/outputs_json/2/3\1666d29a-6b05-4943-af08-a02a9647dd14.mp4 -c:v libx264 -profile:v baseline -level 3.0 -pix_fmt yuv420p -r 30 -c:a aac -b:a 128k -movflags +faststart -y G:/python/FYP/backend/outputs_json/2/3\1666d29a-6b05-4943-af08-a02a9647dd14_web.mp4
+
+FFmpeg STDOUT:
+
+FFmpeg STDERR:
+ffmpeg version 7.0.1 Copyright (c) 2000-2024 the FFmpeg developers
+  built with clang version 18.1.6
+  configuration: --prefix=/d/bld/ffmpeg_1716729588356/_h_env/Library --cc=clang.exe --cxx=clang++.exe --nm=llvm-nm --ar=llvm-ar --disable-doc --disable-openssl --enable-demuxer=dash --enable-hardcoded-tables --enable-libfreetype --enable-libharfbuzz --enable-libfontconfig --enable-libopenh264 --enable-libdav1d --ld=lld-link --target-os=win64 --enable-cross-compile --toolchain=msvc --host-cc=clang.exe --extra-libs=ucrt.lib --extra-libs=vcruntime.lib --extra-libs=oldnames.lib --strip=llvm-strip --disable-stripping --host-extralibs= --disable-libopenvino --enable-gpl --enable-libx264 --enable-libx265 --enable-libaom --enable-libsvtav1 --enable-libxml2 --enable-pic --enable-shared --disable-static --enable-version3 --enable-zlib --enable-libopus --pkg-config=/d/bld/ffmpeg_1716729588356/_build_env/Library/bin/pkg-config
+  libavutil      59.  8.100 / 59.  8.100
+  libavcodec     61.  3.100 / 61.  3.100
+  libavformat    61.  1.100 / 61.  1.100
+  libavdevice    61.  1.100 / 61.  1.100
+  libavfilter    10.  1.100 / 10.  1.100
+  libswscale      8.  1.100 /  8.  1.100
+  libswresample   5.  1.100 /  5.  1.100
+  libpostproc    58.  1.100 / 58.  1.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'G:/python/FYP/backend/outputs_json/2/3\1666d29a-6b05-4943-af08-a02a9647dd14.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2mp41
+    encoder         : Lavf58.76.100
+  Duration: 00:01:35.68, start: 0.000000, bitrate: 3144 kb/s
+  Stream #0:0[0x1](und): Video: mpeg4 (Simple Profile) (mp4v / 0x7634706D), yuv420p, 360x640 [SAR 1:1 DAR 9:16], 3143 kb/s, 25 fps, 25 tbr, 12800 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+[out#0/mp4 @ 0000013ADFE594C0] Codec AVOption b (set bitrate (in bits/s)) has not been used for any stream. The most likely reason is either wrong type (e.g. a video option with no video streams) or that it is a private option of some encoder which was not actually used for any stream.
+Stream mapping:
+  Stream #0:0 -> #0:0 (mpeg4 (native) -> h264 (libx264))
+Press [q] to stop, [?] for help
+[libx264 @ 0000013ADFE6DEC0] using SAR=1/1
+[libx264 @ 0000013ADFE6DEC0] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0000013ADFE6DEC0] profile Constrained Baseline, level 3.0, 4:2:0, 8-bit
+[libx264 @ 0000013ADFE6DEC0] 264 - core 164 r3095 baee400 - H.264/MPEG-4 AVC codec - Copyleft 2003-2022 - http://www.videolan.org/x264.html - options: cabac=0 ref=3 deblock=1:0:0 analyse=0x1:0x111 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=0 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=20 lookahead_threads=3 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=0 weightp=0 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to 'G:/python/FYP/backend/outputs_json/2/3\1666d29a-6b05-4943-af08-a02a9647dd14_web.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2mp41
+    encoder         : Lavf61.1.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(progressive), 360x640 [SAR 1:1 DAR 9:16], q=2-31, 30 fps, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.3.100 libx264
+      Side data:
+        cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+frame=  786 fps=0.0 q=29.0 size=    3328KiB time=00:00:26.13 bitrate=1043.2kbits/s dup=143 drop=0 speed=50.8x    
+frame= 1574 fps=1548 q=29.0 size=    7168KiB time=00:00:52.46 bitrate=1119.2kbits/s dup=274 drop=0 speed=51.6x    
+frame= 2395 fps=1571 q=29.0 size=   10752KiB time=00:01:19.83 bitrate=1103.3kbits/s dup=411 drop=0 speed=52.4x    
+[mp4 @ 0000013ADFE6D580] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0000013ADFE594C0] video:13490KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.091142%
+frame= 2870 fps=1559 q=-1.0 Lsize=   13502KiB time=00:01:35.66 bitrate=1156.2kbits/s dup=478 drop=0 speed=  52x    
+[libx264 @ 0000013ADFE6DEC0] frame I:13    Avg QP:20.25  size: 44463
+[libx264 @ 0000013ADFE6DEC0] frame P:2857  Avg QP:23.02  size:  4632
+[libx264 @ 0000013ADFE6DEC0] mb I  I16..4:  9.6%  0.0% 90.4%
+[libx264 @ 0000013ADFE6DEC0] mb P  I16..4:  0.6%  0.0%  1.5%  P16..4: 28.5% 11.4%  5.0%  0.0%  0.0%    skip:53.0%
+[libx264 @ 0000013ADFE6DEC0] coded y,uvDC,uvAC intra: 73.5% 83.6% 39.8% inter: 15.8% 22.1% 7.6%
+[libx264 @ 0000013ADFE6DEC0] i16 v,h,dc,p: 38% 32% 18% 11%
+[libx264 @ 0000013ADFE6DEC0] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 24% 30% 15%  5%  5%  4%  7%  5%  6%
+[libx264 @ 0000013ADFE6DEC0] i8c dc,h,v,p: 28% 32% 37%  3%
+[libx264 @ 0000013ADFE6DEC0] ref P L0: 75.1% 13.7% 11.3%
+[libx264 @ 0000013ADFE6DEC0] kb/s:1155.09
+
+FFmpeg return code: 0

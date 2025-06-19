@@ -1,0 +1,43 @@
+=== Analysis Debug Log ===
+Time: 2025-05-10 23:54:28
+Root directory: G:\python\FYP\backend
+ML Pipeline directory: G:/python/FYP/backend/ml_pipeline
+MMPose demo path: G:/python/FYP/backend/ml_pipeline/demo/topdown_demo_mmdet_no_heatmap.py
+Video Path: G:/python/FYP/backend/uploads/videos/2/3b97946a-a21e-4794-99c6-0e0811d7fe57.mp4
+User ID: 2
+Video ID: 1
+
+MMPose installation path: C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose
+
+File existence checks:
+- MMPose demo exists: True
+- Detection config exists: True
+- Pose config exists: True
+- Video file exists: True
+
+PyTorch version: 2.0.0+cu118
+CUDA available: True
+CUDA device: NVIDIA GeForce RTX 3070
+
+Running command:
+C:/Users/singn/.conda/envs/mmpose_env/python.exe G:/python/FYP/backend/ml_pipeline/demo/topdown_demo_mmdet_no_heatmap.py G:/python/FYP/backend/ml_pipeline/demo/faster_rcnn_r50_fpn_coco.py https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth C:/Users/singn/.conda/envs/mmpose_env/lib/site-packages/mmpose/configs/body_2d_keypoint/topdown_heatmap/coco/td-hm_hrnet-w32_8xb64-210e_coco-256x192.py https://download.openmmlab.com/mmpose/top_down/hrnet/hrnet_w32_coco_256x192-c78dce93_20200708.pth --input G:/python/FYP/backend/uploads/videos/2/3b97946a-a21e-4794-99c6-0e0811d7fe57.mp4 --output-root G:/python/FYP/backend/outputs_json/2/1 --device cuda:0 --bbox-thr 0.5 --kpt-thr 0.2 --nms-thr 0.3 --draw-bbox --save-predictions
+
+===== STDOUT FROM MMPOSE =====
+Loads checkpoint by http backend from path: https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth
+Loads checkpoint by http backend from path: https://download.openmmlab.com/mmpose/top_down/hrnet/hrnet_w32_coco_256x192-c78dce93_20200708.pth
+predictions have been saved at G:/python/FYP/backend/outputs_json/2/1/results_3b97946a-a21e-4794-99c6-0e0811d7fe57.json
+
+===== STDERR FROM MMPOSE =====
+C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\datasets\datasets\utils.py:102: UserWarning: The metainfo config file "configs/_base_/datasets/coco.py" does not exist. A matched config file "C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\mmpose\.mim\configs\_base_\datasets\coco.py" will be used instead.
+  warnings.warn(
+C:\Users\singn\.conda\envs\mmpose_env\lib\site-packages\json_tricks\encoders.py:419: UserWarning: json-tricks: numpy scalar serialization is experimental and may work differently in future versions
+  warnings.warn('json-tricks: numpy scalar serialization is experimental and may work differently in future versions')
+
+Return code: 0
+
+Checking for results JSON: G:/python/FYP/backend/outputs_json/2/1/results_3b97946a-a21e-4794-99c6-0e0811d7fe57.json
+Results JSON exists: True
+Files in outputs_json_dir:
+- 3b97946a-a21e-4794-99c6-0e0811d7fe57.mp4
+- analysis_log.txt
+- results_3b97946a-a21e-4794-99c6-0e0811d7fe57.json

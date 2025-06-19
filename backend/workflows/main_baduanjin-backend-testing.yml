@@ -1,0 +1,72 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# Debug workflow to test secrets
+name: Build and deploy container app to Azure Web App - baduanjin-backend-docker
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Debug - Check if secrets exist
+        run: |
+          echo "Username length: ${#DOCKER_HUB_USERNAME}"
+          echo "Token length: ${#DOCKER_HUB_ACCESS_TOKEN}"
+          if [ -z "$DOCKER_HUB_USERNAME" ]; then
+            echo "DOCKER_HUB_USERNAME is empty or not set"
+          else
+            echo "DOCKER_HUB_USERNAME is set"
+          fi
+          if [ -z "$DOCKER_HUB_ACCESS_TOKEN" ]; then
+            echo "DOCKER_HUB_ACCESS_TOKEN is empty or not set"
+          else
+            echo "DOCKER_HUB_ACCESS_TOKEN is set"
+          fi
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/baduanjin-backend:${{ github.sha }},${{ secrets.DOCKER_HUB_USERNAME }}/baduanjin-backend:latest
+          file: ./Backend/Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'baduanjin-backend-docker'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_8076d0c906f84863980d2497ed96bc6c }}
+          images: '${{ secrets.DOCKER_HUB_USERNAME }}/baduanjin-backend:${{ github.sha }}'
+            publish-profile: ${{ secrets.AzureAppService_PublishProfile_8076d0c906f84863980d2497ed96bc6c }}
+            images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_0faf47be6d39415bbcd6e3873f4cfb5e }}/python:${{ github.sha }}'
+          

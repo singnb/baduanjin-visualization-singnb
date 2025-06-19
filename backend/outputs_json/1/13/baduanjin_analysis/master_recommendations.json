@@ -1,0 +1,18 @@
+{
+  "title": "Master Performance Analysis Recommendations",
+  "description": "Insights and teaching recommendations based on master performance",
+  "performer_type": "master",
+  "overall": "The Baduanjin sequence demonstrates excellent balance, symmetry, and controlled movements throughout all eight forms. Pay special attention to the fluidity between transitions and maintaining proper alignment.",
+  "keyPoints": [
+    "Maintain vertical alignment during 'Holding Up The Sky'",
+    "Keep shoulders relaxed during 'Drawing The Bow'",
+    "Distribute weight evenly between feet during 'Separating Heaven and Earth'",
+    "Use controlled rotation during 'Looking Backward' to avoid jerky movements",
+    "Keep stable base during 'Swinging Head and Tail'",
+    "Use gradual weight shifts during 'Bouncing on Toes'"
+  ],
+  "jointAngles": "Focus on achieving optimal hip and knee angles during transitions. Maintain 90-degree elbow angles during Drawing The Bow and do not exceed 130-degree shoulder elevation.",
+  "smoothness": "All movements should be performed with consistent, controlled speed. Avoid rapid acceleration or deceleration, especially during transitions between forms.",
+  "symmetry": "Left and right sides should perform identical movements with equal range of motion. Pay special attention to shoulder and hip symmetry during rotational movements.",
+  "balance": "Center of mass should remain stable throughout the sequence, with controlled weight shifts. Maintain stable base of support during single-leg movements."
+}
