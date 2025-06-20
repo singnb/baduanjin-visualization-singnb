@@ -23,30 +23,28 @@ baduanjin-visualization/
 
 ### Prerequisites
 - Node.js 14+ and npm
-- Python 3.8+
+- Python 3.10+
 - PostgreSQL
 - Git
+- Azure cloud
 
 ### Frontend Setup
 ```bash
-cd frontend
+cd frontend_folder
 npm install
 npm start
 
 The frontend will be available at http://localhost:3000
+Alternatively, use Azure frontend URL (skip above steps)
 ```
 ### Backend Setup
 ```bash
-bashcd backend
+cd backend_folder
 pip install -r requirements.txt
 uvicorn main:app --reload
-The API will be available at http://localhost:8000
-```
 
-### Documentation
-```bash
-Frontend Documentation
-Backend Documentation
+The API will be available at http://localhost:8000
+Alternatively, use Azure backend URL (skip above steps)
 ```
 
 ## License
