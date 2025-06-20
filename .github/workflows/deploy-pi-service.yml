@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           source venv/bin/activate
-          pip install -r pi-service/pi_requirements.txt  
+          pip install -r pi-service/pi_requirement.txt  
         
       # Basic validation
       - name: Validate Pi Service
