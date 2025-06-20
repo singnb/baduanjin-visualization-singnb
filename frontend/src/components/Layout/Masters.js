@@ -153,11 +153,11 @@ function Masters() {
     }
   };
 
-  // ENHANCED: View a specific video with improved English audio detection
+  // View a specific video with improved English audio detection
   const viewVideo = async (video) => {
     setSelectedVideo(video);
     
-    // ENHANCED: Check if this video has an English audio version with fallback logic
+    // Check if this video has an English audio version with fallback logic
     try {
       // Method 1: Try the backend endpoint first
       const response = await axios.get(
@@ -173,27 +173,64 @@ function Masters() {
       
       let hasEnglish = response.data.has_english_audio;
       
-      // Method 2: If backend says no English audio, try to verify by attempting to access the file
+      // Method 2: If backend says no English audio, try to verify by making a GET request with range header
       if (!hasEnglish) {
         console.log(`Backend says no English audio for video ${video.id}, trying fallback check...`);
         
         try {
-          // Try to access the English audio stream endpoint to see if it exists
+          // Try to access the English audio stream endpoint with a range request to minimize data transfer
           const englishStreamUrl = `${BACKEND_URL}/api/videos/${video.id}/stream-video?type=english&token=${encodeURIComponent(token)}`;
           
-          // Make a HEAD request to check if the file exists without downloading it
-          const headResponse = await axios.head(englishStreamUrl, {
-            timeout: 5000 // 5 second timeout
+          // Make a GET request with Range header to get just the first byte
+          const rangeResponse = await axios.get(englishStreamUrl, {
+            headers: {
+              'Range': 'bytes=0-0'
+            },
+            timeout: 5000, // 5 second timeout
+            validateStatus: function (status) {
+              // Accept 200, 206 (partial content), and 416 (range not satisfiable) as success
+              return status >= 200 && status < 300 || status === 206 || status === 416;
+            }
           });
           
-          if (headResponse.status === 200) {
-            console.log(`Fallback check: English audio found for video ${video.id}`);
+          if (rangeResponse.status === 200 || rangeResponse.status === 206) {
+            console.log(`Fallback check: English audio found for video ${video.id} (status: ${rangeResponse.status})`);
             hasEnglish = true;
           }
         } catch (fallbackError) {
           console.log(`Fallback check failed for video ${video.id}:`, fallbackError.response?.status);
-          // If we get 404 or other errors, English audio probably doesn't exist
-          hasEnglish = false;
+          
+          // Method 3: If range request fails, try a direct endpoint check
+          if (fallbackError.response?.status !== 404) {
+            try {
+              // Try without range header but with a very short timeout
+              const directResponse = await axios.get(
+                `${BACKEND_URL}/api/videos/${video.id}/stream-video?type=english&token=${encodeURIComponent(token)}`,
+                {
+                  timeout: 2000, // 2 second timeout
+                  responseType: 'stream', // Don't load the full video
+                  validateStatus: function (status) {
+                    return status >= 200 && status < 300;
+                  }
+                }
+              );
+              
+              if (directResponse.status === 200) {
+                console.log(`Direct check: English audio found for video ${video.id}`);
+                hasEnglish = true;
+                // Cancel the request immediately to avoid downloading the video
+                if (directResponse.request && directResponse.request.abort) {
+                  directResponse.request.abort();
+                }
+              }
+            } catch (directError) {
+              console.log(`Direct check also failed for video ${video.id}:`, directError.response?.status);
+              hasEnglish = false;
+            }
+          } else {
+            // 404 means English audio definitely doesn't exist
+            hasEnglish = false;
+          }
         }
       }
       
@@ -202,25 +239,11 @@ function Masters() {
       
     } catch (err) {
       console.error('Error checking for English audio version:', err);
-      // If the check fails entirely, try the fallback method
-      try {
-        console.log('Primary check failed, trying direct stream check...');
-        const englishStreamUrl = `${BACKEND_URL}/api/videos/${video.id}/stream-video?type=english&token=${encodeURIComponent(token)}`;
-        
-        const headResponse = await axios.head(englishStreamUrl, {
-          timeout: 5000
-        });
-        
-        if (headResponse.status === 200) {
-          console.log(`Direct stream check: English audio found for video ${video.id}`);
-          setHasEnglishAudio(true);
-        } else {
-          setHasEnglishAudio(false);
-        }
-      } catch (directError) {
-        console.log('Direct stream check also failed, assuming no English audio');
-        setHasEnglishAudio(false);
-      }
+      console.error('Error details:', err.response?.data);
+      
+      // If all checks fail, assume no English audio
+      console.log('All English audio checks failed, assuming no English audio');
+      setHasEnglishAudio(false);
     }
     
     setShowVideoModal(true);
@@ -264,7 +287,7 @@ function Masters() {
     navigate(`/comparison-selection?master=${masterId}&masterVideo=${masterVideoId}`);
   };
 
-  // ENHANCED: Navigate to analysis page with this master and video
+  // Navigate to analysis page with this master and video
   const handleAnalyzeWithMaster = async (masterId, masterVideoId) => {
     try {
       console.log(`Preparing analysis for master ${masterId}, video ${masterVideoId}`);
@@ -432,7 +455,7 @@ function Masters() {
           </div>
         )}
 
-        {/* Enhanced Video Modal with Better English Audio Handling */}
+        {/* Video Modal with Better English Audio Handling */}
         {showVideoModal && selectedVideo && (
           <div className="video-modal-overlay" onClick={closeVideoModal}>
             <div className="video-modal" onClick={(e) => e.stopPropagation()}>
@@ -495,10 +518,20 @@ function Masters() {
                           const englishUrl = getStreamingUrl(selectedVideo.id, 'english');
                           console.log('Testing English audio URL:', englishUrl);
                           
-                          const response = await axios.head(englishUrl, { timeout: 5000 });
+                          // Try range request instead of HEAD
+                          const response = await axios.get(englishUrl, {
+                            headers: {
+                              'Range': 'bytes=0-0'
+                            },
+                            timeout: 5000,
+                            validateStatus: function (status) {
+                              return status >= 200 && status < 300 || status === 206 || status === 416;
+                            }
+                          });
+                          
                           console.log('English audio test result:', response.status);
                           
-                          if (response.status === 200) {
+                          if (response.status === 200 || response.status === 206) {
                             alert('English audio file exists! Enabling English version.');
                             setHasEnglishAudio(true);
                           } else {
@@ -506,7 +539,30 @@ function Masters() {
                           }
                         } catch (error) {
                           console.log('English audio test failed:', error.response?.status);
-                          alert(`English audio test failed: ${error.response?.status || 'Network error'}`);
+                          
+                          if (error.response?.status === 405) {
+                            alert('HEAD method not supported by backend. Trying alternative method...');
+                            // Try the alternative method
+                            try {
+                              const altResponse = await axios.get(getStreamingUrl(selectedVideo.id, 'english'), {
+                                timeout: 2000,
+                                responseType: 'stream'
+                              });
+                              
+                              if (altResponse.status === 200) {
+                                alert('English audio found via alternative method!');
+                                setHasEnglishAudio(true);
+                                // Cancel the request
+                                if (altResponse.request && altResponse.request.abort) {
+                                  altResponse.request.abort();
+                                }
+                              }
+                            } catch (altError) {
+                              alert(`Alternative test also failed: ${altError.response?.status || 'Network error'}`);
+                            }
+                          } else {
+                            alert(`English audio test failed: ${error.response?.status || 'Network error'}`);
+                          }
                         }
                       }}
                       style={{ marginRight: '10px', fontSize: '12px' }}
@@ -523,6 +579,28 @@ function Masters() {
                       style={{ fontSize: '12px' }}
                     >
                       Force Enable English
+                    </button>
+                    
+                    <button 
+                      className="btn btn-small"
+                      onClick={async () => {
+                        try {
+                          // Test what methods are supported
+                          const testUrl = getStreamingUrl(selectedVideo.id, 'english');
+                          console.log('Testing supported methods for:', testUrl);
+                          
+                          // Try OPTIONS request to see what methods are allowed
+                          const optionsResponse = await axios.options(testUrl);
+                          console.log('Supported methods:', optionsResponse.headers.allow || 'Not specified');
+                          alert(`Supported methods: ${optionsResponse.headers.allow || 'Not specified'}`);
+                        } catch (error) {
+                          console.log('OPTIONS request failed:', error);
+                          alert('OPTIONS request failed - check console');
+                        }
+                      }}
+                      style={{ fontSize: '12px', marginLeft: '5px' }}
+                    >
+                      Check Methods
                     </button>
                   </div>
                 )}
