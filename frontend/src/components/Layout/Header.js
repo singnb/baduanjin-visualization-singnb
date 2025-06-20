@@ -28,6 +28,13 @@ function Header({ title }) {
                   Videos
                 </NavLink>
               </li>
+
+              {/* NEW: Live Sessions link for all users */}
+              <li>
+                <NavLink to="/live-sessions" className={({ isActive }) => isActive ? "active" : ""}>
+                  Live Sessions
+                </NavLink>
+              </li>
               
               {/* Show Comparison only for learners, not masters */}
               {user.role !== 'master' && (

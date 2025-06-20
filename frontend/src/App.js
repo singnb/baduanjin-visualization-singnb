@@ -8,6 +8,7 @@ import RegisterForm from './auth/RegisterForm';
 import UserAgreement from './auth/UserAgreement';
 import Header from './components/Layout/Header'; 
 import VideoManagement from './components/Layout/VideoManagement';
+import LiveSessionManagement from './components/Layout/LiveSessionManagement'; 
 import VideoAnalysis from './components/Analysis/VideoAnalysis';
 import ComparisonSelection from './components/Analysis/ComparisonSelection';
 import ComparisonView from './components/Analysis/ComparisonView';
@@ -57,6 +58,13 @@ function AppRoutes() {
           <Route path="/videos" element={
             <ProtectedRoute>
               <VideoManagement />
+            </ProtectedRoute>
+          } />
+
+          {/* Live sessions route */}
+          <Route path="/live-sessions" element={
+            <ProtectedRoute>
+              <LiveSessionManagement />
             </ProtectedRoute>
           } />
           
