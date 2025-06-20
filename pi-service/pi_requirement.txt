@@ -1,104 +1,34 @@
-# Enhanced Baduanjin Pi System Requirements
-# Install with: pip install -r requirements.txt
+# pi-service/requirements.txt
+# Azure Pi Service Dependencies - NO hardware libraries!
 
-# Core Web Framework
-flask==2.3.3
-flask-socketio==5.3.6
-flask-cors==4.0.0
-
-# Fast API for file transfer service
+# Core FastAPI Framework
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 
-# Computer Vision and AI
-opencv-python==4.8.1.78
-ultralytics==8.0.196
-numpy==1.24.3
-
-# Raspberry Pi Camera (Pi only)
-picamera2==0.3.12
-libcamera==0.0.5
-
-# HTTP Client and File Handling
-httpx==0.25.0
-aiofiles==23.2.1
-requests==2.31.0
-
-# Database (for backend)
-sqlalchemy==2.0.21
-psycopg2-binary==2.9.7  # PostgreSQL adapter
-alembic==1.12.1
-
-# Authentication and Security
+# Authentication & Security (same as main backend)
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 python-multipart==0.0.6
 
-# Background Tasks
-celery==5.3.2
-redis==5.0.1
+# Database (same as main backend)
+sqlalchemy==2.0.21
+psycopg2-binary==2.9.7
 
-# Data Processing
-pandas==2.1.1
-pillow==10.0.1
+# HTTP Client for Pi Communication
+httpx==0.25.0
+aiofiles==23.2.1
 
-# Configuration and Environment
+# Configuration & Environment
 python-dotenv==1.0.0
 pydantic==2.4.2
 pydantic-settings==2.0.3
 
-# Development and Testing
-pytest==7.4.2
-pytest-asyncio==0.21.1
-black==23.9.1
-flake8==6.1.0
-
-# Monitoring and Logging
-structlog==23.1.0
-prometheus-client==0.17.1
-
-# System Dependencies (install via apt on Raspberry Pi)
-# sudo apt update
-# sudo apt install -y python3-opencv python3-picamera2 python3-libcamera
-# sudo apt install -y ffmpeg libavcodec-extra  # For video encoding
-# sudo apt install -y postgresql postgresql-contrib  # If using PostgreSQL
-
-# Optional: GPU acceleration (if available)
-# torch==2.0.1  # For CUDA/GPU support
-# torchvision==0.15.2
-
-# Production Server (alternative to uvicorn)
-gunicorn==21.2.0
-
-# File and Path Utilities
-pathlib2==2.3.7  # For older Python versions
-watchdog==3.0.0  # File system monitoring
-
-# Network and Communication
+# WebSocket Support
 websockets==11.0.3
-python-socketio[client]==5.9.0
 
-# Date and Time
+# Date/Time utilities
 python-dateutil==2.8.2
-pytz==2023.3
 
-# System Monitoring
-psutil==5.9.5  # System resource monitoring
-GPUtil==1.4.0  # GPU monitoring (if applicable)
-
-# Error Tracking (optional)
-sentry-sdk[flask,fastapi]==1.32.0
-
-# API Documentation
-swagger-ui-bundle==0.0.9
-
-# Development Tools
-ipython==8.15.0  # Enhanced Python shell
-jupyter==1.0.0   # Notebook environment (for development)
-
-# Note: Version numbers are pinned for stability
-# For production, consider using a virtual environment:
-# python -m venv venv
-# source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate     # Windows
-# pip install -r requirements.txt
+# NOTE: This file is for AZURE SERVICE only
+# Your pi_requirement.txt is for the physical Pi hardware
+# NO camera libraries (picamera2, libcamera, opencv) needed here!
