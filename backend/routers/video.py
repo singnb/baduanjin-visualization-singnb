@@ -457,6 +457,8 @@ async def stream_specific_video(
     db: Session = Depends(database.get_db)
 ):
     """Stream video with support for both Azure Blob Storage and local files"""
+    import os  # FIX: Add this import at the top of the function
+    
     if not token:
         raise HTTPException(status_code=401, detail="Authentication token required")
     
@@ -520,7 +522,7 @@ async def stream_specific_video(
         if not has_access:
             raise HTTPException(status_code=403, detail="Access denied")
         
-        # Determine which video to stream (keep your existing logic)
+        # Determine which video to stream
         video_path = None
         
         if type == "original":
@@ -528,21 +530,18 @@ async def stream_specific_video(
             print(f"Streaming original video: {video_path}")
             
         elif type == "english":
-            # Enhanced English audio handling
+            # Enhanced English audio handling (from previous fix)
             english_path = None
             
-            # Method 1: Check if video has english_audio_path field
             if hasattr(video, 'english_audio_path') and video.english_audio_path:
                 english_path = video.english_audio_path
                 print(f"Using database English audio path: {english_path}")
             
-            # Method 2: Look in outputs directory
             if not english_path:
                 from pathlib import Path
                 base_path = Path("outputs_json") / str(video.user_id) / str(video_id)
                 
                 if base_path.exists():
-                    # Try different English audio patterns
                     english_patterns = ["*_english.mp4", "english.mp4", "*english*.mp4"]
                     for pattern in english_patterns:
                         english_files = list(base_path.glob(pattern))
@@ -551,23 +550,9 @@ async def stream_specific_video(
                             print(f"Found English audio in outputs: {english_path}")
                             break
             
-            # Method 3: Construct Azure URL if we have video_uuid
             if not english_path and hasattr(video, 'video_uuid') and video.video_uuid:
                 english_path = f"https://baduanjintesting.blob.core.windows.net/videos/outputs_json/{video.user_id}/{video_id}/{video.video_uuid}_english.mp4"
                 print(f"Constructed Azure English audio URL: {english_path}")
-            
-            # Method 4: Try to construct based on original video path
-            if not english_path and video.video_path:
-                import os
-                video_dir = os.path.dirname(video.video_path) if not video.video_path.startswith('http') else None
-                
-                if video_dir:
-                    base_name = os.path.splitext(os.path.basename(video.video_path))[0]
-                    potential_english = os.path.join(video_dir, f"{base_name}_english.mp4")
-                    
-                    if os.path.exists(potential_english):
-                        english_path = potential_english
-                        print(f"Found English audio based on original path: {english_path}")
             
             if english_path:
                 video_path = english_path
@@ -575,23 +560,33 @@ async def stream_specific_video(
             else:
                 print(f"English audio version not found for video {video_id}")
                 raise HTTPException(status_code=404, detail="English audio version not found")
-            
+                
         elif type == "analyzed":
             if video.analyzed_video_path:
                 video_path = video.analyzed_video_path
                 print(f"Streaming analyzed version: {video_path}")
             else:
-                # Fallback logic for outputs directory (keep your existing logic)
+                # Fallback logic for outputs directory
                 outputs_dir = os.path.join("outputs_json", str(video.user_id), str(video_id))
                 print(f"Looking for analyzed video in outputs directory: {outputs_dir}")
                 
                 if os.path.exists(outputs_dir):
                     mp4_files = [f for f in os.listdir(outputs_dir) if f.endswith('.mp4')]
                     for file in mp4_files:
-                        if '_web.mp4' in file:
+                        if '_web.mp4' in file or 'analyzed' in file:
                             video_path = os.path.join(outputs_dir, file)
                             print(f"Found analyzed video in outputs: {video_path}")
                             break
+                    
+                    # If no _web.mp4, try any mp4 file
+                    if not video_path and mp4_files:
+                        video_path = os.path.join(outputs_dir, mp4_files[0])
+                        print(f"Using first available MP4: {video_path}")
+                
+                # If still not found, try Azure URL construction
+                if not video_path and hasattr(video, 'video_uuid') and video.video_uuid:
+                    video_path = f"https://baduanjintesting.blob.core.windows.net/videos/outputs_json/{video.user_id}/{video_id}/{video.video_uuid}_web.mp4"
+                    print(f"Constructed Azure analyzed video URL: {video_path}")
                 
                 if not video_path:
                     video_path = video.video_path  # Fallback to original
@@ -611,77 +606,65 @@ async def stream_specific_video(
             )
         
         if is_azure_url(video_path):
-            # Stream from Azure Blob Storage with your nested structure
+            # FIXED: Stream from Azure Blob Storage with better URL parsing
             try:
                 connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
                 if not connection_string:
                     raise HTTPException(status_code=500, detail="Azure storage not configured")
                 
+                from azure.storage.blob import BlobServiceClient
                 blob_service_client = BlobServiceClient.from_connection_string(connection_string)
                 
-                # Parse the Azure URL to determine container and blob path
+                # FIXED: Better URL parsing
+                container_name = "videos"  # Default container
+                blob_name = None
+                
+                print(f"Parsing Azure URL: {video_path}")
+                
+                # Parse the Azure URL to get blob path
                 if "blob.core.windows.net/videos/" in video_path:
-                    container_name = "videos"
+                    # Extract everything after /videos/
                     blob_name = video_path.split("blob.core.windows.net/videos/")[-1]
-                elif "blob.core.windows.net/results/" in video_path:
-                    container_name = "results"
-                    blob_name = video_path.split("blob.core.windows.net/results/")[-1]
+                    print(f"Extracted blob name: {blob_name}")
                 else:
                     raise HTTPException(status_code=400, detail="Invalid Azure URL format")
                 
+                if not blob_name:
+                    raise HTTPException(status_code=400, detail="Could not extract blob name from URL")
+                
                 print(f"Streaming from Azure: container='{container_name}', blob='{blob_name}'")
                 
-                # Download from appropriate container
+                # Download from Azure
                 blob_client = blob_service_client.get_blob_client(
                     container=container_name,
                     blob=blob_name
                 )
                 
-                # Get blob properties to determine content type
-                blob_properties = blob_client.get_blob_properties()
-                content_type = blob_properties.content_settings.content_type or "application/octet-stream"
+                # Check if blob exists
+                if not blob_client.exists():
+                    print(f"Blob does not exist: {blob_name}")
+                    raise HTTPException(status_code=404, detail="Video file not found in Azure storage")
                 
-                # Override content type based on file extension if not set properly
-                if blob_name.endswith('.mp4'):
-                    content_type = "video/mp4"
-                elif blob_name.endswith('.json'):
-                    content_type = "application/json"
-                elif blob_name.endswith('.png'):
-                    content_type = "image/png"
-                elif blob_name.endswith('.txt'):
-                    content_type = "text/plain"
+                # Get blob properties
+                blob_properties = blob_client.get_blob_properties()
+                content_type = blob_properties.content_settings.content_type or "video/mp4"
                 
                 # Download content
                 content = blob_client.download_blob().readall()
                 print(f"Successfully downloaded from Azure: {len(content)} bytes, type: {content_type}")
                 
-                # Set appropriate headers based on content type
+                # Stream the content
                 headers = {
+                    "Accept-Ranges": "bytes",
+                    "Content-Disposition": "inline",
+                    "Cache-Control": "no-cache, no-store, must-revalidate",
+                    "Pragma": "no-cache",
+                    "Expires": "0",
                     "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Methods": "GET, OPTIONS",
                     "Access-Control-Allow-Headers": "Range, Content-Range, Content-Length"
                 }
                 
-                if content_type.startswith("video/"):
-                    headers.update({
-                        "Accept-Ranges": "bytes",
-                        "Content-Disposition": "inline",
-                        "Cache-Control": "no-cache, no-store, must-revalidate",
-                        "Pragma": "no-cache",
-                        "Expires": "0"
-                    })
-                elif content_type.startswith("image/"):
-                    headers.update({
-                        "Cache-Control": "public, max-age=3600",
-                        "Content-Disposition": "inline"
-                    })
-                elif content_type == "application/json":
-                    headers.update({
-                        "Cache-Control": "public, max-age=300",
-                        "Content-Disposition": "inline"
-                    })
-                
-                # Stream the content
                 return StreamingResponse(
                     io.BytesIO(content),
                     media_type=content_type,
@@ -691,16 +674,15 @@ async def stream_specific_video(
             except Exception as azure_error:
                 print(f"Error streaming from Azure: {azure_error}")
                 print(f"Failed URL: {video_path}")
-                print(f"Attempted container: {container_name if 'container_name' in locals() else 'unknown'}")
-                print(f"Attempted blob: {blob_name if 'blob_name' in locals() else 'unknown'}")
+                print(f"Container: {container_name if 'container_name' in locals() else 'unknown'}")
+                print(f"Blob: {blob_name if 'blob_name' in locals() else 'unknown'}")
                 raise HTTPException(
                     status_code=500, 
-                    detail=f"Error accessing content from Azure storage: {str(azure_error)}"
+                    detail=f"Error accessing video from Azure storage: {str(azure_error)}"
                 )
         else:
             # Handle local files (backward compatibility)
             if not os.path.exists(video_path):
-                # Try alternative paths (keep your existing logic)
                 print(f"Video file not found: {video_path}")
                 alt_paths = [
                     os.path.join("/home/site/wwwroot", video_path),
@@ -736,6 +718,8 @@ async def stream_specific_video(
         raise
     except Exception as e:
         print(f"Error in stream_specific_video: {str(e)}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Server error: {str(e)}")
 
 @router.delete("/{video_id}")
