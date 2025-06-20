@@ -154,40 +154,47 @@ function Masters() {
     }
   };
 
-  // REPLACE the viewVideo function with this enhanced version:
+  // ViewVideo function 
   const viewVideo = async (video) => {
     setSelectedVideo(video);
     setEnglishAudioUrl(null); // Reset
     
-    // Check if this video has an English audio version with Azure fallback
+    console.log(`Checking English audio for video ${video.id}`);
+    
+    let hasEnglish = false;
+    let englishUrl = null;
+    
     try {
-      // Method 1: Try the backend endpoint first
-      const response = await axios.get(
-        `${BACKEND_URL}/api/videos/${video.id}/has-english-audio`,
-        {
+      // Method 1: Try the backend stream endpoint directly
+      console.log('Method 1: Testing backend stream endpoint...');
+      const streamUrl = `${BACKEND_URL}/api/videos/${video.id}/stream-video?type=english&token=${encodeURIComponent(token)}`;
+      
+      try {
+        const streamResponse = await axios.get(streamUrl, {
           headers: {
-            'Authorization': `Bearer ${token}`
+            'Range': 'bytes=0-1023' // Request first 1KB to test if file exists
+          },
+          timeout: 5000,
+          validateStatus: function (status) {
+            return (status >= 200 && status < 300) || status === 206 || status === 416;
           }
+        });
+        
+        if (streamResponse.status === 200 || streamResponse.status === 206) {
+          console.log('✓ Backend stream endpoint has English audio');
+          hasEnglish = true;
+          englishUrl = streamUrl;
         }
-      );
-      
-      console.log(`English audio check for video ${video.id}:`, response.data);
-      
-      let hasEnglish = response.data.has_english_audio;
-      let englishUrl = null;
-      
-      // If backend has the path, use it
-      if (hasEnglish && response.data.english_audio_path) {
-        englishUrl = response.data.english_audio_path;
-        console.log(`Using backend English URL: ${englishUrl}`);
+      } catch (streamError) {
+        console.log('✗ Backend stream endpoint failed:', streamError.response?.status);
       }
       
-      // Method 2: If backend says no English audio, try Azure direct check
+      // Method 2: If backend stream fails, try to construct Azure URL
       if (!hasEnglish) {
-        console.log(`Backend says no English audio for video ${video.id}, trying Azure direct check...`);
-               
+        console.log('Method 2: Trying Azure direct URL...');
+        
         try {
-          // Get the video file information to construct the English URL
+          // Get video details to construct Azure URL
           const videoResponse = await axios.get(
             `${BACKEND_URL}/api/videos/${video.id}`,
             {
@@ -198,67 +205,35 @@ function Masters() {
           );
           
           console.log('Video details:', videoResponse.data);
-          
-          // Try to extract the filename pattern from video paths
-          let baseFilename = null;
           const videoData = videoResponse.data;
           
-          // Look for filename in various path fields
-          if (videoData.video_path) {
-            const match = videoData.video_path.match(/([a-f0-9-]+)\.mp4/);
-            if (match) {
-              baseFilename = match[1];
+          // Try to extract filename from video_path or video_uuid
+          let baseFilename = null;
+          
+          // Method 2a: Use video_uuid if available
+          if (videoData.video_uuid) {
+            baseFilename = videoData.video_uuid;
+            console.log('Using video_uuid as filename:', baseFilename);
+          }
+          // Method 2b: Extract from video_path
+          else if (videoData.video_path) {
+            const pathMatch = videoData.video_path.match(/([a-f0-9-]+)(?:\.mp4)?$/i);
+            if (pathMatch) {
+              baseFilename = pathMatch[1];
+              console.log('Extracted filename from video_path:', baseFilename);
             }
           }
           
-          if (!baseFilename && videoData.analyzed_video_path) {
-            const match = videoData.analyzed_video_path.match(/([a-f0-9-]+)/);
-            if (match) {
-              baseFilename = match[1];
-            }
-          }
-          
-          console.log('Extracted base filename:', baseFilename);
-          
-          if (baseFilename) {
+          if (baseFilename && videoData.user_id) {
             // Construct Azure English audio URL
             const azureEnglishUrl = `https://baduanjintesting.blob.core.windows.net/videos/outputs_json/${videoData.user_id}/${video.id}/${baseFilename}_english.mp4`;
             console.log('Testing Azure English URL:', azureEnglishUrl);
             
-            // Test if the Azure URL exists
-            try {
-              const azureResponse = await axios.head(azureEnglishUrl, {
-                timeout: 5000
-              });
-              
-              if (azureResponse.status === 200) {
-                console.log(`Azure English audio found: ${azureEnglishUrl}`);
-                hasEnglish = true;
-                englishUrl = azureEnglishUrl;
-              }
-            } catch (azureError) {
-              console.log(`Azure English audio not found: ${azureError.response?.status}`);
-              
-              // For video 23 specifically, try the known URL as a test
-              if (video.id === 23 || video.id === '23') {
-                const knownUrl = 'https://baduanjintesting.blob.core.windows.net/videos/outputs_json/3/23/f0d7635f-3848-47f1-8f91-fd602c584e92_english.mp4';
-                console.log('Testing known URL for video 23:', knownUrl);
-                
-                try {
-                  const knownResponse = await axios.head(knownUrl, {
-                    timeout: 5000
-                  });
-                  
-                  if (knownResponse.status === 200) {
-                    console.log('Known URL works for video 23!');
-                    hasEnglish = true;
-                    englishUrl = knownUrl;
-                  }
-                } catch (knownError) {
-                  console.log('Known URL also failed:', knownError.response?.status);
-                }
-              }
-            }
+            // Test if the Azure URL is accessible by trying to load it as a video source
+            // We'll set it and let the video element itself determine if it's valid
+            hasEnglish = true;
+            englishUrl = azureEnglishUrl;
+            console.log('✓ Set Azure English URL (will verify on video load)');
           }
           
         } catch (videoDetailsError) {
@@ -266,72 +241,26 @@ function Masters() {
         }
       }
       
-      // Method 3: Fallback to backend stream endpoint if we still don't have English
-      if (!hasEnglish) {
-        console.log('Trying backend stream endpoint as final fallback...');
-        try {
-          const streamResponse = await axios.get(
-            `${BACKEND_URL}/api/videos/${video.id}/stream-video?type=english&token=${encodeURIComponent(token)}`,
-            {
-              headers: {
-                'Range': 'bytes=0-0'
-              },
-              timeout: 3000,
-              validateStatus: function (status) {
-                return status >= 200 && status < 300 || status === 206 || status === 416;
-              }
-            }
-          );
-          
-          if (streamResponse.status === 200 || streamResponse.status === 206) {
-            console.log('Backend stream endpoint has English audio');
-            hasEnglish = true;
-            englishUrl = getStreamingUrl(video.id, 'english');
-          }
-        } catch (streamError) {
-          console.log('Backend stream endpoint failed:', streamError.response?.status);
-        }
+      // Method 3: Hardcoded fallback for known working videos (for testing)
+      if (!hasEnglish && (video.id === 23 || video.id === '23')) {
+        console.log('Method 3: Using known URL for video 23...');
+        const knownUrl = 'https://baduanjintesting.blob.core.windows.net/videos/outputs_json/3/23/f0d7635f-3848-47f1-8f91-fd602c584e92_english.mp4';
+        hasEnglish = true;
+        englishUrl = knownUrl;
+        console.log('✓ Using known URL for video 23');
       }
-      
-      console.log(`Final English audio status for video ${video.id}: ${hasEnglish}`);
-      console.log(`English audio URL: ${englishUrl}`);
-      
-      setHasEnglishAudio(hasEnglish);
-      setEnglishAudioUrl(englishUrl);
       
     } catch (err) {
-      console.error('Error checking for English audio version:', err);
-      console.error('Error details:', err.response?.data);
-      
-      // Final fallback: For video 23, try the known URL
-      if (video.id === 23 || video.id === '23') {
-        console.log('Final fallback: Testing known URL for video 23');
-        const knownUrl = 'https://baduanjintesting.blob.core.windows.net/videos/outputs_json/3/23/f0d7635f-3848-47f1-8f91-fd602c584e92_english.mp4';
-        
-        try {
-          const finalResponse = await axios.head(knownUrl, { timeout: 5000 });
-          if (finalResponse.status === 200) {
-            console.log('Final fallback successful!');
-            setHasEnglishAudio(true);
-            setEnglishAudioUrl(knownUrl);
-          } else {
-            setHasEnglishAudio(false);
-            setEnglishAudioUrl(null);
-          }
-        } catch (finalError) {
-          console.log('Final fallback also failed');
-          setHasEnglishAudio(false);
-          setEnglishAudioUrl(null);
-        }
-      } else {
-        setHasEnglishAudio(false);
-        setEnglishAudioUrl(null);
-      }
+      console.error('Error in English audio detection:', err);
     }
     
+    console.log(`Final English audio status for video ${video.id}: ${hasEnglish}`);
+    console.log(`English audio URL: ${englishUrl}`);
+    
+    setHasEnglishAudio(hasEnglish);
+    setEnglishAudioUrl(englishUrl);
     setShowVideoModal(true);
   };
-
 
   const closeVideoModal = () => {
     setShowVideoModal(false);
@@ -567,7 +496,7 @@ function Masters() {
                   </div>
                 </div>
 
-                {/* English Version Video - Enhanced with better detection */}
+                {/* English Version Video*/}
                 {hasEnglishAudio && (
                   <div className="video-player-container">
                     <h4>English Version Video</h4>
@@ -575,31 +504,41 @@ function Masters() {
                       <video 
                         controls 
                         className="modal-video-player"
-                        src={englishAudioUrl || getStreamingUrl(selectedVideo.id, 'english')}
+                        src={englishAudioUrl}
                         onError={(e) => {
                           console.error('Error loading English video:', e);
-                          console.log('English Video URL:', englishAudioUrl || getStreamingUrl(selectedVideo.id, 'english'));
-                          // If English video fails to load, try fallback URL
-                          if (englishAudioUrl && englishAudioUrl !== getStreamingUrl(selectedVideo.id, 'english')) {
+                          console.log('Failed English Video URL:', englishAudioUrl);
+                          
+                          // If Azure URL fails, try backend stream as fallback
+                          if (englishAudioUrl && !englishAudioUrl.includes('/stream-video')) {
                             console.log('Trying backend stream URL as fallback...');
-                            e.target.src = getStreamingUrl(selectedVideo.id, 'english');
+                            const fallbackUrl = getStreamingUrl(selectedVideo.id, 'english');
+                            e.target.src = fallbackUrl;
+                            setEnglishAudioUrl(fallbackUrl);
                           } else {
+                            // If all sources fail, hide the English video section
                             console.log('All English video sources failed, hiding section');
                             setHasEnglishAudio(false);
+                            setEnglishAudioUrl(null);
                           }
                         }}
                         onLoadStart={() => {
                           console.log('English video started loading successfully');
-                          console.log('Using URL:', englishAudioUrl || getStreamingUrl(selectedVideo.id, 'english'));
+                          console.log('Loading URL:', englishAudioUrl);
+                        }}
+                        onCanPlay={() => {
+                          console.log('English video can play - source is valid');
                         }}
                       >
                         Your browser does not support the video tag.
                       </video>
-                      {/* Show which source is being used */}
+                      
+                      {/* Show source information in development */}
                       {process.env.NODE_ENV === 'development' && englishAudioUrl && (
-                        <small style={{ display: 'block', marginTop: '5px', color: '#666', fontSize: '11px' }}>
-                          Source: {englishAudioUrl.includes('azure') ? 'Azure Direct' : 'Backend Stream'}
-                        </small>
+                        <div style={{ marginTop: '5px', fontSize: '11px', color: '#666' }}>
+                          <strong>Source:</strong> {englishAudioUrl.includes('azure') ? 'Azure Direct' : 'Backend Stream'}<br/>
+                          <strong>URL:</strong> <span style={{ wordBreak: 'break-all', fontSize: '10px' }}>{englishAudioUrl}</span>
+                        </div>
                       )}
                     </div>
                   </div>

@@ -68,7 +68,7 @@ async def get_video(
     db: Session = Depends(database.get_db)
 ):
     """
-    Get details for a specific video
+    Get details for a specific video (Enhanced with English audio info)
     Allow masters to view their learners' videos
     """
     # Find the video
@@ -79,14 +79,12 @@ async def get_video(
     if not video:
         raise HTTPException(status_code=404, detail="Video not found")
     
-    # Check access permissions
+    # Check access permissions (keep existing logic)
     has_access = False
     
-    # Owner always has access
     if video.user_id == current_user.id:
         has_access = True
     else:
-        # Masters can view their learners' videos
         if current_user.role == models.UserRole.MASTER:
             relationship = db.query(models.MasterLearnerRelationship).filter(
                 models.MasterLearnerRelationship.master_id == current_user.id,
@@ -97,7 +95,6 @@ async def get_video(
             if relationship:
                 has_access = True
                 
-        # Learners can view masters' videos  
         elif current_user.role == models.UserRole.LEARNER:
             video_owner = db.query(models.User).filter(
                 models.User.id == video.user_id
@@ -109,7 +106,147 @@ async def get_video(
     if not has_access:
         raise HTTPException(status_code=403, detail="Access denied")
     
-    return video
+    # Convert video object to dict and add extra fields
+    video_dict = {
+        "id": video.id,
+        "title": video.title,
+        "description": video.description,
+        "user_id": video.user_id,
+        "video_path": video.video_path,
+        "analyzed_video_path": getattr(video, 'analyzed_video_path', None),
+        "video_uuid": getattr(video, 'video_uuid', None),
+        "brocade_type": getattr(video, 'brocade_type', None),
+        "processing_status": video.processing_status,
+        "upload_timestamp": video.upload_timestamp,
+        "keypoints_path": getattr(video, 'keypoints_path', None)
+    }
+    
+    return video_dict
+
+@router.get("/{video_id}/has-english-audio")
+async def check_english_audio(
+    video_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(database.get_db)
+):
+    """Check if a video has an English audio version available"""
+    
+    # Get video details first
+    video = db.query(models.VideoUpload).filter(
+        models.VideoUpload.id == video_id
+    ).first()
+    
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    
+    # Check access permissions (same logic as existing get_video endpoint)
+    has_access = False
+    
+    if video.user_id == current_user.id:
+        has_access = True
+    else:
+        if current_user.role == models.UserRole.MASTER:
+            relationship = db.query(models.MasterLearnerRelationship).filter(
+                models.MasterLearnerRelationship.master_id == current_user.id,
+                models.MasterLearnerRelationship.learner_id == video.user_id,
+                models.MasterLearnerRelationship.status == "accepted"
+            ).first()
+            if relationship:
+                has_access = True
+                
+        elif current_user.role == models.UserRole.LEARNER:
+            video_owner = db.query(models.User).filter(
+                models.User.id == video.user_id
+            ).first()
+            if video_owner and video_owner.role == models.UserRole.MASTER:
+                relationship = db.query(models.MasterLearnerRelationship).filter(
+                    models.MasterLearnerRelationship.master_id == video.user_id,
+                    models.MasterLearnerRelationship.learner_id == current_user.id,
+                    models.MasterLearnerRelationship.status == "accepted"
+                ).first()
+                if relationship:
+                    has_access = True
+    
+    if not has_access:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Check for English audio file
+    has_english_audio = False
+    english_audio_path = None
+    
+    try:
+        # Method 1: Check if video has english_audio_path field (if it exists in your model)
+        if hasattr(video, 'english_audio_path') and video.english_audio_path:
+            has_english_audio = True
+            english_audio_path = video.english_audio_path
+            print(f"Found English audio path in database: {english_audio_path}")
+        
+        # Method 2: Check in outputs_json directory for English audio files
+        if not has_english_audio:
+            from pathlib import Path
+            base_path = Path("outputs_json") / str(video.user_id) / str(video.id)
+            
+            # Try different possible English audio file patterns
+            possible_patterns = [
+                "*_english.mp4",
+                "english.mp4",
+                "*english*.mp4"
+            ]
+            
+            for pattern in possible_patterns:
+                english_files = list(base_path.glob(pattern))
+                if english_files:
+                    has_english_audio = True
+                    english_audio_path = str(english_files[0])
+                    print(f"Found English audio file: {english_audio_path}")
+                    break
+        
+        # Method 3: Check Azure blob storage pattern
+        if not has_english_audio and hasattr(video, 'video_uuid') and video.video_uuid:
+            # Construct potential Azure URL for English audio
+            azure_path = f"https://baduanjintesting.blob.core.windows.net/videos/outputs_json/{video.user_id}/{video.id}/{video.video_uuid}_english.mp4"
+            
+            # For now, assume it exists if we can construct the path
+            # The frontend will verify if it actually loads
+            has_english_audio = True
+            english_audio_path = azure_path
+            print(f"Constructed Azure English audio path: {azure_path}")
+        
+        # Method 4: Fallback - check if we have video_uuid and construct standard path
+        if not has_english_audio:
+            # Try to extract UUID from video_path or use a standard pattern
+            video_path = video.video_path
+            if video_path and "outputs_json" in video_path:
+                # Try to find English version in the same directory
+                import os
+                video_dir = os.path.dirname(video_path)
+                base_name = os.path.splitext(os.path.basename(video_path))[0]
+                
+                # Try common English audio naming patterns
+                possible_english_paths = [
+                    os.path.join(video_dir, f"{base_name}_english.mp4"),
+                    os.path.join(video_dir, "english.mp4"),
+                ]
+                
+                for eng_path in possible_english_paths:
+                    if os.path.exists(eng_path):
+                        has_english_audio = True
+                        english_audio_path = eng_path
+                        print(f"Found English audio at: {eng_path}")
+                        break
+    
+    except Exception as e:
+        print(f"Error checking English audio for video {video_id}: {str(e)}")
+        # Return False if we can't determine
+        has_english_audio = False
+    
+    return {
+        "has_english_audio": has_english_audio,
+        "english_audio_path": english_audio_path,
+        "video_id": video_id,
+        "video_uuid": getattr(video, 'video_uuid', None)
+    }
+
 
 @router.post("/upload")
 async def upload_video(
@@ -389,12 +526,56 @@ async def stream_specific_video(
         if type == "original":
             video_path = video.video_path
             print(f"Streaming original video: {video_path}")
+            
         elif type == "english":
-            if video.english_audio_path:
-                video_path = video.english_audio_path
+            # Enhanced English audio handling
+            english_path = None
+            
+            # Method 1: Check if video has english_audio_path field
+            if hasattr(video, 'english_audio_path') and video.english_audio_path:
+                english_path = video.english_audio_path
+                print(f"Using database English audio path: {english_path}")
+            
+            # Method 2: Look in outputs directory
+            if not english_path:
+                from pathlib import Path
+                base_path = Path("outputs_json") / str(video.user_id) / str(video_id)
+                
+                if base_path.exists():
+                    # Try different English audio patterns
+                    english_patterns = ["*_english.mp4", "english.mp4", "*english*.mp4"]
+                    for pattern in english_patterns:
+                        english_files = list(base_path.glob(pattern))
+                        if english_files:
+                            english_path = str(english_files[0])
+                            print(f"Found English audio in outputs: {english_path}")
+                            break
+            
+            # Method 3: Construct Azure URL if we have video_uuid
+            if not english_path and hasattr(video, 'video_uuid') and video.video_uuid:
+                english_path = f"https://baduanjintesting.blob.core.windows.net/videos/outputs_json/{video.user_id}/{video_id}/{video.video_uuid}_english.mp4"
+                print(f"Constructed Azure English audio URL: {english_path}")
+            
+            # Method 4: Try to construct based on original video path
+            if not english_path and video.video_path:
+                import os
+                video_dir = os.path.dirname(video.video_path) if not video.video_path.startswith('http') else None
+                
+                if video_dir:
+                    base_name = os.path.splitext(os.path.basename(video.video_path))[0]
+                    potential_english = os.path.join(video_dir, f"{base_name}_english.mp4")
+                    
+                    if os.path.exists(potential_english):
+                        english_path = potential_english
+                        print(f"Found English audio based on original path: {english_path}")
+            
+            if english_path:
+                video_path = english_path
                 print(f"Streaming English audio version: {video_path}")
             else:
+                print(f"English audio version not found for video {video_id}")
                 raise HTTPException(status_code=404, detail="English audio version not found")
+            
         elif type == "analyzed":
             if video.analyzed_video_path:
                 video_path = video.analyzed_video_path
@@ -1181,3 +1362,4 @@ async def debug_azure_contents():
         
     except Exception as e:
         return {"error": str(e)}
+    
