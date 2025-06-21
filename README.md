@@ -17,6 +17,11 @@ baduanjin-visualization/
 │   ├── main.py
 │   ├── requirements.txt
 │   └── README.md
+├── pi-service/            # pi-service backend API
+│   ├── app/
+│   ├── pi_requirements.txt
+│   ├── startup.py
+│   └── README.md
 └── README.md               # Main README
 ```
 ## Quick Start
