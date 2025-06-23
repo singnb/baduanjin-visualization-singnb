@@ -202,7 +202,7 @@ const PiVideoStream = ({ activeSession, poseData, isConnected }) => {
   const testDirectConnection = useCallback(async () => {
     try {
       console.log('🧪 Testing direct Pi connection...');
-      const response = await fetch('http://172.20.10.5:5001/api/status');
+      const response = await fetch('http://172.20.10.5:5001/api/pi-live/status');
       const data = await response.json();
       console.log('✅ Pi status:', data);
       

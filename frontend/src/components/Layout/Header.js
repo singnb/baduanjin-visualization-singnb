@@ -23,19 +23,20 @@ function Header({ title }) {
         {user && (
           <nav className="header-nav">
             <ul>
-              <li>
-                <NavLink to="/videos" className={({ isActive }) => isActive ? "active" : ""}>
-                  Videos
-                </NavLink>
-              </li>
 
-              {/* NEW: Live Sessions link for all users */}
+              {/* Live Sessions link for all users */}
               <li>
                 <NavLink to="/live-sessions" className={({ isActive }) => isActive ? "active" : ""}>
                   Live Sessions
                 </NavLink>
               </li>
-              
+
+              <li>
+                <NavLink to="/videos" className={({ isActive }) => isActive ? "active" : ""}>
+                  Videos
+                </NavLink>
+              </li>
+             
               {/* Show Comparison only for learners, not masters */}
               {user.role !== 'master' && (
                 <li>

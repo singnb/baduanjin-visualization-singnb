@@ -53,8 +53,8 @@ const PiControls = ({
       interval = setInterval(async () => {
         try {
           // Check recording status
-          logDebug('Checking Pi status', { url: `${PI_URL}/api/status` });
-          const statusResponse = await axios.get(`${PI_URL}/api/status`, { timeout: 5000 });
+          logDebug('Checking Pi status', { url: `${PI_URL}/api/pi-live/status` });
+          const statusResponse = await axios.get(`${PI_URL}/api/pi-live/status`, { timeout: 5000 });
           
           logDebug('Pi status response', statusResponse.data);
           setIsRecording(statusResponse.data.is_recording || false);
@@ -236,8 +236,8 @@ const PiControls = ({
   // Test Pi connection
   const testPiConnection = async () => {
     try {
-      logDebug('Testing Pi connection', { url: `${PI_URL}/api/status` });
-      const response = await axios.get(`${PI_URL}/api/status`, { timeout: 5000 });
+      logDebug('Testing Pi connection', { url: `${PI_URL}/api/pi-live/status` });
+      const response = await axios.get(`${PI_URL}/api/pi-live/status`, { timeout: 5000 });
       
       logDebug('Pi connection test result', response.data);
       alert(`Pi Connection: ${response.data.is_running ? 'Connected and Running' : 'Connected but Not Running'}`);
