@@ -32,7 +32,7 @@ const PiControls = ({
   const [selectedRecording, setSelectedRecording] = useState(null);
   
   const { token } = useAuth();
-  const PI_URL = 'http://172.20.10.5:5001'; // Updated to match IP
+  const PI_SERVICE_URL = 'https://baduanjin-pi-service-g8aehuh0bghcc4be.southeastasia-01.azurewebsites.net';
   const BACKEND_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
 
   // Enhanced debug logging
@@ -54,14 +54,20 @@ const PiControls = ({
         try {
           // Check recording status
           logDebug('Checking Pi status', { url: `${PI_URL}/api/pi-live/status` });
-          const statusResponse = await axios.get(`${PI_URL}/api/pi-live/status`, { timeout: 5000 });
+          const statusResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/status`, { 
+            headers: { 'Authorization': `Bearer ${token}` },
+            timeout: 5000 
+          });
           
           logDebug('Pi status response', statusResponse.data);
           setIsRecording(statusResponse.data.is_recording || false);
           
           // Get available recordings
           logDebug('Fetching recordings', { url: `${PI_URL}/api/recordings` });
-          const recordingsResponse = await axios.get(`${PI_URL}/api/recordings`, { timeout: 10000 });
+          const recordingsResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/recordings`, { 
+            headers: { 'Authorization': `Bearer ${token}` },
+            timeout: 10000 
+          });
           
           logDebug('Recordings response', recordingsResponse.data);
           
@@ -131,7 +137,10 @@ const PiControls = ({
   const handleStartRecording = async () => {
     try {
       logDebug('Starting recording', { url: `${PI_URL}/api/recording/start` });
-      const response = await axios.post(`${PI_URL}/api/recording/start`, {}, { timeout: 10000 });
+      const response = await axios.post(`${PI_SERVICE_URL}/api/pi-live/recording/start/${activeSession.session_id}`, {}, { 
+        headers: { 'Authorization': `Bearer ${token}` },
+        timeout: 10000 
+      });
       
       logDebug('Start recording response', response.data);
       
@@ -159,7 +168,10 @@ const PiControls = ({
   const handleStopRecording = async () => {
     try {
       logDebug('Stopping recording', { url: `${PI_URL}/api/recording/stop` });
-      const response = await axios.post(`${PI_URL}/api/recording/stop`, {}, { timeout: 15000 });
+      const response = await axios.post(`${PI_SERVICE_URL}/api/pi-live/recording/stop/${activeSession.session_id}`, {}, { 
+        headers: { 'Authorization': `Bearer ${token}` },
+        timeout: 15000 
+      });
       
       logDebug('Stop recording response', response.data);
       
@@ -197,7 +209,10 @@ const PiControls = ({
   const fetchAvailableRecordings = async () => {
     try {
       logDebug('Fetching recordings manually', { url: `${PI_URL}/api/recordings` });
-      const response = await axios.get(`${PI_URL}/api/recordings`, { timeout: 10000 });
+      const recordingsResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/recordings`, { 
+        headers: { 'Authorization': `Bearer ${token}` },
+        timeout: 10000 
+      });
       
       logDebug('Manual recordings fetch response', response.data);
       
@@ -237,7 +252,10 @@ const PiControls = ({
   const testPiConnection = async () => {
     try {
       logDebug('Testing Pi connection', { url: `${PI_URL}/api/pi-live/status` });
-      const response = await axios.get(`${PI_URL}/api/pi-live/status`, { timeout: 5000 });
+      const response = await axios.get(`${PI_SERVICE_URL}/api/pi-live/status`, { 
+        headers: { 'Authorization': `Bearer ${token}` },
+        timeout: 5000 
+      });
       
       logDebug('Pi connection test result', response.data);
       alert(`Pi Connection: ${response.data.is_running ? 'Connected and Running' : 'Connected but Not Running'}`);
@@ -336,7 +354,9 @@ const PiControls = ({
       if (transferSuccess && selectedRecording) {
         try {
           logDebug('Cleaning up Pi recording', { filename: selectedRecording });
-          await axios.delete(`${PI_URL}/api/recordings/${selectedRecording}`);
+          await axios.delete(`${BACKEND_URL}/api/pi-live/recordings/${selectedRecording}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
           console.log(`Cleaned up Pi recording: ${selectedRecording}`);
         } catch (cleanupError) {
           logDebug('Cleanup failed', cleanupError);
@@ -380,7 +400,9 @@ const PiControls = ({
         if (selectedRecording) {
           try {
             logDebug('Deleting Pi recording', { filename: selectedRecording });
-            await axios.delete(`${PI_URL}/api/recordings/${selectedRecording}`);
+            await axios.delete(`${BACKEND_URL}/api/pi-live/recordings/${selectedRecording}`, {
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
           } catch (error) {
             logDebug('Delete recording failed', error);
             console.warn('Failed to delete Pi recording:', error);
