@@ -817,3 +817,61 @@ async def get_session_history(
             for session in live_sessions
         ]
     }
+
+
+@router.post("/start-session-debug")
+async def start_live_session_debug(
+    session_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Debug version of start session - bypasses Pi communication"""
+    
+    try:
+        session_name = session_data.get("session_name", "Debug Live Session")
+        
+        # CREATE SESSION RECORD (without Pi communication)
+        session_record = VideoUpload(
+            user_id=current_user.id,
+            title=f"[DEBUG] {session_name}",
+            description="Debug live session - Pi communication bypassed",
+            brocade_type="FIRST",
+            video_path="",
+            processing_status="live_active",
+            upload_timestamp=datetime.now()
+        )
+        
+        db.add(session_record)
+        db.commit()
+        db.refresh(session_record)
+        
+        # Create session ID
+        pi_session_id = f"debug_{session_record.id}"
+        
+        # Track session in memory
+        pi_service.active_sessions[pi_session_id] = {
+            "db_id": session_record.id,
+            "user_id": current_user.id,
+            "start_time": datetime.now(),
+            "session_name": session_name,
+            "status": "active",
+            "recording_files": []
+        }
+        
+        print(f"🔍 Debug session created: {pi_session_id}")
+        
+        return {
+            "success": True,
+            "session_id": pi_session_id,
+            "db_session_id": session_record.id,
+            "message": "Debug session started (Pi bypassed)",
+            "pi_status": {"success": True, "debug": True},
+            "websocket_url": PI_WEBSOCKET_URL,
+            "session_name": session_name,
+            "start_time": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        print(f"❌ Debug session error: {e}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Debug session failed: {str(e)}")
