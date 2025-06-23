@@ -73,7 +73,7 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
       let httpPolling = null;
       
       try {
-        const NGROK_URL = 'https://25de-122-11-245-27.ngrok-free.app';
+        const NGROK_URL = 'https://fbad-122-11-245-27.ngrok-free.app';
         console.log(`🔗 Attempting WebSocket connection to ${NGROK_URL}...`);
         
         // Try WebSocket first
