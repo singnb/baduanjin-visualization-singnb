@@ -1,12 +1,14 @@
 # pi-service/app/main.py
 # Azure Pi Service - FastAPI Main Application
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 import os
+import sys
 from datetime import datetime
 
-print("🚀 Initializing Baduanjin Pi Service...")
+print("Initializing Baduanjin Pi Service...")
 
 # Create FastAPI app
 app = FastAPI(
@@ -52,11 +54,19 @@ except Exception as e:
     print(f"Could not include auth router: {e}")
 
 try:
+    # Fix import path - assuming pi_live.py is in routers folder
     from routers.pi_live import router as pi_live_router
     app.include_router(pi_live_router)
     print("Pi Live router included")
 except Exception as e:
     print(f"Could not include pi_live router: {e}")
+    # Try alternative import path
+    try:
+        from pi_live import router as pi_live_router
+        app.include_router(pi_live_router)
+        print("Pi Live router included (alternative path)")
+    except Exception as e2:
+        print(f"Could not include pi_live router (alternative): {e2}")
 
 # Root endpoint
 @app.get("/")
@@ -156,26 +166,38 @@ async def startup_event():
         print("Pi Service startup complete!")
         
     except Exception as e:
-        print(f"⚠️ Startup warning: {e}")
+        print(f"Startup warning: {e}")
         print("Service will continue running with limited functionality")
 
-# Import sys for version info
-import sys
-
-# Error handler for 404
+# FIXED: Error handler for 404 - Return JSONResponse instead of dict
 @app.exception_handler(404)
-async def not_found_handler(request, exc):
-    return {
-        "error": "Endpoint not found",
-        "service": "baduanjin-pi-service",
-        "available_endpoints": [
-            "/",
-            "/health", 
-            "/docs",
-            "/api/pi-service/info"
-        ],
-        "suggestion": "Check /docs for full API documentation"
-    }
+async def not_found_handler(request: Request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={
+            "error": "Endpoint not found",
+            "service": "baduanjin-pi-service",
+            "available_endpoints": [
+                "/",
+                "/health", 
+                "/docs",
+                "/api/pi-service/info"
+            ],
+            "suggestion": "Check /docs for full API documentation"
+        }
+    )
+
+# ADDED: Generic exception handler for other errors
+@app.exception_handler(500)
+async def internal_error_handler(request: Request, exc):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Internal server error",
+            "service": "baduanjin-pi-service",
+            "message": "An unexpected error occurred"
+        }
+    )
 
 print("Baduanjin Pi Service initialized successfully")
 
