@@ -72,17 +72,20 @@ const PiVideoStream = ({ activeSession, poseData, isConnected }) => {
       let newSocket = null;
       
       try {
-        console.log('🔗 Connecting to Pi WebSocket at 172.20.10.5:5001...');
+        // FIXED: Use ngrok tunnel instead of direct Pi connection
+        const NGROK_URL = 'https://25de-122-11-245-27.ngrok-free.app';
+        console.log(`🔗 Connecting to Pi WebSocket at ${NGROK_URL}...`);
         
-        // Fixed Socket.IO configuration for Flask-SocketIO compatibility
-        newSocket = io('http://172.20.10.5:5001', {
-          // Allow multiple transports for better compatibility
+        // Fixed Socket.IO configuration for ngrok HTTPS
+        newSocket = io(NGROK_URL, {
+          // Use secure transports for HTTPS
           transports: ['websocket', 'polling'],
           timeout: 10000,
           forceNew: true,
           autoConnect: true,
           
-          // Flask-SocketIO compatibility settings
+          // HTTPS compatibility
+          secure: true,  // Force secure connection
           upgrade: true,
           rememberUpgrade: false,
           
@@ -99,12 +102,13 @@ const PiVideoStream = ({ activeSession, poseData, isConnected }) => {
           maxReconnectionAttempts: 5
         });
         
+        // Rest of your socket event handlers remain the same
         newSocket.on('connect', () => {
-          console.log('✅ Connected to Pi WebSocket');
+          console.log('✅ Connected to Pi WebSocket via ngrok');
           console.log('Transport:', newSocket.io.engine.transport.name);
           setWsConnected(true);
           setConnectionError(null);
-          frameBuffer.current = []; // Clear buffer on reconnect
+          frameBuffer.current = [];
         });
 
         // Handle transport upgrade
@@ -201,23 +205,34 @@ const PiVideoStream = ({ activeSession, poseData, isConnected }) => {
 
   const testDirectConnection = useCallback(async () => {
     try {
-      console.log('🧪 Testing direct Pi connection...');
-      const response = await fetch('http://172.20.10.5:5001/api/pi-live/status');
-      const data = await response.json();
-      console.log('✅ Pi status:', data);
+      console.log('🧪 Testing Pi connection via Azure service...');
       
-      if (data.is_running) {
-        console.log('✅ Pi is running, WebSocket should work');
+      // FIXED: Test through Azure pi-service instead of direct Pi connection
+      const response = await fetch('https://baduanjin-pi-service-g8aehuh0bghcc4be.southeastasia-01.azurewebsites.net/api/pi-live/status', {
+        headers: {
+          'Authorization': `Bearer ${token}` // You'll need to pass token as prop
+        }
+      });
+      
+      const data = await response.json();
+      console.log('✅ Pi status via Azure:', data);
+      
+      if (data.pi_connected && data.is_running) {
+        console.log('✅ Pi is connected and running, WebSocket should work');
         // Try to reconnect
         if (socket) {
           socket.connect();
         }
+      } else if (data.pi_connected && !data.is_running) {
+        console.log('⚠️ Pi is connected but not running streaming');
+        setConnectionError('Pi is connected but streaming is not active');
       } else {
-        console.log('⚠️ Pi is not running streaming');
+        console.log('❌ Pi is not connected');
+        setConnectionError('Pi is not connected to Azure service');
       }
     } catch (error) {
       console.error('❌ Pi connection test failed:', error);
-      setConnectionError('Cannot reach Pi server - check network connection');
+      setConnectionError('Cannot reach Pi through Azure service');
     }
   }, [socket]);
 

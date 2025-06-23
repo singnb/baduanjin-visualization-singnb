@@ -486,19 +486,30 @@ async def stop_session_recording(
 async def get_available_recordings(current_user: User = Depends(get_current_user)):
     """Get list of available recordings from Pi"""
     
-    result = await pi_service.get_pi_recordings()
-    
-    if result.get("success"):
+    try:
+        result = await pi_service.get_pi_recordings()
+        
+        if result.get("success"):
+            return {
+                "success": True,
+                "recordings": result.get("recordings", []),
+                "count": len(result.get("recordings", []))
+            }
+        else:
+            return {
+                "success": False,
+                "error": result.get("error", "Failed to get recordings"),
+                "recordings": [],
+                "count": 0
+            }
+    except Exception as e:
+        print(f"❌ Error getting recordings: {e}")
         return {
-            "success": True,
-            "recordings": result.get("recordings", []),
-            "count": len(result.get("recordings", []))
+            "success": False,
+            "error": f"Internal server error: {str(e)}",
+            "recordings": [],
+            "count": 0
         }
-    else:
-        raise HTTPException(
-            status_code=500, 
-            detail=f"Failed to get recordings: {result.get('error', 'Unknown error')}"
-        )
 
 @router.post("/transfer-video/{filename}")
 async def transfer_video_from_pi(
