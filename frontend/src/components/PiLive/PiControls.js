@@ -33,7 +33,7 @@ const PiControls = ({
   
   const { token } = useAuth();
   const PI_URL = 'http://172.20.10.5:5001'; // Updated to match your IP
-  const BACKEND_URL = 'http://localhost:8000';
+  const BACKEND_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
 
   // Enhanced debug logging
   const logDebug = (action, data) => {

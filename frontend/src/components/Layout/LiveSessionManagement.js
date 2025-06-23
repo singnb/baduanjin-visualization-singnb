@@ -6,6 +6,8 @@ import PiLiveSession from '../PiLive/PiLiveSession';
 import './Layout.css';
 import './LiveSessionManagement.css';
 
+const BACKEND_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
+
 const LiveSessionManagement = () => {
   const [liveSessions, setLiveSessions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -89,7 +91,7 @@ const LiveSessionManagement = () => {
     
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8000/api/videos', {
+      const response = await axios.get(`${BACKEND_URL}/api/videos`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -144,7 +146,7 @@ const LiveSessionManagement = () => {
         )
       );
       
-      await axios.delete(`http://localhost:8000/api/videos/${sessionId}`, {
+      await axios.delete(`${BACKEND_URL}/api/videos/${sessionId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
