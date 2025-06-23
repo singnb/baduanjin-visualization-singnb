@@ -70,133 +70,103 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
   useEffect(() => {
     if (activeSession && isConnected) {
       let newSocket = null;
+      let httpPolling = null;
       
       try {
-        // FIXED: Use ngrok tunnel instead of direct Pi connection
         const NGROK_URL = 'https://25de-122-11-245-27.ngrok-free.app';
-        console.log(`🔗 Connecting to Pi WebSocket at ${NGROK_URL}...`);
+        console.log(`🔗 Attempting WebSocket connection to ${NGROK_URL}...`);
         
-        // Fixed Socket.IO configuration for better ngrok compatibility
+        // Try WebSocket first
         newSocket = io(NGROK_URL, {
-          // Prefer polling for stability through proxies like ngrok
-          transports: ['polling', 'websocket'],  // Try polling first
-          timeout: 20000,  // Increased timeout
+          transports: ['polling', 'websocket'],
+          timeout: 10000,
           forceNew: true,
           autoConnect: true,
-          
-          // HTTPS compatibility
-          secure: true,
-          upgrade: true,
-          rememberUpgrade: false,
-          
-          // Ngrok compatibility settings
-          forceJSONP: false,
-          
-          // Connection stability
-          reconnection: true,
-          reconnectionDelay: 2000,  // Increased delay
-          reconnectionAttempts: 3,   // Reduced attempts
-          maxReconnectionAttempts: 3,
-          
-          // Query parameters for debugging
-          query: {
-            client: 'baduanjin-frontend',
-            version: '1.0'
-          }
+          secure: true
         });
         
-        // Rest of your socket event handlers remain the same
+        // WebSocket success
         newSocket.on('connect', () => {
-          console.log('✅ Connected to Pi WebSocket via ngrok');
-          console.log('Transport:', newSocket.io.engine.transport.name);
+          console.log('✅ WebSocket connected successfully');
           setWsConnected(true);
           setConnectionError(null);
           frameBuffer.current = [];
         });
 
-        // Handle transport upgrade
-        newSocket.io.on('upgrade', () => {
-          console.log('📈 Upgraded to transport:', newSocket.io.engine.transport.name);
-        });
-
-        // Optimized frame handler
+        // WebSocket frame updates
         newSocket.on('frame_update', handleFrameUpdate);
         
-        // Handle recording status updates
-        newSocket.on('recording_status', (data) => {
-          console.log('📹 Recording status:', data);
-          setIsRecording(data.recording || false);
-        });
-        
-        // Handle stream status updates
-        newSocket.on('stream_status', (data) => {
-          console.log('📡 Stream status:', data);
-        });
-        
-        newSocket.on('disconnect', (reason) => {
-          console.log('❌ Disconnected from Pi WebSocket:', reason);
-          setWsConnected(false);
-          frameBuffer.current = []; // Clear buffer on disconnect
-          
-          // Auto-reconnect logic
-          if (reason === 'io server disconnect') {
-            // Server disconnected, try to reconnect
-            console.log('🔄 Server disconnected, attempting reconnection...');
-          }
-        });
-
-        // Error handling
+        // WebSocket error - switch to HTTP polling
         newSocket.on('connect_error', (error) => {
-          console.error('🔴 WebSocket connection error:', error);
+          console.error('🔴 WebSocket failed, switching to HTTP polling:', error);
           
-          // More detailed error handling
-          let errorMessage = 'Connection failed';
-          if (error.message.includes('Invalid frame header')) {
-            errorMessage = 'WebSocket protocol error - using polling fallback';
-            console.log('🔄 Switching to polling transport only...');
-            
-            // Force polling mode if WebSocket fails
-            newSocket.io.opts.transports = ['polling'];
-          } else if (error.message.includes('timeout')) {
-            errorMessage = 'Connection timeout - check Pi server';
-          } else if (error.message.includes('ECONNREFUSED')) {
-            errorMessage = 'Pi server not responding - check if running';
-          } else {
-            errorMessage = `Connection failed: ${error.message}`;
+          // Disconnect WebSocket
+          if (newSocket) {
+            newSocket.disconnect();
+            newSocket = null;
           }
           
-          setConnectionError(errorMessage);
-          setWsConnected(false);
-        });
-
-        newSocket.on('reconnect', (attemptNumber) => {
-          console.log(`🔄 Reconnected after ${attemptNumber} attempts`);
-          setWsConnected(true);
-          setConnectionError(null);
-        });
-
-        newSocket.on('reconnect_error', (error) => {
-          console.error('🔴 Reconnection failed:', error);
-        });
-
-        newSocket.on('reconnect_failed', () => {
-          console.error('🔴 Reconnection failed permanently');
-          setConnectionError('Connection lost - please refresh page');
+          // Start HTTP polling fallback
+          startHttpPolling(NGROK_URL);
         });
         
         setSocket(newSocket);
+        
       } catch (error) {
-        console.error('🔴 Error setting up WebSocket:', error);
-        setConnectionError(`Setup error: ${error.message}`);
+        console.error('🔴 WebSocket setup failed, using HTTP polling:', error);
+        startHttpPolling('https://25de-122-11-245-27.ngrok-free.app');
       }
       
+      // HTTP Polling Fallback Function
+      function startHttpPolling(baseUrl) {
+        console.log('🔄 Starting HTTP polling for frames...');
+        setConnectionError('Using HTTP polling (WebSocket unavailable)');
+        
+        httpPolling = setInterval(async () => {
+          try {
+            const response = await fetch(`${baseUrl}/api/current_frame`);
+            const data = await response.json();
+            
+            if (data.success && data.image) {
+              // Simulate WebSocket frame data structure
+              const frameData = {
+                image: data.image,
+                pose_data: data.pose_data || [],
+                stats: data.stats || {},
+                timestamp: data.timestamp || Date.now()
+              };
+              
+              handleFrameUpdate(frameData);
+              setWsConnected(true);
+              setConnectionError(null);
+              
+            } else if (data.error) {
+              console.warn('HTTP polling error:', data.error);
+              setConnectionError(`HTTP polling: ${data.error}`);
+              setWsConnected(false);
+            }
+            
+          } catch (error) {
+            console.warn('HTTP polling failed:', error);
+            setConnectionError('HTTP polling connection failed');
+            setWsConnected(false);
+          }
+        }, 200); // Poll every 200ms (5 FPS)
+      }
+      
+      // Cleanup function
       return () => {
         if (newSocket) {
           console.log('🔌 Disconnecting WebSocket');
           newSocket.disconnect();
         }
-        frameBuffer.current = []; // Clear buffer on cleanup
+        if (httpPolling) {
+          console.log('🔌 Stopping HTTP polling');
+          clearInterval(httpPolling);
+        }
+        frameBuffer.current = [];
       };
+      
     } else {
       // Clean up when session ends
       if (socket) {
