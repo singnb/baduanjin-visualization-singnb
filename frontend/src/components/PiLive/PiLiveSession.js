@@ -26,7 +26,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
       setError(null);
       
       // First check basic Pi connection
-      const response = await axios.get(`${PI_URL}/pi-live/status`, {
+      const response = await axios.get(`${PI_URL}/api/pi-live/status`, {
         timeout: 5000
       });
       
