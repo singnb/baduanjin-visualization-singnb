@@ -53,7 +53,7 @@ const PiControls = ({
       interval = setInterval(async () => {
         try {
           // Check recording status
-          logDebug('Checking Pi status', { url: `${PI_URL}/api/pi-live/status` });
+          logDebug('Checking Pi status', { url: `${PI_SERVICE_URL}/api/pi-live/status` });
           const statusResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/status`, { 
             headers: { 'Authorization': `Bearer ${token}` },
             timeout: 5000 
@@ -63,7 +63,7 @@ const PiControls = ({
           setIsRecording(statusResponse.data.is_recording || false);
           
           // Get available recordings
-          logDebug('Fetching recordings', { url: `${PI_URL}/api/recordings` });
+          logDebug('Fetching recordings', { url: `${PI_SERVICE_URL}/api/pi-live/recordings` });
           const recordingsResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/recordings`, { 
             headers: { 'Authorization': `Bearer ${token}` },
             timeout: 10000 
@@ -136,7 +136,7 @@ const PiControls = ({
 
   const handleStartRecording = async () => {
     try {
-      logDebug('Starting recording', { url: `${PI_URL}/api/recording/start` });
+      logDebug('Starting recording', { url: `${PI_SERVICE_URL}/api/pi-live/recording/start` });
       const response = await axios.post(`${PI_SERVICE_URL}/api/pi-live/recording/start/${activeSession.session_id}`, {}, { 
         headers: { 'Authorization': `Bearer ${token}` },
         timeout: 10000 
@@ -167,7 +167,7 @@ const PiControls = ({
 
   const handleStopRecording = async () => {
     try {
-      logDebug('Stopping recording', { url: `${PI_URL}/api/recording/stop` });
+      logDebug('Stopping recording', { url: `${PI_SERVICE_URL}/api/pi-live/recording/stop` });
       const response = await axios.post(`${PI_SERVICE_URL}/api/pi-live/recording/stop/${activeSession.session_id}`, {}, { 
         headers: { 'Authorization': `Bearer ${token}` },
         timeout: 15000 
@@ -208,16 +208,16 @@ const PiControls = ({
 
   const fetchAvailableRecordings = async () => {
     try {
-      logDebug('Fetching recordings manually', { url: `${PI_URL}/api/recordings` });
+      logDebug('Fetching recordings manually', { url: `${PI_SERVICE_URL}/api/pi-live/recordings` });
       const recordingsResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/recordings`, { 
         headers: { 'Authorization': `Bearer ${token}` },
         timeout: 10000 
       });
       
-      logDebug('Manual recordings fetch response', response.data);
+      logDebug('Manual recordings fetch response', recordingsResponse.data);
       
-      if (response.data.success) {
-        const recordings = response.data.recordings || [];
+      if (recordingsResponse.data.success) {
+        const recordings = recordingsResponse.data.recordings || [];
         setAvailableRecordings(recordings);
         
         logDebug('Recordings updated', { 
@@ -234,8 +234,8 @@ const PiControls = ({
         
         return recordings;
       } else {
-        logDebug('Recordings fetch failed', { error: response.data });
-        throw new Error(response.data.error || 'Failed to fetch recordings');
+        logDebug('Recordings fetch failed', { error: recordingsResponse.data });
+        throw new Error(recordingsResponse.data.error || 'Failed to fetch recordings');
       }
     } catch (error) {
       logDebug('Recordings fetch error', { 
@@ -247,11 +247,11 @@ const PiControls = ({
       return [];
     }
   };
-
+  
   // Test Pi connection
   const testPiConnection = async () => {
     try {
-      logDebug('Testing Pi connection', { url: `${PI_URL}/api/pi-live/status` });
+      logDebug('Testing Pi connection', { url: `${PI_SERVICE_URL}/api/pi-live/status` });
       const response = await axios.get(`${PI_SERVICE_URL}/api/pi-live/status`, { 
         headers: { 'Authorization': `Bearer ${token}` },
         timeout: 5000 
@@ -469,7 +469,7 @@ const PiControls = ({
             <p><strong>Recording Status:</strong> {isRecording ? '🔴 Recording' : '⚪ Not Recording'}</p>
             <p><strong>Available Recordings:</strong> {availableRecordings.length}</p>
             <p><strong>Selected Recording:</strong> {selectedRecording || 'None'}</p>
-            <p><strong>Pi URL:</strong> {PI_URL}</p>
+            <p><strong>Pi URL:</strong> {PI_SERVICE_URL}</p>
             <button onClick={testPiConnection} style={{ marginRight: '10px' }}>Test Pi Connection</button>
             <button onClick={fetchAvailableRecordings}>Refresh Recordings</button>
             
