@@ -76,30 +76,33 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
         const NGROK_URL = 'https://25de-122-11-245-27.ngrok-free.app';
         console.log(`🔗 Connecting to Pi WebSocket at ${NGROK_URL}...`);
         
-        // Fixed Socket.IO configuration for ngrok HTTPS
+        // Fixed Socket.IO configuration for better ngrok compatibility
         newSocket = io(NGROK_URL, {
-          // Use secure transports for HTTPS
-          transports: ['websocket', 'polling'],
-          timeout: 10000,
+          // Prefer polling for stability through proxies like ngrok
+          transports: ['polling', 'websocket'],  // Try polling first
+          timeout: 20000,  // Increased timeout
           forceNew: true,
           autoConnect: true,
           
           // HTTPS compatibility
-          secure: true,  // Force secure connection
+          secure: true,
           upgrade: true,
           rememberUpgrade: false,
           
-          // Add query parameters for debugging
+          // Ngrok compatibility settings
+          forceJSONP: false,
+          
+          // Connection stability
+          reconnection: true,
+          reconnectionDelay: 2000,  // Increased delay
+          reconnectionAttempts: 3,   // Reduced attempts
+          maxReconnectionAttempts: 3,
+          
+          // Query parameters for debugging
           query: {
             client: 'baduanjin-frontend',
             version: '1.0'
-          },
-          
-          // Additional options for stability
-          reconnection: true,
-          reconnectionDelay: 1000,
-          reconnectionAttempts: 5,
-          maxReconnectionAttempts: 5
+          }
         });
         
         // Rest of your socket event handlers remain the same
@@ -142,13 +145,18 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
           }
         });
 
+        // Error handling
         newSocket.on('connect_error', (error) => {
           console.error('🔴 WebSocket connection error:', error);
           
           // More detailed error handling
           let errorMessage = 'Connection failed';
           if (error.message.includes('Invalid frame header')) {
-            errorMessage = 'Protocol mismatch - check Flask-SocketIO version';
+            errorMessage = 'WebSocket protocol error - using polling fallback';
+            console.log('🔄 Switching to polling transport only...');
+            
+            // Force polling mode if WebSocket fails
+            newSocket.io.opts.transports = ['polling'];
           } else if (error.message.includes('timeout')) {
             errorMessage = 'Connection timeout - check Pi server';
           } else if (error.message.includes('ECONNREFUSED')) {
