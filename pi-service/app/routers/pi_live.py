@@ -27,8 +27,8 @@ import asyncio
 router = APIRouter(prefix="/api/pi-live", tags=["pi-live-sessions"])
 
 # Pi Configuration - Updated to match your IP
-PI_BASE_URL = "http://172.20.10.5:5001/api"
-PI_WEBSOCKET_URL = "ws://172.20.10.5:5001"
+PI_BASE_URL = "https://25de-122-11-245-27.ngrok-free.app/api"
+PI_WEBSOCKET_URL = "wss://25de-122-11-245-27.ngrok-free.app"
 
 # File storage configuration
 VIDEOS_DIR = Path("uploaded_videos")

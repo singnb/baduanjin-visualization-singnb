@@ -25,26 +25,16 @@ const PiLiveSession = ({ onSessionComplete }) => {
       setLoading(true);
       setError(null);
       
-      // First check basic Pi connection
+      // Single call with authentication - no need for two calls
       const response = await axios.get(`${PI_URL}/api/pi-live/status`, {
-        timeout: 5000
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        timeout: 15000  // Increased timeout for network issues
       });
       
-      if (response.data.pi_connected) {
-        // Get detailed status if connected
-        const detailedResponse = await axios.get(`${PI_URL}/api/pi-live/status`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          timeout: 5000
-        });
-        
-        setPiStatus(detailedResponse.data);
-        setIsConnected(detailedResponse.data.pi_connected);
-      } else {
-        setPiStatus(response.data);
-        setIsConnected(false);
-      }
+      setPiStatus(response.data);
+      setIsConnected(response.data.pi_connected);
       
     } catch (err) {
       console.error('Error checking Pi status:', err);
