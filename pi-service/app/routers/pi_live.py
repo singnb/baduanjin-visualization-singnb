@@ -46,13 +46,30 @@ class EnhancedPiService:
         self.transfer_queue = {}   # Track file transfers
     
     async def check_pi_status(self) -> Dict[str, Any]:
-        """Check if Pi is available and get status"""
+        """Check if Pi is available and get status - FAST RESPONSE"""
         try:
-            async with httpx.AsyncClient(timeout=5.0) as client:
+            # Reduce timeout to 3 seconds for faster response
+            async with httpx.AsyncClient(timeout=3.0) as client:
                 response = await client.get(f"{PI_BASE_URL}/status")
                 return {"connected": True, "data": response.json()}
+        except httpx.TimeoutException:
+            return {
+                "connected": False, 
+                "error": "Pi connection timeout - Pi may be offline",
+                "pi_ip": "172.20.10.5:5001"
+            }
+        except httpx.ConnectError:
+            return {
+                "connected": False, 
+                "error": "Cannot reach Pi - check network connection",
+                "pi_ip": "172.20.10.5:5001"
+            }
         except Exception as e:
-            return {"connected": False, "error": str(e)}
+            return {
+                "connected": False, 
+                "error": f"Pi connection error: {str(e)}",
+                "pi_ip": "172.20.10.5:5001"
+            }
     
     async def start_pi_streaming(self) -> Dict[str, Any]:
         """Start streaming on Pi"""
