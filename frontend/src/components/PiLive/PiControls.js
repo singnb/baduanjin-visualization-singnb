@@ -32,7 +32,7 @@ const PiControls = ({
   const [selectedRecording, setSelectedRecording] = useState(null);
   
   const { token } = useAuth();
-  const PI_URL = 'http://172.20.10.5:5001'; // Updated to match your IP
+  const PI_URL = 'http://172.20.10.5:5001'; // Updated to match IP
   const BACKEND_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
 
   // Enhanced debug logging

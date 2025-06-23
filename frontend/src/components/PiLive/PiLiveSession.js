@@ -8,6 +8,8 @@ import PiControls from './PiControls';
 import PiPoseData from './PiPoseData';
 import './PiLive.css';
 
+const BACKEND_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
+
 const PiLiveSession = ({ onSessionComplete }) => {
   const [piStatus, setPiStatus] = useState(null);
   const [activeSession, setActiveSession] = useState(null);
@@ -24,13 +26,13 @@ const PiLiveSession = ({ onSessionComplete }) => {
       setError(null);
       
       // First check basic Pi connection
-      const response = await axios.get('http://localhost:8000/api/pi-status', {
+      const response = await axios.get(`${BACKEND_URL}/api/pi-status`, {
         timeout: 5000
       });
       
       if (response.data.pi_connected) {
         // Get detailed status if connected
-        const detailedResponse = await axios.get('http://localhost:8000/api/pi-live/status', {
+        const detailedResponse = await axios.get(`${BACKEND_URL}/api/pi-live/status`, {
           headers: {
             'Authorization': `Bearer ${token}`
           },
@@ -61,7 +63,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
       setError(null);
       
       const response = await axios.post(
-        'http://localhost:8000/api/pi-live/start-session',
+        `${BACKEND_URL}/api/pi-live/start-session`,
         {
           session_name: sessionName
         },
@@ -112,7 +114,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
       setLoading(true);
       
       const response = await axios.post(
-        `http://localhost:8000/api/pi-live/stop-session/${activeSession.session_id}`,
+        `${BACKEND_URL}/api/pi-live/stop-session/${activeSession.session_id}`,
         {},
         {
           headers: {
@@ -155,7 +157,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
   const startPoseDataPolling = useCallback(() => {
     const intervalId = setInterval(async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/pi-live/current-pose', {
+        const response = await axios.get(`${BACKEND_URL}/api/pi-live/current-pose`, {
           headers: {
             'Authorization': `Bearer ${token}`
           },
