@@ -8,7 +8,7 @@ import PiControls from './PiControls';
 import PiPoseData from './PiPoseData';
 import './PiLive.css';
 
-const PI_URL = 'https://baduanjin-pi-service-g8aehuh0bghcc4be.southeastasia-01.azurewebsites.net/';
+const PI_URL = 'https://baduanjin-pi-service-g8aehuh0bghcc4be.southeastasia-01.azurewebsites.net';
 
 const PiLiveSession = ({ onSessionComplete }) => {
   const [piStatus, setPiStatus] = useState(null);
