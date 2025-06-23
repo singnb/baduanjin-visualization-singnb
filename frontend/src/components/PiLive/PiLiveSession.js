@@ -220,6 +220,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
             activeSession={activeSession}
             poseData={poseData}
             isConnected={isConnected}
+            token={token} 
           />
         </div>
         

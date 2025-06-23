@@ -119,7 +119,8 @@ class EnhancedPiService:
     async def download_pi_recording(self, filename: str, local_path: Path) -> Dict[str, Any]:
         """Download recording from Pi to local storage - ROBUST VERSION"""
         try:
-            pi_download_url = f"http://172.20.10.5:5001/api/download/{filename}"
+            # FIXED: Use ngrok URL instead of direct IP
+            pi_download_url = f"https://25de-122-11-245-27.ngrok-free.app/api/download/{filename}"
             print(f"🔄 Starting download: {filename} from {pi_download_url}")
             
             async with httpx.AsyncClient(timeout=120.0) as client:

@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import io from 'socket.io-client';
 
-const PiVideoStream = ({ activeSession, poseData, isConnected }) => {
+const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
   const [socket, setSocket] = useState(null);
   const [streamImage, setStreamImage] = useState(null);
   const [connectionError, setConnectionError] = useState(null);
