@@ -27,8 +27,8 @@ import asyncio
 router = APIRouter(prefix="/api/pi-live", tags=["pi-live-sessions"])
 
 # Pi Configuration - Updated to match your IP
-PI_BASE_URL = "https://fbad-122-11-245-27.ngrok-free.app/api"
-PI_WEBSOCKET_URL = "wss://fbad-122-11-245-27.ngrok-free.app"
+PI_BASE_URL = "https://mongoose-hardy-caiman.ngrok-free.app/api"
+PI_WEBSOCKET_URL = "wss://mongoose-hardy-caiman.ngrok-free.app"
 
 # File storage configuration
 VIDEOS_DIR = Path("uploaded_videos")
@@ -120,7 +120,7 @@ class EnhancedPiService:
         """Download recording from Pi to local storage - ROBUST VERSION"""
         try:
             # FIXED: Use ngrok URL instead of direct IP
-            pi_download_url = f"https://fbad-122-11-245-27.ngrok-free.app/api/download/{filename}"
+            pi_download_url = f"https://mongoose-hardy-caiman.ngrok-free.app/api/download/{filename}"
             print(f"🔄 Starting download: {filename} from {pi_download_url}")
             
             async with httpx.AsyncClient(timeout=120.0) as client:

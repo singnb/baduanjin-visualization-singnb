@@ -73,7 +73,7 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
       let httpPolling = null;
       
       try {
-        const NGROK_URL = 'https://fbad-122-11-245-27.ngrok-free.app';
+        const NGROK_URL = 'https://mongoose-hardy-caiman.ngrok-free.app';
         console.log(`🔗 Attempting WebSocket connection to ${NGROK_URL}...`);
         
         // Try WebSocket first
@@ -114,7 +114,7 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
         
       } catch (error) {
         console.error('🔴 WebSocket setup failed, using HTTP polling:', error);
-        startHttpPolling('https://25de-122-11-245-27.ngrok-free.app');
+        startHttpPolling('https://mongoose-hardy-caiman.ngrok-free.app');
       }
       
       // HTTP Polling Fallback Function

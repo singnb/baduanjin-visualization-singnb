@@ -27,6 +27,7 @@ class BrocadeType(str, enum.Enum):
     SIXTH = "SIXTH"
     SEVENTH = "SEVENTH"
     EIGHTH = "EIGHTH"
+    LIVE_SESSION = "LIVE_SESSION" 
 
 class User(Base):
     __tablename__ = "users"
