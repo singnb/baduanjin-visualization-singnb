@@ -201,58 +201,109 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
   }, [handleFrameUpdate]);
 
   useEffect(() => {
+    console.log('🔍 PiVideoStream useEffect triggered:', {
+      activeSession: !!activeSession,
+      isConnected,
+      sessionId: activeSession?.session_id
+    });
+
     if (activeSession && isConnected) {
-      let newSocket = null;
+      console.log('🚀 Starting video stream for session:', activeSession.session_id);
+      
+      const NGROK_URL = 'https://mongoose-hardy-caiman.ngrok-free.app';
+      console.log('🔗 Using ngrok URL:', NGROK_URL);
+      
+      // SKIP WEBSOCKET ENTIRELY - Go straight to HTTP polling for ngrok compatibility
+      console.log('🔄 Starting HTTP polling immediately (WebSocket disabled for ngrok)');
+      
       let httpPolling = null;
       
-      try {
-        console.log(`🔗 Attempting WebSocket connection to ${NGROK_URL}...`);
-        
-        // Try WebSocket first with ngrok headers
-        newSocket = io(NGROK_URL, {
-          transports: ['polling', 'websocket'],
-          timeout: 10000,
-          forceNew: true,
-          autoConnect: true,
-          secure: true,
-          extraHeaders: {
-            'ngrok-skip-browser-warning': 'true'
+      const startPolling = () => {
+        httpPolling = setInterval(async () => {
+          try {
+            const url = `${NGROK_URL}/api/current_frame`;
+            
+            const response = await fetch(url, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': 'true',
+                'Origin': window.location.origin
+              },
+              mode: 'cors'
+            });
+            
+            if (!response.ok) {
+              const errorText = await response.text();
+              console.error(`❌ HTTP ${response.status}:`, errorText.substring(0, 200));
+              setConnectionError(`HTTP ${response.status}: ${errorText.substring(0, 100)}`);
+              setWsConnected(false);
+              return;
+            }
+            
+            const contentType = response.headers.get('content-type');
+            
+            if (!contentType || !contentType.includes('application/json')) {
+              const htmlContent = await response.text();
+              console.error('❌ Received HTML instead of JSON:', htmlContent.substring(0, 200));
+              setConnectionError('Received HTML instead of JSON');
+              setWsConnected(false);
+              return;
+            }
+            
+            const data = await response.json();
+            
+            if (data.success && data.image) {
+              console.log('✅ Frame received:', {
+                imageSize: data.image.length,
+                poseCount: data.pose_data?.length || 0,
+                isRecording: data.is_recording
+              });
+              
+              const frameData = {
+                image: data.image,
+                pose_data: data.pose_data || [],
+                stats: data.stats || {},
+                is_recording: data.is_recording || false,
+                timestamp: data.timestamp || Date.now()
+              };
+              
+              handleFrameUpdate(frameData);
+              setWsConnected(true);  // Use this to indicate "connected"
+              setConnectionError(null);
+              
+            } else if (data.error) {
+              console.warn('⚠️ Pi server error:', data.error);
+              if (data.error.includes('No active stream')) {
+                setConnectionError('Waiting for camera to start...');
+              } else {
+                setConnectionError(`Pi server: ${data.error}`);
+              }
+              setWsConnected(false);
+            } else {
+              console.warn('⚠️ Unexpected response:', data);
+              setConnectionError('Unexpected response from Pi');
+              setWsConnected(false);
+            }
+            
+          } catch (error) {
+            console.error('❌ HTTP polling failed:', error);
+            setConnectionError(`Network error: ${error.message}`);
+            setWsConnected(false);
           }
-        });
-        
-        newSocket.on('connect', () => {
-          console.log('✅ WebSocket connected successfully');
-          setWsConnected(true);
-          setConnectionError(null);
-          frameBuffer.current = [];
-        });
-
-        newSocket.on('frame_update', handleFrameUpdate);
-        
-        newSocket.on('connect_error', (error) => {
-          console.error('🔴 WebSocket failed, switching to HTTP polling:', error);
-          
-          if (newSocket) {
-            newSocket.disconnect();
-            newSocket = null;
-          }
-          
-          httpPolling = startHttpPolling(NGROK_URL);
-        });
-        
-        setSocket(newSocket);
-        
-      } catch (error) {
-        console.error('🔴 WebSocket setup failed, using HTTP polling:', error);
-        httpPolling = startHttpPolling(NGROK_URL);
-      }
+        }, 2000); // Poll every 2 seconds
+      };
+      
+      // Start polling immediately
+      startPolling();
+      
+      // Set initial state
+      setWsConnected(false); // Will be set to true when first frame arrives
+      setConnectionError('Connecting to camera...');
       
       // Cleanup function
       return () => {
-        if (newSocket) {
-          console.log('🔌 Disconnecting WebSocket');
-          newSocket.disconnect();
-        }
         if (httpPolling) {
           console.log('🔌 Stopping HTTP polling');
           clearInterval(httpPolling);
@@ -272,7 +323,7 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
       setIsRecording(false);
       frameBuffer.current = [];
     }
-  }, [activeSession, isConnected, handleFrameUpdate, startHttpPolling]);
+  }, [activeSession, isConnected, handleFrameUpdate]);
 
   // Open ngrok URL in new tab for authentication
   const authenticateNgrok = useCallback(() => {
