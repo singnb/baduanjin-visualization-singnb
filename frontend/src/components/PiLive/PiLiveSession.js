@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../auth/AuthContext';
-import PiStatusPanel from './PiStatusPanel';
+import PiStatusPanel from './PiStatusPanel'; 
 import PiVideoStream from './PiVideoStream';
 import PiControls from './PiControls';
 import PiPoseData from './PiPoseData';
