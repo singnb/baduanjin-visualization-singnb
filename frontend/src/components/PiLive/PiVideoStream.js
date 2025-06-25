@@ -1,4 +1,5 @@
 // src/components/PiLive/PiVideoStream.js 
+
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import io from 'socket.io-client';
 
@@ -13,6 +14,9 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
   const lastFrameTime = useRef(0);
   const frameBuffer = useRef([]);
 
+  // Update your ngrok URL here when it changes
+  const NGROK_URL = 'https://mongoose-hardy-caiman.ngrok-free.app';
+
   // Optimized frame handler with frame dropping
   const handleFrameUpdate = useCallback((data) => {
     const now = Date.now();
@@ -21,15 +25,15 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
     // Calculate latency
     const latency = now - frameTimestamp;
     
-    // Drop old frames to reduce buffering delay (be more lenient)
-    if (latency > 1000) { // Drop frames older than 1 second
+    // Drop old frames to reduce buffering delay
+    if (latency > 1000) {
       console.warn(`⚠️ Dropping old frame, latency: ${latency}ms`);
       return;
     }
     
     // Clear frame buffer if it's getting too long
     if (frameBuffer.current.length > 3) {
-      frameBuffer.current = frameBuffer.current.slice(-1); // Keep only latest frame
+      frameBuffer.current = frameBuffer.current.slice(-1);
     }
     
     // Add frame to buffer
@@ -57,7 +61,7 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
     setIsRecording(frame.isRecording);
     
     // Update stats less frequently to avoid excessive re-renders
-    if (now - lastFrameTime.current > 500) { // Update every 500ms
+    if (now - lastFrameTime.current > 500) {
       setStreamStats({
         fps: frame.stats.current_fps || 0,
         latency: frame.latency,
@@ -67,25 +71,155 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
     }
   }, []);
 
+  // Test ngrok authentication
+  const testNgrokAuthentication = useCallback(async () => {
+    try {
+      console.log('🧪 Testing ngrok authentication...');
+      
+      const response = await fetch(NGROK_URL, {
+        method: 'GET',
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // This header skips ngrok warning
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+        },
+        mode: 'cors'
+      });
+      
+      const text = await response.text();
+      console.log('🧪 Ngrok response:', text.substring(0, 200));
+      
+      if (text.includes('ngrok') && text.includes('Visit Site')) {
+        return false; // Needs authentication
+      }
+      return true; // Already authenticated
+    } catch (error) {
+      console.error('🧪 Ngrok test failed:', error);
+      return false;
+    }
+  }, []);
+
+  // Enhanced HTTP polling with ngrok handling
+  const startHttpPolling = useCallback((baseUrl) => {
+    console.log('🔄 Starting HTTP polling for frames...');
+    
+    const httpPolling = setInterval(async () => {
+      try {
+        console.log(`📡 Polling: ${baseUrl}/api/current_frame`);
+        
+        const response = await fetch(`${baseUrl}/api/current_frame`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true', // Skip ngrok warning page
+            'Origin': window.location.origin
+          },
+          mode: 'cors'
+        });
+        
+        console.log(`📊 Response status: ${response.status}`);
+        
+        const contentType = response.headers.get('content-type');
+        console.log(`📊 Content-Type: ${contentType}`);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`❌ HTTP ${response.status}:`, errorText.substring(0, 200));
+          
+          // Check for specific ngrok errors
+          if (errorText.includes('ngrok') && errorText.includes('Visit Site')) {
+            setConnectionError('Ngrok authentication required. Click "Authenticate Ngrok" below.');
+          } else if (response.status === 404) {
+            setConnectionError('Pi server endpoint not found. Check if web_server.py is running.');
+          } else {
+            setConnectionError(`HTTP ${response.status}: ${errorText.substring(0, 100)}`);
+          }
+          setWsConnected(false);
+          return;
+        }
+        
+        if (!contentType || !contentType.includes('application/json')) {
+          const htmlContent = await response.text();
+          console.error('❌ Received HTML instead of JSON:', htmlContent.substring(0, 500));
+          
+          // Enhanced ngrok detection
+          if (htmlContent.includes('ngrok')) {
+            if (htmlContent.includes('Visit Site') || htmlContent.includes('only for legitimate traffic')) {
+              setConnectionError('Ngrok requires browser authentication. Click "Authenticate Ngrok" below.');
+            } else if (htmlContent.includes('Tunnel not found')) {
+              setConnectionError('Ngrok tunnel not found. Please check your ngrok URL.');
+            } else {
+              setConnectionError('Ngrok issue detected. Try authenticating in browser first.');
+            }
+          } else if (htmlContent.includes('CORS')) {
+            setConnectionError('CORS error - Pi server not accepting requests from this domain');
+          } else {
+            setConnectionError(`Received HTML instead of JSON. Check if Pi server is running correctly.`);
+          }
+          setWsConnected(false);
+          return;
+        }
+        
+        const data = await response.json();
+        console.log('📦 Parsed JSON data keys:', Object.keys(data));
+        
+        if (data.success && data.image) {
+          const frameData = {
+            image: data.image,
+            pose_data: data.pose_data || [],
+            stats: data.stats || {},
+            timestamp: data.timestamp || Date.now()
+          };
+          
+          handleFrameUpdate(frameData);
+          setWsConnected(true);
+          setConnectionError(null);
+          
+        } else if (data.error) {
+          console.warn('HTTP polling error:', data.error);
+          setConnectionError(`Pi server error: ${data.error}`);
+          setWsConnected(false);
+        } else {
+          console.warn('Unexpected response format:', data);
+          setConnectionError('Unexpected response format from Pi server');
+          setWsConnected(false);
+        }
+        
+      } catch (error) {
+        console.error('HTTP polling failed:', error);
+        
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+          setConnectionError('Network error: Cannot reach Pi server. Check ngrok tunnel.');
+        } else {
+          setConnectionError(`HTTP polling failed: ${error.message}`);
+        }
+        setWsConnected(false);
+      }
+    }, 2000); // Poll every 2 seconds
+    
+    return httpPolling;
+  }, [handleFrameUpdate]);
+
   useEffect(() => {
     if (activeSession && isConnected) {
       let newSocket = null;
       let httpPolling = null;
       
       try {
-        const NGROK_URL = 'https://mongoose-hardy-caiman.ngrok-free.app';
         console.log(`🔗 Attempting WebSocket connection to ${NGROK_URL}...`);
         
-        // Try WebSocket first
+        // Try WebSocket first with ngrok headers
         newSocket = io(NGROK_URL, {
           transports: ['polling', 'websocket'],
           timeout: 10000,
           forceNew: true,
           autoConnect: true,
-          secure: true
+          secure: true,
+          extraHeaders: {
+            'ngrok-skip-browser-warning': 'true'
+          }
         });
         
-        // WebSocket success
         newSocket.on('connect', () => {
           console.log('✅ WebSocket connected successfully');
           setWsConnected(true);
@@ -93,112 +227,24 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
           frameBuffer.current = [];
         });
 
-        // WebSocket frame updates
         newSocket.on('frame_update', handleFrameUpdate);
         
-        // WebSocket error - switch to HTTP polling
         newSocket.on('connect_error', (error) => {
           console.error('🔴 WebSocket failed, switching to HTTP polling:', error);
           
-          // Disconnect WebSocket
           if (newSocket) {
             newSocket.disconnect();
             newSocket = null;
           }
           
-          // Start HTTP polling fallback
-          startHttpPolling(NGROK_URL);
+          httpPolling = startHttpPolling(NGROK_URL);
         });
         
         setSocket(newSocket);
         
       } catch (error) {
         console.error('🔴 WebSocket setup failed, using HTTP polling:', error);
-        startHttpPolling('https://mongoose-hardy-caiman.ngrok-free.app');
-      }
-      
-      // HTTP Polling Fallback Function
-      function startHttpPolling(baseUrl) {
-        console.log('🔄 Starting HTTP polling for frames...');
-        setConnectionError('Using HTTP polling (WebSocket unavailable)');
-        
-        httpPolling = setInterval(async () => {
-          try {
-            console.log(`📡 Polling: ${baseUrl}/api/current_frame`);
-            
-            const response = await fetch(`${baseUrl}/api/current_frame`, {
-              method: 'GET',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                // Add origin header to help with CORS debugging
-                'Origin': window.location.origin
-              },
-              // Important: Set mode to handle CORS properly
-              mode: 'cors'
-            });
-            
-            console.log(`📊 Response status: ${response.status}`);
-            console.log(`📊 Response headers:`, Object.fromEntries(response.headers.entries()));
-            
-            // Check content type before parsing
-            const contentType = response.headers.get('content-type');
-            console.log(`📊 Content-Type: ${contentType}`);
-            
-            if (!response.ok) {
-              // Log the actual error response
-              const errorText = await response.text();
-              console.error(`❌ HTTP ${response.status}:`, errorText.substring(0, 200));
-              setConnectionError(`HTTP ${response.status}: ${errorText.substring(0, 100)}`);
-              setWsConnected(false);
-              return;
-            }
-            
-            if (!contentType || !contentType.includes('application/json')) {
-              // This is where we're getting HTML instead of JSON
-              const htmlContent = await response.text();
-              console.error('❌ Received HTML instead of JSON:', htmlContent.substring(0, 500));
-              
-              // Check if this is an ngrok authentication page
-              if (htmlContent.includes('ngrok') && htmlContent.includes('Visit Site')) {
-                setConnectionError('Ngrok authentication required - visit the Pi URL in browser first');
-              } else if (htmlContent.includes('CORS')) {
-                setConnectionError('CORS error - Pi server not accepting requests from this domain');
-              } else {
-                setConnectionError(`Received HTML instead of JSON. Response starts with: ${htmlContent.substring(0, 100)}`);
-              }
-              setWsConnected(false);
-              return;
-            }
-            
-            const data = await response.json();
-            console.log('📦 Parsed JSON data:', data);
-            
-            if (data.success && data.image) {
-              // Simulate WebSocket frame data structure
-              const frameData = {
-                image: data.image,
-                pose_data: data.pose_data || [],
-                stats: data.stats || {},
-                timestamp: data.timestamp || Date.now()
-              };
-              
-              handleFrameUpdate(frameData);
-              setWsConnected(true);
-              setConnectionError(null);
-              
-            } else if (data.error) {
-              console.warn('HTTP polling error:', data.error);
-              setConnectionError(`HTTP polling: ${data.error}`);
-              setWsConnected(false);
-            }
-            
-          } catch (error) {
-            console.error('HTTP polling failed:', error);
-            setConnectionError(`HTTP polling failed: ${error.message}`);
-            setWsConnected(false);
-          }
-        }, 1000); // Increased to 1 second for debugging
+        httpPolling = startHttpPolling(NGROK_URL);
       }
       
       // Cleanup function
@@ -226,16 +272,35 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
       setIsRecording(false);
       frameBuffer.current = [];
     }
-  }, [activeSession, isConnected, handleFrameUpdate]);
+  }, [activeSession, isConnected, handleFrameUpdate, startHttpPolling]);
+
+  // Open ngrok URL in new tab for authentication
+  const authenticateNgrok = useCallback(() => {
+    const authUrl = NGROK_URL;
+    console.log('🌐 Opening ngrok URL for authentication:', authUrl);
+    window.open(authUrl, '_blank');
+    
+    // Provide instructions
+    alert(`
+Opening ngrok URL in new tab for authentication.
+
+After the page loads:
+1. Click "Visit Site" if prompted
+2. You may see a warning page - this is normal for ngrok free tier
+3. Wait for the page to load completely
+4. Close the tab and click "Retry Connection" below
+
+The ngrok URL is: ${authUrl}
+    `);
+  }, []);
 
   const testDirectConnection = useCallback(async () => {
     try {
       console.log('🧪 Testing Pi connection via Azure service...');
       
-      // FIXED: Test through Azure pi-service instead of direct Pi connection
       const response = await fetch('https://baduanjin-pi-service-g8aehuh0bghcc4be.southeastasia-01.azurewebsites.net/api/pi-live/status', {
         headers: {
-          'Authorization': `Bearer ${token}` // You'll need to pass token as prop
+          'Authorization': `Bearer ${token}`
         }
       });
       
@@ -243,10 +308,19 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
       console.log('✅ Pi status via Azure:', data);
       
       if (data.pi_connected && data.is_running) {
-        console.log('✅ Pi is connected and running, WebSocket should work');
-        // Try to reconnect
-        if (socket) {
-          socket.connect();
+        console.log('✅ Pi is connected and running, testing ngrok authentication...');
+        const ngrokAuthenticated = await testNgrokAuthentication();
+        
+        if (ngrokAuthenticated) {
+          console.log('✅ Ngrok is authenticated, trying to reconnect...');
+          if (socket) {
+            socket.connect();
+          } else {
+            // Force a reconnection attempt
+            window.location.reload();
+          }
+        } else {
+          setConnectionError('Ngrok authentication required. Click "Authenticate Ngrok" below.');
         }
       } else if (data.pi_connected && !data.is_running) {
         console.log('⚠️ Pi is connected but not running streaming');
@@ -259,7 +333,7 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
       console.error('❌ Pi connection test failed:', error);
       setConnectionError('Cannot reach Pi through Azure service');
     }
-  }, [socket]);
+  }, [socket, testNgrokAuthentication, token]);
 
   const renderStreamContent = () => {
     if (!activeSession) {
@@ -287,11 +361,32 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
                 frameBuffer.current = [];
                 if (socket) {
                   socket.connect();
+                } else {
+                  // Force component re-mount to retry connection
+                  window.location.reload();
                 }
               }}
             >
               🔄 Retry Connection
             </button>
+            
+            {connectionError.includes('ngrok') && (
+              <button 
+                className="auth-btn"
+                onClick={authenticateNgrok}
+                style={{ 
+                  backgroundColor: '#007bff', 
+                  color: 'white', 
+                  border: 'none', 
+                  padding: '8px 12px', 
+                  borderRadius: '4px',
+                  marginLeft: '10px'
+                }}
+              >
+                🌐 Authenticate Ngrok
+              </button>
+            )}
+            
             <button 
               className="test-btn"
               onClick={testDirectConnection}
@@ -299,15 +394,23 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
               🧪 Test Pi Connection
             </button>
           </div>
+          
           <div className="troubleshooting">
             <details>
-              <summary>Troubleshooting Tips</summary>
-              <ul>
-                <li>Check if Pi server is running at 172.20.10.5:5001</li>
-                <li>Verify network connection to Pi</li>
-                <li>Try refreshing the page</li>
-                <li>Check browser console for more details</li>
-              </ul>
+              <summary>Troubleshooting Steps</summary>
+              <ol style={{ textAlign: 'left', fontSize: '13px' }}>
+                <li><strong>Ngrok Authentication:</strong> Click "Authenticate Ngrok" button above</li>
+                <li><strong>Check Pi Server:</strong> Ensure web_server.py is running on Pi</li>
+                <li><strong>Update Ngrok URL:</strong> Ngrok URLs change frequently on free tier</li>
+                <li><strong>Network Check:</strong> Verify Pi can reach internet</li>
+                <li><strong>Firewall:</strong> Check if ports 5001 are open</li>
+              </ol>
+              
+              <div style={{ marginTop: '10px', padding: '8px', backgroundColor: '#f8f9fa' }}>
+                <strong>Current Ngrok URL:</strong><br />
+                <code style={{ fontSize: '12px' }}>{NGROK_URL}</code><br />
+                <small>Update this URL in the code if it has changed</small>
+              </div>
             </details>
           </div>
         </div>
@@ -348,7 +451,7 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
           <div className="loading-spinner"></div>
           <p>Connecting to Pi camera...</p>
           <p style={{ fontSize: '14px', color: '#6c757d' }}>
-            Attempting Socket.IO connection with fallback...
+            Attempting connection to: {NGROK_URL}
           </p>
         </div>
       );

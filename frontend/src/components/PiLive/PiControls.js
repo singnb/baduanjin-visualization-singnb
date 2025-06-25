@@ -1,4 +1,4 @@
-// src/components/PiLive/PiControls.js - Enhanced with debugging
+// src/components/PiLive/PiControls.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../auth/AuthContext';
