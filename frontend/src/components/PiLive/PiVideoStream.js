@@ -124,8 +124,55 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
         
         httpPolling = setInterval(async () => {
           try {
-            const response = await fetch(`${baseUrl}/api/current_frame`);
+            console.log(`📡 Polling: ${baseUrl}/api/current_frame`);
+            
+            const response = await fetch(`${baseUrl}/api/current_frame`, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                // Add origin header to help with CORS debugging
+                'Origin': window.location.origin
+              },
+              // Important: Set mode to handle CORS properly
+              mode: 'cors'
+            });
+            
+            console.log(`📊 Response status: ${response.status}`);
+            console.log(`📊 Response headers:`, Object.fromEntries(response.headers.entries()));
+            
+            // Check content type before parsing
+            const contentType = response.headers.get('content-type');
+            console.log(`📊 Content-Type: ${contentType}`);
+            
+            if (!response.ok) {
+              // Log the actual error response
+              const errorText = await response.text();
+              console.error(`❌ HTTP ${response.status}:`, errorText.substring(0, 200));
+              setConnectionError(`HTTP ${response.status}: ${errorText.substring(0, 100)}`);
+              setWsConnected(false);
+              return;
+            }
+            
+            if (!contentType || !contentType.includes('application/json')) {
+              // This is where we're getting HTML instead of JSON
+              const htmlContent = await response.text();
+              console.error('❌ Received HTML instead of JSON:', htmlContent.substring(0, 500));
+              
+              // Check if this is an ngrok authentication page
+              if (htmlContent.includes('ngrok') && htmlContent.includes('Visit Site')) {
+                setConnectionError('Ngrok authentication required - visit the Pi URL in browser first');
+              } else if (htmlContent.includes('CORS')) {
+                setConnectionError('CORS error - Pi server not accepting requests from this domain');
+              } else {
+                setConnectionError(`Received HTML instead of JSON. Response starts with: ${htmlContent.substring(0, 100)}`);
+              }
+              setWsConnected(false);
+              return;
+            }
+            
             const data = await response.json();
+            console.log('📦 Parsed JSON data:', data);
             
             if (data.success && data.image) {
               // Simulate WebSocket frame data structure
@@ -147,11 +194,11 @@ const PiVideoStream = ({ activeSession, poseData, isConnected, token }) => {
             }
             
           } catch (error) {
-            console.warn('HTTP polling failed:', error);
-            setConnectionError('HTTP polling connection failed');
+            console.error('HTTP polling failed:', error);
+            setConnectionError(`HTTP polling failed: ${error.message}`);
             setWsConnected(false);
           }
-        }, 200); // Poll every 200ms (5 FPS)
+        }, 1000); // Increased to 1 second for debugging
       }
       
       // Cleanup function
