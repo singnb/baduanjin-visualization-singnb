@@ -46,29 +46,55 @@ class EnhancedPiService:
         self.transfer_queue = {}   # Track file transfers
     
     async def check_pi_status(self) -> Dict[str, Any]:
-        """Check if Pi is available and get status - FAST RESPONSE"""
+        """Enhanced Pi status check for static ngrok URL"""
         try:
-            # Reduce timeout to 3 seconds for faster response
-            async with httpx.AsyncClient(timeout=3.0) as client:
-                response = await client.get(f"{PI_BASE_URL}/status")
-                return {"connected": True, "data": response.json()}
+            # Use static ngrok URL with enhanced headers
+            headers = {
+                'ngrok-skip-browser-warning': 'true',
+                'User-Agent': 'Azure-Pi-Service/1.0',
+                'Accept': 'application/json'
+            }
+            
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(
+                    f"https://mongoose-hardy-caiman.ngrok-free.app/api/status",
+                    headers=headers
+                )
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    return {
+                        "connected": True, 
+                        "data": data,
+                        "ngrok_status": "active",
+                        "connection_method": "static_ngrok"
+                    }
+                else:
+                    return {
+                        "connected": False,
+                        "error": f"Pi returned HTTP {response.status_code}",
+                        "ngrok_status": "error"
+                    }
+                    
         except httpx.TimeoutException:
             return {
                 "connected": False, 
-                "error": "Pi connection timeout - Pi may be offline",
-                "pi_ip": "172.20.10.5:5001"
+                "error": "Pi connection timeout (mobile network may be slow)",
+                "ngrok_status": "timeout",
+                "suggestion": "Check mobile network connection and ngrok tunnel"
             }
         except httpx.ConnectError:
             return {
                 "connected": False, 
-                "error": "Cannot reach Pi - check network connection",
-                "pi_ip": "172.20.10.5:5001"
+                "error": "Cannot reach Pi via ngrok - tunnel may be down",
+                "ngrok_status": "unreachable",
+                "suggestion": "Verify ngrok tunnel is running on Pi"
             }
         except Exception as e:
             return {
                 "connected": False, 
                 "error": f"Pi connection error: {str(e)}",
-                "pi_ip": "172.20.10.5:5001"
+                "ngrok_status": "unknown_error"
             }
     
     async def start_pi_streaming(self) -> Dict[str, Any]:
@@ -117,78 +143,147 @@ class EnhancedPiService:
             return {"success": False, "error": str(e)}
     
     async def download_pi_recording(self, filename: str, local_path: Path) -> Dict[str, Any]:
-        """Download recording from Pi to local storage - ROBUST VERSION"""
+        """Enhanced download method with ngrok static URL and better error handling"""
         try:
-            # FIXED: Use ngrok URL instead of direct IP
+            # Use static ngrok URL for download
             pi_download_url = f"https://mongoose-hardy-caiman.ngrok-free.app/api/download/{filename}"
             print(f"🔄 Starting download: {filename} from {pi_download_url}")
             
-            async with httpx.AsyncClient(timeout=120.0) as client:
-                # Method 1: Try streaming with modern httpx
+            # Check if file exists on Pi first
+            try:
+                status_url = f"https://mongoose-hardy-caiman.ngrok-free.app/api/download-status/{filename}"
+                async with httpx.AsyncClient(timeout=30.0) as client:
+                    status_response = await client.get(status_url, headers={
+                        'ngrok-skip-browser-warning': 'true',
+                        'User-Agent': 'Azure-Pi-Service/1.0'
+                    })
+                    
+                    if status_response.status_code != 200:
+                        return {
+                            "success": False, 
+                            "error": f"File not ready on Pi: HTTP {status_response.status_code}"
+                        }
+                    
+                    status_data = status_response.json()
+                    if not status_data.get("exists", False):
+                        return {
+                            "success": False,
+                            "error": f"File does not exist on Pi: {filename}"
+                        }
+                    
+                    expected_size = status_data.get("size", 0)
+                    print(f"📁 File confirmed on Pi: {filename} ({expected_size} bytes)")
+                    
+            except Exception as status_error:
+                print(f"⚠️ Could not verify file status: {status_error}")
+                # Continue anyway, but with warning
+            
+            # Download with enhanced settings for ngrok
+            async with httpx.AsyncClient(
+                timeout=httpx.Timeout(connect=30.0, read=300.0, write=30.0, pool=30.0),
+                limits=httpx.Limits(max_connections=5, max_keepalive_connections=2),
+                follow_redirects=True
+            ) as client:
+                
+                # Method 1: Try streaming download
                 try:
-                    async with client.stream('GET', pi_download_url) as response:
-                        response.raise_for_status()
+                    headers = {
+                        'ngrok-skip-browser-warning': 'true',
+                        'User-Agent': 'Azure-Pi-Service/1.0',
+                        'Accept': 'video/mp4,application/octet-stream,*/*',
+                        'Cache-Control': 'no-cache'
+                    }
+                    
+                    print(f"📡 Starting streaming download...")
+                    async with client.stream('GET', pi_download_url, headers=headers) as response:
                         
-                        print(f"📡 Stream opened, status: {response.status_code}")
+                        if response.status_code != 200:
+                            error_text = await response.atext()
+                            return {
+                                "success": False,
+                                "error": f"HTTP {response.status_code}: {error_text[:200]}"
+                            }
+                        
+                        content_length = response.headers.get('content-length')
+                        if content_length:
+                            expected_size = int(content_length)
+                            print(f"📊 Expected download size: {expected_size} bytes")
+                        
                         total_size = 0
+                        chunk_count = 0
                         
-                        # Write file in chunks - Compatible with different httpx versions
+                        # Stream download with progress tracking
                         async with aiofiles.open(local_path, 'wb') as f:
-                            try:
-                                # Try with chunk size parameter (newer httpx)
-                                async for chunk in response.aiter_bytes(8192):
+                            async for chunk in response.aiter_bytes(chunk_size=65536):  # 64KB chunks
+                                if chunk:
                                     await f.write(chunk)
                                     total_size += len(chunk)
-                            except TypeError:
-                                # Fallback for older httpx - no chunk size parameter
-                                print("📡 Using fallback streaming method...")
-                                async for chunk in response.aiter_bytes():
-                                    await f.write(chunk)
-                                    total_size += len(chunk)
+                                    chunk_count += 1
+                                    
+                                    # Progress log every 100 chunks (about 6.4MB)
+                                    if chunk_count % 100 == 0:
+                                        print(f"📥 Downloaded {total_size:,} bytes...")
                         
-                        print(f"✅ Downloaded {total_size} bytes")
+                        print(f"✅ Streaming download completed: {total_size:,} bytes")
                         
                 except Exception as stream_error:
                     print(f"⚠️ Streaming failed: {stream_error}, trying direct download...")
                     
-                    # Method 2: Fallback to direct download
-                    response = await client.get(pi_download_url)
-                    response.raise_for_status()
+                    # Method 2: Direct download fallback
+                    response = await client.get(pi_download_url, headers={
+                        'ngrok-skip-browser-warning': 'true',
+                        'User-Agent': 'Azure-Pi-Service/1.0'
+                    })
+                    
+                    if response.status_code != 200:
+                        return {
+                            "success": False,
+                            "error": f"Direct download failed: HTTP {response.status_code}"
+                        }
                     
                     async with aiofiles.open(local_path, 'wb') as f:
                         await f.write(response.content)
                     
-                    print(f"✅ Direct download completed: {len(response.content)} bytes")
+                    total_size = len(response.content)
+                    print(f"✅ Direct download completed: {total_size:,} bytes")
             
-            # Verify file was downloaded
+            # Verify download
             if local_path.exists() and local_path.stat().st_size > 0:
-                file_size = local_path.stat().st_size
-                print(f"✅ File verification passed: {file_size} bytes")
+                actual_size = local_path.stat().st_size
+                
+                # Size verification
+                if 'expected_size' in locals() and expected_size > 0:
+                    if actual_size != expected_size:
+                        print(f"⚠️ Size mismatch: expected {expected_size}, got {actual_size}")
+                    else:
+                        print(f"✅ Size verification passed: {actual_size} bytes")
                 
                 return {
                     "success": True, 
                     "filename": filename,
                     "local_path": str(local_path),
-                    "size": file_size
+                    "size": actual_size,
+                    "download_method": "streaming" if 'stream_error' not in locals() else "direct"
                 }
             else:
-                error_msg = "Downloaded file is empty or missing"
-                print(f"❌ File verification failed: {error_msg}")
-                return {"success": False, "error": error_msg}
+                return {
+                    "success": False, 
+                    "error": "Downloaded file is empty or missing"
+                }
                 
-        except httpx.HTTPStatusError as http_error:
-            error_msg = f"HTTP error {http_error.response.status_code}: {http_error.response.text}"
-            print(f"❌ HTTP error: {error_msg}")
-            return {"success": False, "error": error_msg}
-            
         except httpx.TimeoutException:
-            error_msg = "Download timeout - file might be too large or network is slow"
-            print(f"❌ Timeout error: {error_msg}")
-            return {"success": False, "error": error_msg}
-            
+            return {
+                "success": False, 
+                "error": "Download timeout - ngrok connection may be slow on mobile network"
+            }
+        except httpx.ConnectError:
+            return {
+                "success": False, 
+                "error": "Cannot connect to Pi - check ngrok tunnel status"
+            }
         except Exception as e:
             error_msg = f"Download failed: {str(e)}"
-            print(f"❌ General error: {error_msg}")
+            print(f"❌ {error_msg}")
             return {"success": False, "error": error_msg}
     
     async def delete_pi_recording(self, filename: str) -> Dict[str, Any]:
@@ -630,28 +725,65 @@ def download_pi_recording_requests_fallback(self, filename: str, local_path: Pat
         return {"success": False, "error": error_msg}
 
 @router.get("/transfer-status/{filename}")
-async def get_transfer_status(
+async def get_transfer_status_enhanced(
     filename: str,
     current_user: User = Depends(get_current_user)
 ):
-    """Get transfer status for a file"""
+    """Enhanced transfer status with better debugging info"""
     
     if filename not in pi_service.transfer_queue:
-        raise HTTPException(status_code=404, detail="Transfer not found")
+        # Check if file exists on Pi for debugging
+        try:
+            recordings = await pi_service.get_pi_recordings()
+            pi_files = [r["filename"] for r in recordings.get("recordings", [])]
+            
+            return {
+                "transfer_found": False,
+                "error": "Transfer not found in queue",
+                "filename": filename,
+                "available_on_pi": filename in pi_files,
+                "pi_files_count": len(pi_files),
+                "suggestion": "Check if transfer was initiated" if filename not in pi_files else "Initiate transfer first"
+            }
+        except:
+            return {"transfer_found": False, "error": "Transfer not found and cannot check Pi"}
     
     transfer_info = pi_service.transfer_queue[filename]
     
     if transfer_info["user_id"] != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized")
     
-    return {
+    # Enhanced status with debugging info
+    status_data = {
         "filename": filename,
         "status": transfer_info["status"],
         "start_time": transfer_info["start_time"].isoformat(),
-        "size": transfer_info.get("size"),
-        "error": transfer_info.get("error"),
-        "completion_time": transfer_info.get("completion_time").isoformat() if transfer_info.get("completion_time") else None
+        "user_id": transfer_info["user_id"],
+        "local_path": str(transfer_info.get("local_path", "")),
     }
+    
+    # Add completion info if available
+    if transfer_info.get("completion_time"):
+        status_data["completion_time"] = transfer_info["completion_time"].isoformat()
+        duration = transfer_info["completion_time"] - transfer_info["start_time"]
+        status_data["duration_seconds"] = duration.total_seconds()
+    
+    if transfer_info.get("size"):
+        status_data["size"] = transfer_info["size"]
+        status_data["size_mb"] = round(transfer_info["size"] / 1024 / 1024, 2)
+    
+    if transfer_info.get("error"):
+        status_data["error"] = transfer_info["error"]
+        status_data["error_details"] = "Check Pi connection and ngrok tunnel status"
+    
+    # File verification for completed transfers
+    if transfer_info["status"] == "completed" and transfer_info.get("local_path"):
+        local_path = Path(transfer_info["local_path"])
+        status_data["file_exists_locally"] = local_path.exists()
+        if local_path.exists():
+            status_data["actual_file_size"] = local_path.stat().st_size
+    
+    return status_data
 
 @router.post("/save-session")
 async def save_live_session(
@@ -875,3 +1007,130 @@ async def start_live_session_debug(
         print(f"❌ Debug session error: {e}")
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Debug session failed: {str(e)}")
+    
+@router.get("/test-pi-connection")
+async def test_pi_connection_detailed():
+    """Detailed Pi connection test for debugging ngrok issues"""
+    
+    test_results = {
+        "timestamp": datetime.now().isoformat(),
+        "tests": {}
+    }
+    
+    # Test 1: Basic connectivity
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.get(
+                "https://mongoose-hardy-caiman.ngrok-free.app/api/health",
+                headers={'ngrok-skip-browser-warning': 'true'}
+            )
+            test_results["tests"]["basic_connectivity"] = {
+                "status": "pass" if response.status_code == 200 else "fail",
+                "http_code": response.status_code,
+                "response_time_ms": response.elapsed.total_seconds() * 1000
+            }
+    except Exception as e:
+        test_results["tests"]["basic_connectivity"] = {
+            "status": "fail",
+            "error": str(e)
+        }
+    
+    # Test 2: Status endpoint
+    try:
+        status_result = await pi_service.check_pi_status()
+        test_results["tests"]["status_endpoint"] = {
+            "status": "pass" if status_result["connected"] else "fail",
+            "pi_running": status_result.get("data", {}).get("is_running", False),
+            "camera_available": status_result.get("data", {}).get("camera_available", False)
+        }
+    except Exception as e:
+        test_results["tests"]["status_endpoint"] = {
+            "status": "fail",
+            "error": str(e)
+        }
+    
+    # Test 3: Recordings list
+    try:
+        recordings_result = await pi_service.get_pi_recordings()
+        test_results["tests"]["recordings_endpoint"] = {
+            "status": "pass" if recordings_result.get("success") else "fail",
+            "recordings_count": len(recordings_result.get("recordings", []))
+        }
+    except Exception as e:
+        test_results["tests"]["recordings_endpoint"] = {
+            "status": "fail",
+            "error": str(e)
+        }
+    
+    return test_results
+
+async def transfer_file_background_enhanced(filename: str, local_path: Path, user_id: int):
+    """Enhanced background transfer with better error handling and logging"""
+    try:
+        print(f"🚀 Starting enhanced background transfer: {filename}")
+        
+        # Update status
+        pi_service.transfer_queue[filename]["status"] = "downloading"
+        pi_service.transfer_queue[filename]["progress"] = "Initializing download..."
+        
+        # Check Pi file status first
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                status_url = f"https://mongoose-hardy-caiman.ngrok-free.app/api/download-status/{filename}"
+                status_response = await client.get(status_url, headers={
+                    'ngrok-skip-browser-warning': 'true'
+                })
+                
+                if status_response.status_code == 200:
+                    status_data = status_response.json()
+                    if status_data.get("exists"):
+                        expected_size = status_data.get("size", 0)
+                        pi_service.transfer_queue[filename]["expected_size"] = expected_size
+                        pi_service.transfer_queue[filename]["progress"] = f"File verified on Pi ({expected_size:,} bytes)"
+                        print(f"✅ File verified on Pi: {filename} ({expected_size:,} bytes)")
+                    else:
+                        raise Exception("File does not exist on Pi")
+                else:
+                    raise Exception(f"Pi status check failed: HTTP {status_response.status_code}")
+                    
+        except Exception as status_error:
+            error_msg = f"Pi file verification failed: {status_error}"
+            pi_service.transfer_queue[filename].update({
+                "status": "failed",
+                "error": error_msg,
+                "completion_time": datetime.now()
+            })
+            print(f"❌ {error_msg}")
+            return
+        
+        # Perform download
+        pi_service.transfer_queue[filename]["progress"] = "Downloading from Pi..."
+        result = await pi_service.download_pi_recording(filename, local_path)
+        
+        if result["success"]:
+            pi_service.transfer_queue[filename].update({
+                "status": "completed",
+                "size": result["size"],
+                "completion_time": datetime.now(),
+                "progress": f"Transfer completed ({result['size']:,} bytes)",
+                "download_method": result.get("download_method", "unknown")
+            })
+            print(f"✅ Enhanced transfer completed: {filename} -> {local_path} ({result['size']:,} bytes)")
+        else:
+            pi_service.transfer_queue[filename].update({
+                "status": "failed",
+                "error": result["error"],
+                "completion_time": datetime.now(),
+                "progress": f"Transfer failed: {result['error']}"
+            })
+            print(f"❌ Enhanced transfer failed: {filename} - {result['error']}")
+            
+    except Exception as e:
+        error_msg = f"Background transfer exception: {str(e)}"
+        pi_service.transfer_queue[filename].update({
+            "status": "failed",
+            "error": error_msg,
+            "completion_time": datetime.now(),
+            "progress": f"Exception occurred: {error_msg}"
+        })
+        print(f"❌ {error_msg}")
