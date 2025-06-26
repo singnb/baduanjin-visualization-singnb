@@ -1,89 +1,148 @@
 // src/components/PiLive/PiLiveSession.js
+// CLEANED VERSION - Consolidated state management and polling
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../auth/AuthContext';
-import PiStatusPanel from './PiStatusPanel'; 
+import { PI_CONFIG, getPiUrl, isDirectPiAvailable } from '../../config/piConfig';
+import PiStatusPanel from './PiStatusPanel';
 import PiVideoStream from './PiVideoStream';
 import PiControls from './PiControls';
 import PiPoseData from './PiPoseData';
 import './PiLive.css';
 
-const PI_URL = 'https://baduanjin-pi-service-g8aehuh0bghcc4be.southeastasia-01.azurewebsites.net';
-
 const PiLiveSession = ({ onSessionComplete }) => {
-  // Pi Connection State
-  const [piStatus, setPiStatus] = useState(null);
-  const [isConnected, setIsConnected] = useState(false);
-  
-  // Session State
-  const [activeSession, setActiveSession] = useState(null);
-  const [sessionStartTime, setSessionStartTime] = useState(null);
-  
-  // Recording State (separate from session)
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordingStartTime, setRecordingStartTime] = useState(null);
-  const [availableRecordings, setAvailableRecordings] = useState([]);
-  
-  // Real-time Data
-  const [poseData, setPoseData] = useState(null);
-  
-  // UI State
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // === CONSOLIDATED STATE MANAGEMENT ===
+  const [piState, setPiState] = useState({
+    // Connection status
+    isConnected: false,
+    connectionError: null,
+    loading: false,
+    
+    // Pi status data
+    status: null,
+    
+    // Session data
+    activeSession: null,
+    sessionStartTime: null,
+    
+    // Recording data
+    isRecording: false,
+    recordingStartTime: null,
+    availableRecordings: [],
+    
+    // Real-time data
+    poseData: null,
+    currentFrame: null,
+    streamStats: { fps: 0, persons: 0, latency: 0 }
+  });
   
   const { token, user } = useAuth();
-
-  // Polling intervals
-  const [posePollingInterval, setPosePollingInterval] = useState(null);
-  const [statusPollingInterval, setStatusPollingInterval] = useState(null);
-
-  // === PI CONNECTION MANAGEMENT ===
-  const checkPiStatus = useCallback(async () => {
+  const pollingIntervalRef = useRef(null);
+  
+  // === UNIFIED POLLING SYSTEM ===
+  const unifiedPolling = useCallback(async () => {
+    if (!piState.activeSession) return;
+    
     try {
-      setLoading(true);
-      setError(null);
-      
-      const response = await axios.get(`${PI_URL}/api/pi-live/status`, {
+      // Single API call to get all Pi data
+      const statusResponse = await axios.get(`${getPiUrl('api')}/api/pi-live/status`, {
         headers: { 'Authorization': `Bearer ${token}` },
-        timeout: 15000
+        timeout: PI_CONFIG.TIMEOUTS.STATUS_CHECK
       });
       
-      setPiStatus(response.data);
-      setIsConnected(response.data.pi_connected);
+      const statusData = statusResponse.data;
       
-      // Update recording status from Pi
-      if (response.data.is_recording !== undefined) {
-        setIsRecording(response.data.is_recording);
+      // Get pose data if session is active
+      let poseResponse = null;
+      if (statusData.is_running) {
+        try {
+          poseResponse = await axios.get(`${getPiUrl('api')}/api/pi-live/current-pose`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+            timeout: PI_CONFIG.TIMEOUTS.API_REQUEST
+          });
+        } catch (poseError) {
+          console.warn('⚠️ Pose data fetch failed:', poseError.message);
+        }
       }
       
-    } catch (err) {
-      console.error('Error checking Pi status:', err);
-      setError('Failed to connect to Pi. Please check if the Pi is running.');
-      setPiStatus({ pi_connected: false, error: err.message });
-      setIsConnected(false);
-    } finally {
-      setLoading(false);
+      // Update consolidated state
+      setPiState(prev => ({
+        ...prev,
+        isConnected: statusData.pi_connected || false,
+        status: statusData,
+        isRecording: statusData.is_recording || false,
+        poseData: poseResponse?.data?.success ? {
+          pose_data: poseResponse.data.pose_data || [],
+          stats: {
+            current_fps: statusData.current_fps || 0,
+            persons_detected: poseResponse.data.pose_data?.length || 0,
+            total_frames: 0
+          },
+          timestamp: poseResponse.data.timestamp
+        } : null,
+        connectionError: null,
+        loading: false
+      }));
+      
+    } catch (error) {
+      console.error('❌ Unified polling error:', error);
+      setPiState(prev => ({
+        ...prev,
+        isConnected: false,
+        connectionError: error.response?.data?.detail || error.message || 'Pi connection failed',
+        loading: false
+      }));
+    }
+  }, [token, piState.activeSession]);
+
+  // === PI STATUS CHECK ===
+  const checkPiStatus = useCallback(async () => {
+    setPiState(prev => ({ ...prev, loading: true, connectionError: null }));
+    
+    try {
+      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/status`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        timeout: PI_CONFIG.TIMEOUTS.STATUS_CHECK
+      });
+      
+      setPiState(prev => ({
+        ...prev,
+        isConnected: response.data.pi_connected || false,
+        status: response.data,
+        isRecording: response.data.is_recording || false,
+        loading: false,
+        connectionError: null
+      }));
+      
+    } catch (error) {
+      console.error('❌ Pi status check failed:', error);
+      setPiState(prev => ({
+        ...prev,
+        isConnected: false,
+        status: { pi_connected: false, error: error.message },
+        loading: false,
+        connectionError: 'Failed to connect to Pi service'
+      }));
     }
   }, [token]);
 
   // === SESSION MANAGEMENT ===
   const startLiveSession = useCallback(async (sessionName = 'Live Practice Session') => {
+    setPiState(prev => ({ ...prev, loading: true, connectionError: null }));
+    
     try {
-      setLoading(true);
-      setError(null);
-      
       console.log('🚀 Starting live session:', sessionName);
       
       const response = await axios.post(
-        `${PI_URL}/api/pi-live/start-session`,
+        `${getPiUrl('api')}/api/pi-live/start-session`,
         { session_name: sessionName },
         {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
-          timeout: 10000
+          timeout: PI_CONFIG.TIMEOUTS.API_REQUEST
         }
       );
       
@@ -94,197 +153,184 @@ const PiLiveSession = ({ onSessionComplete }) => {
           start_time: new Date().toISOString()
         };
         
-        setActiveSession(newSession);
-        setSessionStartTime(new Date());
+        setPiState(prev => ({
+          ...prev,
+          activeSession: newSession,
+          sessionStartTime: new Date(),
+          loading: false,
+          availableRecordings: []
+        }));
         
-        // Start polling for pose data and status
-        startPoseDataPolling();
-        startStatusPolling();
+        // Start unified polling
+        startUnifiedPolling();
         
         console.log('✅ Live session started successfully:', newSession);
-        
-        // Clear any previous recordings list
-        setAvailableRecordings([]);
-        
       } else {
         throw new Error(response.data.message || 'Failed to start session');
       }
       
-    } catch (err) {
-      console.error('❌ Error starting live session:', err);
-      const errorMessage = err.response?.data?.detail || err.message || 'Failed to start live session';
-      setError(errorMessage);
-      
-      // Provide specific error guidance
-      if (err.response?.status === 503) {
-        setError('Pi camera is not available. Please check the Pi connection.');
-      } else if (err.response?.status === 401) {
-        setError('Authentication failed. Please try logging in again.');
-      }
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error('❌ Error starting live session:', error);
+      setPiState(prev => ({
+        ...prev,
+        loading: false,
+        connectionError: error.response?.data?.detail || error.message || 'Failed to start live session'
+      }));
     }
   }, [token]);
 
   const stopLiveSession = useCallback(async () => {
-    if (!activeSession) return null;
+    if (!piState.activeSession) return null;
+    
+    setPiState(prev => ({ ...prev, loading: true }));
     
     try {
-      setLoading(true);
-      console.log('⏹️ Stopping live session:', activeSession.session_id);
+      console.log('⏹️ Stopping live session:', piState.activeSession.session_id);
       
-      // If recording is active, stop it first
-      if (isRecording) {
-        console.log('⏹️ Stopping recording before session ends...');
+      // Stop recording if active
+      if (piState.isRecording) {
         await stopRecording();
-        
-        // Wait for recording to be processed
         await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        // Refresh recordings list
         await fetchAvailableRecordings();
       }
       
       const response = await axios.post(
-        `${PI_URL}/api/pi-live/stop-session/${activeSession.session_id}`,
+        `${getPiUrl('api')}/api/pi-live/stop-session/${piState.activeSession.session_id}`,
         {},
-        {
+        { 
           headers: { 'Authorization': `Bearer ${token}` },
-          timeout: 10000
+          timeout: PI_CONFIG.TIMEOUTS.API_REQUEST
         }
       );
       
       console.log('✅ Session stopped:', response.data);
       
       // Stop polling
-      stopPoseDataPolling();
-      stopStatusPolling();
+      stopUnifiedPolling();
       
       // Calculate session duration
-      const sessionDuration = sessionStartTime 
-        ? Math.round((new Date() - sessionStartTime) / 1000) 
+      const sessionDuration = piState.sessionStartTime 
+        ? Math.round((new Date() - piState.sessionStartTime) / 1000) 
         : 0;
       
-      // Return session data for save dialog
       const sessionData = {
-        ...activeSession,
+        ...piState.activeSession,
         end_time: new Date().toISOString(),
         duration_seconds: sessionDuration,
-        recordings: availableRecordings
+        recordings: piState.availableRecordings
       };
       
-      // Don't clear session data yet - let the save dialog handle it
       return sessionData;
       
-    } catch (err) {
-      console.error('❌ Error stopping live session:', err);
-      setError('Failed to stop session properly, but local session has been cleared.');
-      
-      // Force cleanup even if API call failed
+    } catch (error) {
+      console.error('❌ Error stopping live session:', error);
       cleanupSession();
-      throw err;
+      throw error;
     } finally {
-      setLoading(false);
+      setPiState(prev => ({ ...prev, loading: false }));
     }
-  }, [activeSession, token, isRecording, sessionStartTime, availableRecordings]);
+  }, [piState.activeSession, piState.isRecording, piState.sessionStartTime, piState.availableRecordings, token]);
 
   const cleanupSession = useCallback(() => {
     console.log('🧹 Cleaning up session...');
+    stopUnifiedPolling();
     
-    // Clear session data
-    setActiveSession(null);
-    setSessionStartTime(null);
-    setPoseData(null);
-    setIsRecording(false);
-    setRecordingStartTime(null);
-    setAvailableRecordings([]);
-    
-    // Stop all polling
-    stopPoseDataPolling();
-    stopStatusPolling();
+    setPiState(prev => ({
+      ...prev,
+      activeSession: null,
+      sessionStartTime: null,
+      poseData: null,
+      isRecording: false,
+      recordingStartTime: null,
+      availableRecordings: [],
+      currentFrame: null
+    }));
   }, []);
 
   // === RECORDING MANAGEMENT ===
   const startRecording = useCallback(async () => {
-    if (!activeSession) {
-      setError('No active session. Please start a session first.');
+    if (!piState.activeSession) {
+      setPiState(prev => ({ ...prev, connectionError: 'No active session. Please start a session first.' }));
       return false;
     }
     
     try {
-      console.log('🔴 Starting recording for session:', activeSession.session_id);
+      console.log('🔴 Starting recording for session:', piState.activeSession.session_id);
       
       const response = await axios.post(
-        `${PI_URL}/api/pi-live/recording/start/${activeSession.session_id}`,
+        `${getPiUrl('api')}/api/pi-live/recording/start/${piState.activeSession.session_id}`,
         {},
-        {
+        { 
           headers: { 'Authorization': `Bearer ${token}` },
-          timeout: 10000
+          timeout: PI_CONFIG.TIMEOUTS.API_REQUEST
         }
       );
       
       if (response.data.success) {
-        setIsRecording(true);
-        setRecordingStartTime(new Date());
+        setPiState(prev => ({
+          ...prev,
+          isRecording: true,
+          recordingStartTime: new Date()
+        }));
         console.log('✅ Recording started:', response.data.message);
         return true;
       } else {
-        setError(response.data.message || 'Failed to start recording');
+        setPiState(prev => ({ ...prev, connectionError: response.data.message || 'Failed to start recording' }));
         return false;
       }
     } catch (error) {
       console.error('❌ Failed to start recording:', error);
-      setError('Failed to start recording: ' + (error.response?.data?.detail || error.message));
+      setPiState(prev => ({ ...prev, connectionError: 'Failed to start recording: ' + error.message }));
       return false;
     }
-  }, [activeSession, token]);
+  }, [piState.activeSession, token]);
 
   const stopRecording = useCallback(async () => {
-    if (!activeSession) return false;
+    if (!piState.activeSession) return false;
     
     try {
-      console.log('⏹️ Stopping recording for session:', activeSession.session_id);
+      console.log('⏹️ Stopping recording for session:', piState.activeSession.session_id);
       
       const response = await axios.post(
-        `${PI_URL}/api/pi-live/recording/stop/${activeSession.session_id}`,
+        `${getPiUrl('api')}/api/pi-live/recording/stop/${piState.activeSession.session_id}`,
         {},
-        {
+        { 
           headers: { 'Authorization': `Bearer ${token}` },
-          timeout: 15000
+          timeout: PI_CONFIG.TIMEOUTS.API_REQUEST
         }
       );
       
       if (response.data.success) {
-        setIsRecording(false);
-        setRecordingStartTime(null);
+        setPiState(prev => ({
+          ...prev,
+          isRecording: false,
+          recordingStartTime: null
+        }));
         
         console.log('✅ Recording stopped:', response.data.recording_info);
-        
-        // Refresh recordings list
         await fetchAvailableRecordings();
-        
         return response.data.recording_info;
       } else {
-        setError(response.data.message || 'Failed to stop recording');
+        setPiState(prev => ({ ...prev, connectionError: response.data.message || 'Failed to stop recording' }));
         return false;
       }
     } catch (error) {
       console.error('❌ Failed to stop recording:', error);
-      setError('Failed to stop recording: ' + (error.response?.data?.detail || error.message));
+      setPiState(prev => ({ ...prev, connectionError: 'Failed to stop recording: ' + error.message }));
       return false;
     }
-  }, [activeSession, token]);
+  }, [piState.activeSession, token]);
 
   const fetchAvailableRecordings = useCallback(async () => {
     try {
-      const response = await axios.get(`${PI_URL}/api/pi-live/recordings`, {
+      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/recordings`, {
         headers: { 'Authorization': `Bearer ${token}` },
-        timeout: 10000
+        timeout: PI_CONFIG.TIMEOUTS.API_REQUEST
       });
       
       if (response.data.success) {
         const recordings = response.data.recordings || [];
-        setAvailableRecordings(recordings);
+        setPiState(prev => ({ ...prev, availableRecordings: recordings }));
         console.log('📹 Available recordings updated:', recordings.length);
         return recordings;
       }
@@ -294,103 +340,33 @@ const PiLiveSession = ({ onSessionComplete }) => {
     }
   }, [token]);
 
-  // === DATA POLLING ===
-  const startPoseDataPolling = useCallback(() => {
-    if (posePollingInterval) return; // Already polling
+  // === POLLING MANAGEMENT ===
+  const startUnifiedPolling = useCallback(() => {
+    if (pollingIntervalRef.current) return;
     
-    console.log('📊 Starting pose data polling...');
-    const intervalId = setInterval(async () => {
-      try {
-        const response = await axios.get(`${PI_URL}/api/pi-live/current-pose`, {
-          headers: { 'Authorization': `Bearer ${token}` },
-          timeout: 3000
-        });
-        
-        if (response.data.success && response.data.pose_data) {
-          setPoseData({
-            pose_data: response.data.pose_data,
-            stats: {
-              current_fps: 15,
-              total_frames: 0,
-              persons_detected: response.data.pose_data.length
-            },
-            timestamp: response.data.timestamp
-          });
-        }
-      } catch (err) {
-        // Only log significant errors, not every polling failure
-        if (err.response?.status !== 401) {
-          console.warn('⚠️ Pose data polling error:', err.message);
-        }
-      }
-    }, 1000);
-    
-    setPosePollingInterval(intervalId);
-  }, [token, posePollingInterval]);
+    console.log('🔄 Starting unified polling...');
+    const intervalId = setInterval(unifiedPolling, PI_CONFIG.POLLING.UNIFIED_INTERVAL);
+    pollingIntervalRef.current = intervalId;
+  }, [unifiedPolling]);
 
-  const stopPoseDataPolling = useCallback(() => {
-    if (posePollingInterval) {
-      console.log('📊 Stopping pose data polling...');
-      clearInterval(posePollingInterval);
-      setPosePollingInterval(null);
+  const stopUnifiedPolling = useCallback(() => {
+    if (pollingIntervalRef.current) {
+      console.log('🔄 Stopping unified polling...');
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
     }
-  }, [posePollingInterval]);
-
-  const startStatusPolling = useCallback(() => {
-    if (statusPollingInterval) return; // Already polling
-    
-    console.log('🔄 Starting status polling...');
-    const intervalId = setInterval(async () => {
-      try {
-        const response = await axios.get(`${PI_URL}/api/pi-live/status`, {
-          headers: { 'Authorization': `Bearer ${token}` },
-          timeout: 5000
-        });
-        
-        // Update recording status
-        if (response.data.is_recording !== undefined) {
-          setIsRecording(response.data.is_recording);
-        }
-        
-        // Update connection status
-        setIsConnected(response.data.pi_connected);
-        
-      } catch (error) {
-        console.warn('⚠️ Status polling error:', error.message);
-      }
-    }, 3000);
-    
-    setStatusPollingInterval(intervalId);
-  }, [token, statusPollingInterval]);
-
-  const stopStatusPolling = useCallback(() => {
-    if (statusPollingInterval) {
-      console.log('🔄 Stopping status polling...');
-      clearInterval(statusPollingInterval);
-      setStatusPollingInterval(null);
-    }
-  }, [statusPollingInterval]);
+  }, []);
 
   // === COMPONENT LIFECYCLE ===
   useEffect(() => {
     checkPiStatus();
-  }, [checkPiStatus]);
-
-  useEffect(() => {
-    return () => {
-      stopPoseDataPolling();
-      stopStatusPolling();
-    };
-  }, [stopPoseDataPolling, stopStatusPolling]);
+    return () => stopUnifiedPolling();
+  }, [checkPiStatus, stopUnifiedPolling]);
 
   // === SESSION COMPLETION HANDLER ===
   const handleSessionComplete = useCallback((result) => {
     console.log('✅ Session completed:', result);
-    
-    // Cleanup local state
     cleanupSession();
-    
-    // Notify parent component
     if (onSessionComplete) {
       onSessionComplete(result);
     }
@@ -401,44 +377,39 @@ const PiLiveSession = ({ onSessionComplete }) => {
       <div className="pi-live-header">
         <h2>🥋 Real-time Baduanjin Analysis</h2>
         <PiStatusPanel 
-          status={piStatus}
-          isConnected={isConnected}
-          loading={loading}
+          status={piState.status}
+          isConnected={piState.isConnected}
+          loading={piState.loading}
           onRefresh={checkPiStatus}
         />
       </div>
       
-      {error && (
+      {piState.connectionError && (
         <div className="error-banner">
-          <p>⚠️ {error}</p>
-          <button onClick={() => setError(null)}>Dismiss</button>
+          <p>⚠️ {piState.connectionError}</p>
+          <button onClick={() => setPiState(prev => ({ ...prev, connectionError: null }))}>
+            Dismiss
+          </button>
         </div>
       )}
       
       <div className="pi-live-content">
         <div className="pi-stream-section">
           <PiVideoStream 
-            activeSession={activeSession}
-            poseData={poseData}
-            isConnected={isConnected}
+            // Pass consolidated state
+            piState={piState}
+            activeSession={piState.activeSession}
+            poseData={piState.poseData}
+            isConnected={piState.isConnected}
+            connectionError={piState.connectionError}
             token={token} 
           />
         </div>
         
         <div className="pi-controls-section">
           <PiControls
-            // Pi Status
-            piStatus={piStatus}
-            isConnected={isConnected}
-            
-            // Session State
-            activeSession={activeSession}
-            sessionStartTime={sessionStartTime}
-            
-            // Recording State  
-            isRecording={isRecording}
-            recordingStartTime={recordingStartTime}
-            availableRecordings={availableRecordings}
+            // Pass consolidated state
+            piState={piState}
             
             // Actions
             onStartSession={startLiveSession}
@@ -449,18 +420,17 @@ const PiLiveSession = ({ onSessionComplete }) => {
             onSessionComplete={handleSessionComplete}
             
             // UI State
-            loading={loading}
             user={user}
           />
           
           <PiPoseData 
-            poseData={poseData}
-            activeSession={activeSession}
+            poseData={piState.poseData}
+            activeSession={piState.activeSession}
           />
         </div>
       </div>
       
-      {loading && (
+      {piState.loading && (
         <div className="loading-overlay">
           <div className="loading-spinner"></div>
           <p>Processing...</p>

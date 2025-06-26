@@ -1,33 +1,19 @@
 // src/components/PiLive/PiControls.js
+// CLEANED VERSION - Uses centralized state, simplified logic
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from '../../auth/AuthContext'; 
+import { useAuth } from '../../auth/AuthContext';
+import { PI_CONFIG, getPiUrl } from '../../config/piConfig';
 
 const PiControls = ({ 
-  // Pi Status
-  piStatus, 
-  isConnected,
-  
-  // Session State
-  activeSession, 
-  sessionStartTime,
-  
-  // Recording State
-  isRecording,
-  recordingStartTime,
-  availableRecordings,
-  
-  // Actions
+  piState,
   onStartSession, 
   onStopSession,
   onStartRecording,
   onStopRecording,
   onFetchRecordings,
   onSessionComplete,
-  
-  // UI State
-  loading, 
   user
 }) => {
   // === LOCAL STATE ===
@@ -38,25 +24,26 @@ const PiControls = ({
   const [saveError, setSaveError] = useState(null);
   
   // Save form fields
-  const [saveTitle, setSaveTitle] = useState('');
-  const [saveDescription, setSaveDescription] = useState('');
-  const [saveBrocadeType, setSaveBrocadeType] = useState('FIRST');
-  const [transferVideo, setTransferVideo] = useState(true);
-  const [selectedRecording, setSelectedRecording] = useState(null);
+  const [saveForm, setSaveForm] = useState({
+    title: '',
+    description: '',
+    brocadeType: 'FIRST',
+    transferVideo: true,
+    selectedRecording: null
+  });
   
-  // UI State
+  // Duration timers
   const [sessionDuration, setSessionDuration] = useState(0);
   const [recordingDuration, setRecordingDuration] = useState(0);
   
   const { token } = useAuth();
-  const BACKEND_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
 
-  // === DURATION TIMERS ===
+  // === DURATION TRACKING ===
   useEffect(() => {
     let interval;
-    if (sessionStartTime) {
+    if (piState.sessionStartTime) {
       interval = setInterval(() => {
-        const duration = Math.floor((new Date() - sessionStartTime) / 1000);
+        const duration = Math.floor((new Date() - piState.sessionStartTime) / 1000);
         setSessionDuration(duration);
       }, 1000);
     } else {
@@ -65,13 +52,13 @@ const PiControls = ({
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [sessionStartTime]);
+  }, [piState.sessionStartTime]);
 
   useEffect(() => {
     let interval;
-    if (recordingStartTime) {
+    if (piState.recordingStartTime) {
       interval = setInterval(() => {
-        const duration = Math.floor((new Date() - recordingStartTime) / 1000);
+        const duration = Math.floor((new Date() - piState.recordingStartTime) / 1000);
         setRecordingDuration(duration);
       }, 1000);
     } else {
@@ -80,17 +67,19 @@ const PiControls = ({
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [recordingStartTime]);
+  }, [piState.recordingStartTime]);
 
-  // === AUTO-SELECT LATEST RECORDING ===
+  // Auto-select latest recording
   useEffect(() => {
-    if (availableRecordings.length > 0 && !selectedRecording) {
-      // Auto-select the most recent recording
-      const latest = availableRecordings[0];
-      setSelectedRecording(latest.filename);
-      console.log('🎯 Auto-selected latest recording:', latest.filename);
+    if (piState.availableRecordings.length > 0 && !saveForm.selectedRecording) {
+      const latest = piState.availableRecordings[0];
+      setSaveForm(prev => ({ 
+        ...prev, 
+        selectedRecording: latest.filename,
+        transferVideo: true
+      }));
     }
-  }, [availableRecordings, selectedRecording]);
+  }, [piState.availableRecordings, saveForm.selectedRecording]);
 
   // === HELPER FUNCTIONS ===
   const formatDuration = (seconds) => {
@@ -112,22 +101,18 @@ const PiControls = ({
 
   const handleStopSession = async () => {
     try {
-      console.log('🛑 Initiating session stop...');
-      
-      // Stop the session and get session data
       const sessionData = await onStopSession();
-      
       if (sessionData) {
-        // Refresh recordings one more time
         await onFetchRecordings();
-        
-        // Show save dialog
         setSessionToSave(sessionData);
         setShowSaveDialog(true);
-        setSaveTitle(sessionData.session_name || 'Live Session');
-        setSaveDescription('');
-        setSaveBrocadeType('FIRST');
-        setTransferVideo(availableRecordings.length > 0);
+        setSaveForm(prev => ({
+          ...prev,
+          title: sessionData.session_name || 'Live Session',
+          description: '',
+          brocadeType: 'FIRST',
+          transferVideo: piState.availableRecordings.length > 0
+        }));
         setSaveError(null);
       }
     } catch (error) {
@@ -136,26 +121,9 @@ const PiControls = ({
     }
   };
 
-  // === RECORDING CONTROLS ===
-  const handleStartRecording = async () => {
-    const success = await onStartRecording();
-    if (success) {
-      console.log('✅ Recording started successfully');
-    }
-  };
-
-  const handleStopRecording = async () => {
-    const result = await onStopRecording();
-    if (result) {
-      console.log('✅ Recording stopped:', result);
-      // Refresh recordings list
-      await onFetchRecordings();
-    }
-  };
-
-  // === SAVE/DISCARD LOGIC ===
+  // === SAVE LOGIC ===
   const handleSaveSession = async () => {
-    if (!saveTitle.trim()) {
+    if (!saveForm.title.trim()) {
       setSaveError('Please enter a title for the session');
       return;
     }
@@ -167,55 +135,41 @@ const PiControls = ({
       let videoFilename = null;
       let transferSuccess = false;
 
-      console.log('💾 Saving session...', {
-        transferVideo,
-        selectedRecording,
-        availableRecordings: availableRecordings.length
-      });
-
-      // Step 1: Transfer video if requested and available
-      if (transferVideo && selectedRecording) {
+      // Transfer video if requested
+      if (saveForm.transferVideo && saveForm.selectedRecording) {
         try {
-          console.log('📤 Transferring video:', selectedRecording);
-          
           const transferResponse = await axios.post(
-            `${BACKEND_URL}/api/pi-live/transfer-video/${selectedRecording}`,
+            `${getPiUrl('api')}/api/pi-live/transfer-video/${saveForm.selectedRecording}`,
             {},
             {
               headers: { 'Authorization': `Bearer ${token}` },
-              timeout: 120000 // 2 minute timeout
+              timeout: 120000
             }
           );
           
           if (transferResponse.data.success) {
             videoFilename = transferResponse.data.filename;
             transferSuccess = true;
-            console.log('✅ Video transferred successfully:', videoFilename);
-          } else {
-            throw new Error(transferResponse.data.message || 'Transfer failed');
           }
         } catch (transferError) {
           console.error('❌ Video transfer failed:', transferError);
           setSaveError(`Video transfer failed: ${transferError.message}. Session will be saved without video.`);
-          // Continue to save session metadata even if transfer fails
         }
       }
 
-      // Step 2: Save session metadata
+      // Save session metadata
       const saveData = {
-        title: saveTitle.trim(),
-        description: saveDescription.trim() || '',
-        brocade_type: saveBrocadeType,
+        title: saveForm.title.trim(),
+        description: saveForm.description.trim() || '',
+        brocade_type: saveForm.brocadeType,
         session_id: sessionToSave.session_id,
         video_filename: videoFilename,
         has_video_file: transferSuccess,
         duration_seconds: sessionToSave.duration_seconds || 0
       };
 
-      console.log('💾 Saving session metadata:', saveData);
-
       const response = await axios.post(
-        `${BACKEND_URL}/api/pi-live/save-session`,
+        `${getPiUrl('api')}/api/pi-live/save-session`,
         saveData,
         {
           headers: {
@@ -225,21 +179,17 @@ const PiControls = ({
         }
       );
 
-      console.log('✅ Session saved:', response.data);
-
-      // Step 3: Clean up Pi recording if transferred
-      if (transferSuccess && selectedRecording) {
+      // Cleanup Pi recording if transferred
+      if (transferSuccess && saveForm.selectedRecording) {
         try {
-          await axios.delete(`${BACKEND_URL}/api/pi-live/recordings/${selectedRecording}`, {
+          await axios.delete(`${getPiUrl('api')}/api/pi-live/recordings/${saveForm.selectedRecording}`, {
             headers: { 'Authorization': `Bearer ${token}` }
           });
-          console.log('🧹 Cleaned up Pi recording:', selectedRecording);
         } catch (cleanupError) {
           console.warn('⚠️ Failed to clean up Pi recording:', cleanupError);
         }
       }
       
-      // Close dialog and notify completion
       setShowSaveDialog(false);
       setSessionToSave(null);
       
@@ -263,29 +213,18 @@ const PiControls = ({
   const handleDiscardSession = async () => {
     if (window.confirm('Are you sure you want to discard this session? This cannot be undone.')) {
       try {
-        console.log('🗑️ Discarding session...');
-        
-        // Delete any recordings from this session
-        if (selectedRecording) {
-          try {
-            await axios.delete(`${BACKEND_URL}/api/pi-live/recordings/${selectedRecording}`, {
-              headers: { 'Authorization': `Bearer ${token}` }
-            });
-            console.log('🗑️ Deleted recording:', selectedRecording);
-          } catch (error) {
-            console.warn('⚠️ Failed to delete recording:', error);
-          }
+        if (saveForm.selectedRecording) {
+          await axios.delete(`${getPiUrl('api')}/api/pi-live/recordings/${saveForm.selectedRecording}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
         }
         
-        // Close dialog and notify completion
         setShowSaveDialog(false);
         setSessionToSave(null);
         
         if (onSessionComplete) {
           onSessionComplete(null);
         }
-
-        console.log('✅ Session discarded');
 
       } catch (error) {
         console.error('❌ Error discarding session:', error);
@@ -294,40 +233,30 @@ const PiControls = ({
     }
   };
 
-  const handleCancelSaveDialog = () => {
-    setShowSaveDialog(false);
-    setSessionToSave(null);
-    setSaveError(null);
-  };
-
   return (
     <div className="pi-controls">
       <h3>🎮 Session Controls</h3>
       
-      {/* WORKFLOW GUIDE */}
+      {/* WORKFLOW STATUS */}
       <div className="workflow-status">
         <div className="workflow-steps">
-          <div className={`workflow-step ${!activeSession ? 'current' : 'completed'}`}>
+          <div className={`workflow-step ${!piState.activeSession ? 'current' : 'completed'}`}>
             <span className="step-number">1</span>
             <span className="step-text">Start Session</span>
           </div>
-          <div className={`workflow-step ${activeSession && !isRecording ? 'current' : isRecording ? 'completed' : ''}`}>
+          <div className={`workflow-step ${piState.activeSession && !piState.isRecording ? 'current' : piState.isRecording ? 'completed' : ''}`}>
             <span className="step-number">2</span>
             <span className="step-text">Record (Optional)</span>
           </div>
-          <div className={`workflow-step ${activeSession && isRecording ? 'current' : ''}`}>
-            <span className="step-number">3</span>
-            <span className="step-text">Practice</span>
-          </div>
           <div className={`workflow-step ${showSaveDialog ? 'current' : ''}`}>
-            <span className="step-number">4</span>
+            <span className="step-number">3</span>
             <span className="step-text">Save</span>
           </div>
         </div>
       </div>
       
-      {!activeSession ? (
-        // === START SESSION FORM ===
+      {!piState.activeSession ? (
+        // Start session form
         <div className="start-session-form">
           <div className="form-group">
             <label htmlFor="sessionName">Session Name:</label>
@@ -337,55 +266,42 @@ const PiControls = ({
               value={sessionName}
               onChange={(e) => setSessionName(e.target.value)}
               placeholder="Enter session name (optional)..."
-              className="session-name-input"
-              disabled={loading}
+              disabled={piState.loading}
             />
           </div>
           
           <button
             className="btn start-session-btn"
             onClick={handleStartSession}
-            disabled={!isConnected || loading}
+            disabled={!piState.isConnected || piState.loading}
           >
-            {loading ? 'Starting...' : '🚀 Start Live Session'}
+            {piState.loading ? 'Starting...' : '🚀 Start Live Session'}
           </button>
           
-          {!isConnected && !loading && (
+          {!piState.isConnected && !piState.loading && (
             <div className="connection-warning">
               <p>⚠️ Pi camera not connected. Please check the connection and refresh.</p>
             </div>
           )}
-          
-          <div className="workflow-reminder">
-            <h4>💡 Remember:</h4>
-            <ul>
-              <li>Start session first for live streaming</li>
-              <li>Click "Start Recording" if you want to save video</li>
-              <li>Recording is optional - you can practice with just streaming</li>
-            </ul>
-          </div>
         </div>
       ) : (
-        // === ACTIVE SESSION CONTROLS ===
+        // Active session controls
         <div className="active-session-controls">
           <div className="session-info">
             <h4>📡 Active Session</h4>
             <div className="session-details">
-              <p><strong>Name:</strong> {activeSession.session_name || 'Live Session'}</p>
+              <p><strong>Name:</strong> {piState.activeSession.session_name || 'Live Session'}</p>
               <p><strong>Duration:</strong> {formatDuration(sessionDuration)}</p>
-              <p><strong>User:</strong> {user?.name} ({user?.role})</p>
-              <p><strong>Status:</strong> 
-                <span className="status-live">🔴 LIVE STREAMING</span>
-              </p>
+              <p><strong>Status:</strong> <span className="status-live">🔴 LIVE</span></p>
             </div>
           </div>
           
           {/* RECORDING SECTION */}
           <div className="recording-section">
-            <h4>🎥 Video Recording (Optional)</h4>
+            <h4>🎥 Recording (Optional)</h4>
             
             <div className="recording-status">
-              {isRecording ? (
+              {piState.isRecording ? (
                 <div className="recording-active">
                   <span className="recording-indicator">🔴 RECORDING</span>
                   <span className="recording-duration">{formatDuration(recordingDuration)}</span>
@@ -393,113 +309,88 @@ const PiControls = ({
               ) : (
                 <div className="recording-inactive">
                   <span className="recording-indicator">⚪ Not Recording</span>
-                  <span className="recording-note">Click below to record video</span>
                 </div>
               )}
             </div>
             
             <div className="recording-controls">
-              {!isRecording ? (
+              {!piState.isRecording ? (
                 <button
                   className="btn start-recording-btn"
-                  onClick={handleStartRecording}
-                  disabled={loading}
+                  onClick={onStartRecording}
+                  disabled={piState.loading}
                 >
                   🔴 Start Recording
                 </button>
               ) : (
                 <button
                   className="btn stop-recording-btn"
-                  onClick={handleStopRecording}
-                  disabled={loading}
+                  onClick={onStopRecording}
+                  disabled={piState.loading}
                 >
                   ⏹️ Stop Recording
                 </button>
               )}
-              
-              <button
-                className="btn refresh-recordings-btn"
-                onClick={onFetchRecordings}
-                disabled={loading}
-              >
-                🔄 Refresh
-              </button>
             </div>
             
-            {availableRecordings.length > 0 && (
+            {piState.availableRecordings.length > 0 && (
               <div className="recordings-available">
-                <p>📹 {availableRecordings.length} recording(s) available for this session</p>
+                <p>📹 {piState.availableRecordings.length} recording(s) available</p>
               </div>
             )}
-            
-            <div className="recording-info">
-              <p>💡 <strong>Recording is optional!</strong></p>
-              <ul>
-                <li>✅ Stream-only: Real-time feedback without storage</li>
-                <li>🎥 With recording: Save video for detailed analysis</li>
-              </ul>
-            </div>
           </div>
           
-          {/* SESSION ACTIONS */}
           <div className="session-actions">
             <button
               className="btn stop-session-btn"
               onClick={handleStopSession}
-              disabled={loading || showSaveDialog}
+              disabled={piState.loading || showSaveDialog}
             >
-              {loading ? 'Stopping...' : '⏹️ Stop Session'}
+              {piState.loading ? 'Stopping...' : '⏹️ Stop Session'}
             </button>
           </div>
         </div>
       )}
 
-      {/* === SAVE/DISCARD DIALOG === */}
+      {/* SAVE DIALOG */}
       {showSaveDialog && sessionToSave && (
         <div className="save-dialog-overlay">
           <div className="save-dialog">
             <h3>💾 Save Session</h3>
             
             <div className="session-summary">
-              <h4>Session Summary:</h4>
               <p><strong>Duration:</strong> {formatDuration(sessionToSave.duration_seconds || 0)}</p>
-              <p><strong>Recordings Available:</strong> {availableRecordings.length}</p>
-              <p><strong>Session Type:</strong> {availableRecordings.length > 0 ? '🎥 With Video' : '📡 Streaming Only'}</p>
+              <p><strong>Recordings:</strong> {piState.availableRecordings.length}</p>
             </div>
             
             {saveError && <div className="error-message">{saveError}</div>}
             
             <div className="save-form">
               <div className="form-group">
-                <label htmlFor="saveTitle">Title:</label>
+                <label>Title:</label>
                 <input
-                  id="saveTitle"
                   type="text"
-                  value={saveTitle}
-                  onChange={(e) => setSaveTitle(e.target.value)}
-                  placeholder="Enter session title..."
+                  value={saveForm.title}
+                  onChange={(e) => setSaveForm(prev => ({ ...prev, title: e.target.value }))}
                   disabled={saving}
                   required
                 />
               </div>
               
               <div className="form-group">
-                <label htmlFor="saveDescription">Description (Optional):</label>
+                <label>Description:</label>
                 <textarea
-                  id="saveDescription"
-                  value={saveDescription}
-                  onChange={(e) => setSaveDescription(e.target.value)}
-                  placeholder="Enter description..."
+                  value={saveForm.description}
+                  onChange={(e) => setSaveForm(prev => ({ ...prev, description: e.target.value }))}
                   disabled={saving}
                 />
               </div>
               
               <div className="form-group">
-                <label htmlFor="saveBrocadeType">Brocade Type:</label>
+                <label>Brocade Type:</label>
                 <select
-                  id="saveBrocadeType"
-                  value={saveBrocadeType}
-                  onChange={(e) => setSaveBrocadeType(e.target.value)}
+                  value={saveForm.brocadeType}
+                  onChange={(e) => setSaveForm(prev => ({ ...prev, brocadeType: e.target.value }))}
                   disabled={saving}
                 >
                   <option value="FIRST">First Brocade</option>
@@ -513,34 +404,30 @@ const PiControls = ({
                 </select>
               </div>
 
-              {/* VIDEO TRANSFER OPTIONS */}
-              {availableRecordings.length > 0 ? (
+              {piState.availableRecordings.length > 0 && (
                 <div className="video-transfer-section">
-                  <h4>🎥 Video Recording</h4>
-                  
                   <div className="form-group">
                     <label>
                       <input
                         type="checkbox"
-                        checked={transferVideo}
-                        onChange={(e) => setTransferVideo(e.target.checked)}
+                        checked={saveForm.transferVideo}
+                        onChange={(e) => setSaveForm(prev => ({ ...prev, transferVideo: e.target.checked }))}
                         disabled={saving}
                       />
-                      Transfer video file to permanent storage
+                      Transfer video file to storage
                     </label>
                   </div>
 
-                  {transferVideo && (
+                  {saveForm.transferVideo && (
                     <div className="form-group">
-                      <label htmlFor="selectedRecording">Select Recording:</label>
+                      <label>Select Recording:</label>
                       <select
-                        id="selectedRecording"
-                        value={selectedRecording || ''}
-                        onChange={(e) => setSelectedRecording(e.target.value)}
+                        value={saveForm.selectedRecording || ''}
+                        onChange={(e) => setSaveForm(prev => ({ ...prev, selectedRecording: e.target.value }))}
                         disabled={saving}
                       >
                         <option value="">Select a recording...</option>
-                        {availableRecordings.map((recording) => (
+                        {piState.availableRecordings.map((recording) => (
                           <option key={recording.filename} value={recording.filename}>
                             {recording.filename} - {formatFileSize(recording.size)}
                           </option>
@@ -549,12 +436,6 @@ const PiControls = ({
                     </div>
                   )}
                 </div>
-              ) : (
-                <div className="no-recordings-info">
-                  <h4>📡 Streaming-Only Session</h4>
-                  <p>This session used live streaming without video recording.</p>
-                  <p>💡 Next time, click "Start Recording" to save video files.</p>
-                </div>
               )}
             </div>
             
@@ -562,7 +443,7 @@ const PiControls = ({
               <button
                 className="btn save-btn"
                 onClick={handleSaveSession}
-                disabled={saving || (transferVideo && !selectedRecording)}
+                disabled={saving || (saveForm.transferVideo && !saveForm.selectedRecording)}
               >
                 {saving ? 'Saving...' : '💾 Save Session'}
               </button>
@@ -577,7 +458,7 @@ const PiControls = ({
               
               <button
                 className="btn cancel-btn"
-                onClick={handleCancelSaveDialog}
+                onClick={() => setShowSaveDialog(false)}
                 disabled={saving}
               >
                 Cancel

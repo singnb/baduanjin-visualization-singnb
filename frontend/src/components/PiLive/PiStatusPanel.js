@@ -1,5 +1,5 @@
 // src/components/PiLive/PiStatusPanel.js
-import React from 'react';
+// CLEANED VERSION - No redundant state management
 
 const PiStatusPanel = ({ status, isConnected, loading, onRefresh }) => {
   return (

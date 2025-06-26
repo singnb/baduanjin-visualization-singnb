@@ -47,6 +47,8 @@ jobs:
         env:
           # Add environment variable for build process
           REACT_APP_API_URL: https://baduanjin-backend-docker.azurewebsites.net
+          REACT_APP_PI_SERVICE_URL: https://baduanjin-pi-service-g8aehuh0bghcc4be.southeastasia-01.azurewebsites.net
+          REACT_APP_DIRECT_PI_URL: https://mongoose-hardy-caiman.ngrok-free.app
           
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
