@@ -353,7 +353,7 @@ const PiControls = ({
       )}
 
       {/* SAVE DIALOG */}
-      {showSaveDialog && sessionToSave && (
+{/*       {showSaveDialog && sessionToSave && (
         <div className="save-dialog-overlay">
           <div className="save-dialog">
             <h3>💾 Save Session</h3>
@@ -466,7 +466,7 @@ const PiControls = ({
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
