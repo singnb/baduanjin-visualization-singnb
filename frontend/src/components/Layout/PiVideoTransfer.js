@@ -1,11 +1,15 @@
 // src/components/Layout/PiVideoTransfer.js
-// FIXED VERSION - Uses correct API endpoints from documentation
+// Routes video transfers to main backend
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../auth/AuthContext';
 import { PI_CONFIG, getPiUrl } from '../../config/piConfig';
 import './Layout.css';
+
+// FIXED: Use main backend for video storage (same as VideoUpload.js)
+const MAIN_BACKEND_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
+const PI_SERVICE_URL = 'https://baduanjin-pi-service-g8aehuh0bghcc4be.southeastasia-01.azurewebsites.net';
 
 const PiVideoTransfer = ({ onTransferComplete }) => {
   const [piRecordings, setPiRecordings] = useState([]);
@@ -19,7 +23,7 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
   const [transferForm, setTransferForm] = useState({
     title: '',
     description: '',
-    brocadeType: 'LIVE_SESSION'
+    brocadeType: 'FIRST' // Changed from LIVE_SESSION to match main backend
   });
 
   useEffect(() => {
@@ -27,14 +31,14 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
     checkPiStatus();
   }, []);
 
-  // === Use correct API endpoint ===
+  // === Get recordings list from Pi Service (this stays the same) ===
   const loadPiRecordings = async () => {
     setLoading(true);
     setError(null);
     
     try {
-      // Use actual API endpoint from docs
-      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/recordings`, {
+      // Use pi-service for getting recordings list
+      const response = await axios.get(`${PI_SERVICE_URL}/api/pi-live/recordings`, {
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -43,7 +47,6 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
       
       const data = response.data;
       
-      // Handle response format from actual API
       if (data.success) {
         setPiRecordings(data.recordings || []);
         setPiStatus('connected');
@@ -63,8 +66,8 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
 
   const checkPiStatus = async () => {
     try {
-      // Use actual status endpoint
-      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/status`, {
+      // Use pi-service for status check
+      const response = await axios.get(`${PI_SERVICE_URL}/api/pi-live/status`, {
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -79,7 +82,7 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
     }
   };
 
-  // === Use correct transfer endpoint with filename ===
+  // === FIXED: Transfer to main backend instead of pi-service ===
   const handleTransfer = async (recording) => {
     // Determine the filename for transfer
     let filename;
@@ -88,7 +91,6 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
     } else if (recording.filename) {
       filename = recording.filename;
     } else if (recording.timestamp) {
-      // Default to original file naming convention
       filename = `baduanjin_original_${recording.timestamp}.mp4`;
     } else {
       setError('Cannot determine filename for transfer');
@@ -103,16 +105,23 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
     setError(null);
 
     try {
-      console.log('📤 Starting transfer for:', filename);
+      console.log('📤 Starting transfer to MAIN BACKEND for:', filename);
       
-      // Use actual transfer endpoint from docs
+      // FIXED: Send transfer request to main backend
+      const transferData = {
+        pi_filename: filename,
+        title: title,
+        description: description,
+        brocade_type: transferForm.brocadeType,
+        source: 'pi_transfer',
+        pi_recording_data: recording // Include full recording metadata
+      };
+
+      console.log('📤 Transfer data:', transferData);
+      
       const response = await axios.post(
-        `${getPiUrl('api')}/api/pi-live/transfer-video/${encodeURIComponent(filename)}`,
-        {
-          title: title,
-          description: description,
-          brocade_type: transferForm.brocadeType
-        },
+        `${MAIN_BACKEND_URL}/api/videos/pi-transfer`, // New endpoint on main backend
+        transferData,
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -122,14 +131,29 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
         }
       );
 
-      console.log('📤 Transfer response:', response.data);
+      console.log('📤 Main backend transfer response:', response.data);
 
       // Check if transfer started successfully
-      if (response.data.success || response.data.status === 'started') {
-        // Poll for transfer completion using status endpoint
-        await pollTransferStatus(filename, recordingId);
+      if (response.data.success || response.data.status === 'success') {
+        // For main backend, we can assume it's completed immediately
+        // since it handles the Pi download internally
+        setTransferStatus(prev => ({ ...prev, [recordingId]: 'completed' }));
+        
+        // Remove from Pi recordings list
+        setPiRecordings(prev => prev.filter(r => 
+          r.timestamp !== recordingId && 
+          r.filename !== recordingId && 
+          r.id !== recordingId
+        ));
+        
+        if (onTransferComplete) {
+          onTransferComplete(response.data);
+        }
+
+        alert(`Transfer completed successfully!\nFile: ${filename}\nSaved to main backend storage`);
+        
       } else {
-        throw new Error(response.data.message || 'Transfer failed to start');
+        throw new Error(response.data.message || response.data.detail || 'Transfer failed to start');
       }
       
     } catch (err) {
@@ -140,102 +164,115 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
                           err.response?.data?.message || 
                           err.message || 
                           'Transfer failed';
+      
       setError(`Transfer failed for ${filename}: ${errorMessage}`);
+      
+      // Show more specific error information
+      if (err.response?.status === 404) {
+        setError(`Transfer endpoint not found on main backend. Please check if /api/videos/pi-transfer exists.`);
+      } else if (err.response?.status === 500) {
+        setError(`Main backend error during transfer. Check backend logs for details.`);
+      }
     }
   };
 
-  // === Poll transfer status using correct endpoint ===
-  const pollTransferStatus = async (filename, recordingId) => {
-    const maxAttempts = 60; // 10 minutes with 10-second intervals
-    let attempts = 0;
+  // === ALTERNATIVE: Direct file transfer method ===
+  const handleDirectTransfer = async (recording) => {
+    // Alternative approach: Download from Pi and upload to main backend
+    let filename;
+    if (recording.files && recording.files.original) {
+      filename = recording.files.original.filename;
+    } else if (recording.filename) {
+      filename = recording.filename;
+    } else if (recording.timestamp) {
+      filename = `baduanjin_original_${recording.timestamp}.mp4`;
+    } else {
+      setError('Cannot determine filename for transfer');
+      return;
+    }
+    
+    const recordingId = recording.timestamp || recording.filename || recording.id;
+    const title = transferForm.title || `Pi Session ${recordingId}`;
+    const description = transferForm.description || `Baduanjin practice session from Pi`;
+    
+    setTransferStatus(prev => ({ ...prev, [recordingId]: 'transferring' }));
+    setError(null);
 
-    const checkStatus = async () => {
-      try {
-        attempts++;
-        console.log(`📊 Checking transfer status (${attempts}/${maxAttempts})...`);
-        
-        // Use actual status endpoint from docs
-        const statusResponse = await axios.get(
-          `${getPiUrl('api')}/api/pi-live/transfer-status/${encodeURIComponent(filename)}`,
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-            timeout: PI_CONFIG.TIMEOUTS.API_REQUEST
-          }
-        );
-        
-        const statusData = statusResponse.data;
-        console.log('📊 Transfer status:', statusData);
-        
-        if (statusData.status === 'completed' || statusData.success) {
-          // Transfer completed successfully
-          setTransferStatus(prev => ({ ...prev, [recordingId]: 'completed' }));
-          
-          // Remove from Pi recordings list
-          setPiRecordings(prev => prev.filter(r => 
-            r.timestamp !== recordingId && 
-            r.filename !== recordingId && 
-            r.id !== recordingId
-          ));
-          
-          if (onTransferComplete) {
-            onTransferComplete(statusData);
-          }
+    try {
+      console.log('📤 Starting direct transfer for:', filename);
+      
+      // Step 1: Download file from Pi via pi-service
+      console.log('📥 Step 1: Downloading from Pi...');
+      const downloadResponse = await axios.get(
+        `${PI_SERVICE_URL}/api/pi-live/download-video/${encodeURIComponent(filename)}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          responseType: 'blob', // Important for video files
+          timeout: 300000 // 5 minutes
+        }
+      );
 
-          const transferInfo = statusData.transfer_info || {};
-          const sizeMB = transferInfo.total_size ? 
-            (transferInfo.total_size / 1024 / 1024).toFixed(1) : 'Unknown';
-          
-          alert(`Transfer completed!\nFile: ${filename}\nSize: ${sizeMB} MB`);
-          
-        } else if (statusData.status === 'failed' || statusData.error) {
-          // Transfer failed
-          setTransferStatus(prev => ({ ...prev, [recordingId]: 'failed' }));
-          setError(`Transfer failed: ${statusData.error || statusData.message || 'Unknown error'}`);
-          
-        } else if (statusData.status === 'in_progress' || statusData.status === 'transferring') {
-          // Still transferring, check again
-          if (attempts < maxAttempts) {
-            setTimeout(checkStatus, 10000); // Check every 10 seconds
-          } else {
-            // Timeout reached
-            setTransferStatus(prev => ({ ...prev, [recordingId]: 'failed' }));
-            setError(`Transfer timeout after ${maxAttempts * 10} seconds`);
-          }
-        } else {
-          // Unknown status, assume completed
-          console.warn('⚠️ Unknown transfer status:', statusData);
-          setTransferStatus(prev => ({ ...prev, [recordingId]: 'completed' }));
-          if (onTransferComplete) {
-            onTransferComplete(statusData);
-          }
+      console.log('📥 Downloaded video blob, size:', downloadResponse.data.size);
+
+      // Step 2: Upload to main backend like regular file upload
+      console.log('📤 Step 2: Uploading to main backend...');
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('brocade_type', transferForm.brocadeType);
+      formData.append('file', downloadResponse.data, filename);
+      formData.append('source', 'pi_transfer');
+
+      const uploadResponse = await axios.post(
+        `${MAIN_BACKEND_URL}/api/videos/upload`,
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+            // Don't set Content-Type, let browser set it for FormData
+          },
+          timeout: 600000 // 10 minutes
         }
-        
-      } catch (statusError) {
-        console.error('❌ Status check failed:', statusError);
-        
-        if (attempts < maxAttempts) {
-          // Retry status check
-          setTimeout(checkStatus, 10000);
-        } else {
-          // Give up after max attempts
-          setTransferStatus(prev => ({ ...prev, [recordingId]: 'failed' }));
-          setError(`Status check failed: ${statusError.message}`);
-        }
+      );
+
+      console.log('📤 Upload complete:', uploadResponse.data);
+
+      // Success
+      setTransferStatus(prev => ({ ...prev, [recordingId]: 'completed' }));
+      
+      // Remove from Pi recordings list
+      setPiRecordings(prev => prev.filter(r => 
+        r.timestamp !== recordingId && 
+        r.filename !== recordingId && 
+        r.id !== recordingId
+      ));
+      
+      if (onTransferComplete) {
+        onTransferComplete(uploadResponse.data);
       }
-    };
 
-    // Start status checking
-    setTimeout(checkStatus, 2000); // Initial delay
+      alert(`Direct transfer completed!\nFile: ${filename}\nUploaded to main backend storage`);
+      
+    } catch (err) {
+      console.error('Direct transfer error:', err);
+      setTransferStatus(prev => ({ ...prev, [recordingId]: 'failed' }));
+      
+      const errorMessage = err.response?.data?.detail || 
+                          err.response?.data?.message || 
+                          err.message || 
+                          'Direct transfer failed';
+      
+      setError(`Direct transfer failed for ${filename}: ${errorMessage}`);
+    }
   };
 
   // === Test Pi connection ===
   const testPiConnection = async () => {
     setLoading(true);
     try {
-      // Use actual test endpoint from docs
-      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/test-pi-connection`, {
+      const response = await axios.get(`${PI_SERVICE_URL}/api/pi-live/test-pi-connection`, {
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -254,6 +291,27 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
     } catch (err) {
       setPiStatus('error');
       alert(`Pi connection test failed: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // === Test main backend connection ===
+  const testMainBackendConnection = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${MAIN_BACKEND_URL}/api/videos/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        timeout: 10000
+      });
+      
+      alert('Main backend connection successful!');
+      console.log('Main backend response:', response.data);
+    } catch (err) {
+      alert(`Main backend connection failed: ${err.message}`);
+      console.error('Main backend error:', err);
     } finally {
       setLoading(false);
     }
@@ -285,10 +343,15 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
     <div className="pi-video-transfer-container">
       <div className="section-header">
         <h2>Pi Video Transfer</h2>
-        <div className="pi-status" style={{ color: getStatusColor(piStatus) }}>
-          Pi Status: {piStatus === 'connected' ? '✅ Connected' : 
-                     piStatus === 'disconnected' ? '❌ Disconnected' : 
-                     piStatus === 'error' ? '❌ Error' : '⏳ Checking...'}
+        <div className="backend-info">
+          <div className="pi-status" style={{ color: getStatusColor(piStatus) }}>
+            Pi Status: {piStatus === 'connected' ? '✅ Connected' : 
+                       piStatus === 'disconnected' ? '❌ Disconnected' : 
+                       piStatus === 'error' ? '❌ Error' : '⏳ Checking...'}
+          </div>
+          <div className="backend-url" style={{ fontSize: '12px', color: '#6c757d' }}>
+            Transfers to: {MAIN_BACKEND_URL}
+          </div>
         </div>
       </div>
 
@@ -319,6 +382,23 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
         >
           {loading ? 'Testing...' : 'Test Pi Connection'}
         </button>
+
+        <button 
+          onClick={testMainBackendConnection} 
+          disabled={loading}
+          className="test-backend-btn"
+          style={{
+            background: '#28a745',
+            color: 'white',
+            border: 'none',
+            padding: '8px 15px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginLeft: '10px'
+          }}
+        >
+          {loading ? 'Testing...' : 'Test Main Backend'}
+        </button>
       </div>
 
       {/* Transfer Settings */}
@@ -340,7 +420,6 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
               value={transferForm.brocadeType}
               onChange={(e) => setTransferForm(prev => ({ ...prev, brocadeType: e.target.value }))}
             >
-              <option value="LIVE_SESSION">Live Session</option>
               <option value="FIRST">First Brocade</option>
               <option value="SECOND">Second Brocade</option>
               <option value="THIRD">Third Brocade</option>
@@ -441,7 +520,7 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
                     {transferStatus[recordingId] === 'transferring' ? (
                       <div className="transfer-progress">
                         <div className="spinner"></div>
-                        <span>Transferring... This may take several minutes</span>
+                        <span>Transferring to main backend...</span>
                       </div>
                     ) : transferStatus[recordingId] === 'completed' ? (
                       <div className="transfer-success">
@@ -456,15 +535,37 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
                         >
                           Retry
                         </button>
+                        <button 
+                          onClick={() => handleDirectTransfer(recording)}
+                          className="retry-btn"
+                          style={{ marginLeft: '5px' }}
+                        >
+                          Try Direct Transfer
+                        </button>
                       </div>
                     ) : (
-                      <button
-                        onClick={() => handleTransfer(recording)}
-                        className="transfer-btn"
-                        disabled={piStatus !== 'connected'}
-                      >
-                        Transfer to Storage
-                      </button>
+                      <div className="transfer-buttons">
+                        <button
+                          onClick={() => handleTransfer(recording)}
+                          className="transfer-btn"
+                          disabled={piStatus !== 'connected'}
+                        >
+                          Transfer to Main Backend
+                        </button>
+                        <button
+                          onClick={() => handleDirectTransfer(recording)}
+                          className="transfer-btn"
+                          disabled={piStatus !== 'connected'}
+                          style={{ 
+                            marginLeft: '5px', 
+                            background: '#17a2b8',
+                            fontSize: '12px',
+                            padding: '6px 10px'
+                          }}
+                        >
+                          Direct Transfer
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>

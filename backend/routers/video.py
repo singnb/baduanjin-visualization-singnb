@@ -17,6 +17,7 @@ from azure.storage.blob import BlobServiceClient
 from config import settings
 import io
 import json
+import httpx
 from datetime import datetime
 
 router = APIRouter(
@@ -1303,3 +1304,157 @@ async def debug_azure_contents():
     except Exception as e:
         return {"error": str(e)}
     
+@router.post("/pi-transfer")
+async def transfer_video_from_pi(
+    transfer_data: dict,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(database.get_db)
+):
+    """Transfer video from Pi to main backend Azure storage"""
+    
+    try:
+        # Extract transfer data
+        pi_filename = transfer_data.get("pi_filename")
+        title = transfer_data.get("title", "")
+        description = transfer_data.get("description", "")
+        brocade_type = transfer_data.get("brocade_type", "FIRST")
+        
+        if not pi_filename:
+            raise HTTPException(status_code=400, detail="Pi filename is required")
+        if not title:
+            raise HTTPException(status_code=400, detail="Title is required")
+        
+        print(f"🔄 Starting Pi transfer: {pi_filename} for user {current_user.id}")
+        
+        # Pi download URL (using your existing ngrok setup)
+        PI_DOWNLOAD_URL = f"https://mongoose-hardy-caiman.ngrok-free.app/api/download/{pi_filename}"
+        
+        # Download file from Pi
+        print(f"📥 Downloading from Pi: {PI_DOWNLOAD_URL}")
+        
+        import httpx
+        async with httpx.AsyncClient(
+            timeout=httpx.Timeout(connect=30.0, read=300.0, write=30.0, pool=30.0)
+        ) as client:
+            headers = {
+                'ngrok-skip-browser-warning': 'true',
+                'User-Agent': 'Main-Backend-Pi-Transfer/1.0'
+            }
+            
+            response = await client.get(PI_DOWNLOAD_URL, headers=headers)
+            
+            if response.status_code != 200:
+                error_text = response.text[:200] if hasattr(response, 'text') else 'Unknown error'
+                raise HTTPException(
+                    status_code=503, 
+                    detail=f"Failed to download from Pi: HTTP {response.status_code} - {error_text}"
+                )
+            
+            file_content = response.content
+            total_size = len(file_content)
+            print(f"✅ Downloaded {total_size:,} bytes from Pi")
+        
+        # Validate downloaded content
+        if total_size == 0:
+            raise HTTPException(status_code=500, detail="Downloaded file is empty")
+        
+        # Check file size (limit to 100MB)
+        max_size = 100 * 1024 * 1024  # 100MB
+        if total_size > max_size:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"File too large. Maximum size is {max_size // (1024*1024)}MB"
+            )
+        
+        # Upload to Azure Blob Storage (using your existing Azure setup)
+        try:
+            from azure.storage.blob import BlobServiceClient
+            import uuid
+            
+            # Get connection string (same as your existing upload endpoint)
+            connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+            if not connection_string:
+                raise Exception("Azure storage not configured")
+            
+            # Create blob service client
+            blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+            
+            # Generate unique filename for Azure storage
+            file_extension = os.path.splitext(pi_filename)[1] or '.mp4'
+            unique_filename = f"{uuid.uuid4()}{file_extension}"
+            blob_path = f"uploads/videos/{current_user.id}/{unique_filename}"
+            
+            print(f"📤 Uploading to Azure: {blob_path}")
+            
+            # Upload to Azure
+            blob_client = blob_service_client.get_blob_client(
+                container="videos",
+                blob=blob_path
+            )
+            
+            blob_client.upload_blob(
+                file_content,
+                overwrite=True,
+                content_type="video/mp4",
+                metadata={
+                    "original_filename": pi_filename,
+                    "user_id": str(current_user.id),
+                    "upload_type": "pi_transfer",
+                    "source": "raspberry_pi"
+                }
+            )
+            
+            # Get the blob URL
+            blob_url = blob_client.url
+            file_path = blob_url  # Store Azure URL as path
+            
+            print(f"✅ Successfully uploaded to Azure: {blob_url}")
+            
+        except Exception as azure_error:
+            print(f"❌ Azure upload failed: {azure_error}")
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Failed to upload to Azure storage: {str(azure_error)}"
+            )
+        
+        # Map the brocade type (using your existing mapping function)
+        mapped_brocade_type = map_brocade_type(brocade_type)
+        
+        # Create database record (same structure as your existing upload endpoint)
+        new_video = models.VideoUpload(
+            user_id=current_user.id,
+            title=title,
+            description=description,
+            brocade_type=mapped_brocade_type,
+            video_path=file_path,  # Azure URL
+            processing_status="uploaded"  # Same as regular uploads
+        )
+        
+        db.add(new_video)
+        db.commit()
+        db.refresh(new_video)
+        
+        print(f"✅ Video record created with ID: {new_video.id}")
+        
+        return {
+            "success": True,
+            "status": "success",
+            "message": "Video transferred successfully from Pi",
+            "video_id": new_video.id,
+            "title": title,
+            "brocade_type": brocade_type,
+            "processing_status": new_video.processing_status,
+            "upload_timestamp": new_video.upload_timestamp,
+            "storage_type": "azure_blob",
+            "original_pi_filename": pi_filename,
+            "size": total_size,
+            "azure_path": blob_path
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"❌ Pi transfer failed: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Pi transfer failed: {str(e)}")
