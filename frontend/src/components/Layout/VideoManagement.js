@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../auth/AuthContext';
 import VideoUpload from './VideoUpload';
+import PiVideoTransfer from './PiVideoTransfer';
 import './Layout.css';
 import './VideoManagement.css';
 
@@ -23,6 +24,7 @@ const VideoManagement = () => {
   const [isConverting, setIsConverting] = useState(false);
   const [conversionVideoId, setConversionVideoId] = useState(null);
   const [hasEnglishAudio, setHasEnglishAudio] = useState(false);
+  const [piTransferComplete, setPiTransferComplete] = useState(false);
   const { token, user } = useAuth();
   const navigate = useNavigate();
   
@@ -805,6 +807,18 @@ const VideoManagement = () => {
     );
   }
 
+  const handleTransferComplete = (data) => {
+    console.log('Pi transfer completed:', data);
+    setPiTransferComplete(true);
+    
+    // Refresh videos to show newly transferred videos
+    fetchVideos();
+    
+    // Show success message briefly
+    setTimeout(() => setPiTransferComplete(false), 3000);
+  };
+
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
@@ -1151,9 +1165,39 @@ const VideoManagement = () => {
             </div>
           </div>
         </div>
-        
-        <div className="upload-section">
-          <VideoUpload onUploadComplete={handleUploadComplete} />
+
+        {/* Manual upload and Pi video transfer section */}
+        <div className="upload-sections-container">
+          {/* Success Banner - spans both columns */}
+          {piTransferComplete && (
+            <div className="transfer-success-banner-full">
+              ✅ Pi videos transferred successfully! Check your video list above.
+            </div>
+          )}
+          
+          <div className="upload-columns">
+            {/* Left Column - Manual Upload */}
+            <div className="upload-column manual-upload-column">
+              <div className="column-header">
+                <h3>📤 Manual Upload</h3>
+                <p>Upload videos directly from your device</p>
+              </div>
+              <div className="upload-section">
+                <VideoUpload onUploadComplete={handleUploadComplete} />
+              </div>
+            </div>
+            
+            {/* Right Column - Pi Transfer */}
+            <div className="upload-column pi-transfer-column">
+              <div className="column-header">
+                <h3>🤖 Pi Transfer</h3>
+                <p>Transfer recorded videos from your Pi device</p>
+              </div>
+              <div className="pi-transfer-section">
+                <PiVideoTransfer onTransferComplete={handleTransferComplete} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

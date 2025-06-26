@@ -351,4 +351,4 @@ const VideoManagementPage = () => {
   );
 };
 
-export { PiVideoTransfer, VideoManagementPage, additionalStyles, tabStyles };
+export { PiVideoTransfer, VideoManagementPage};
