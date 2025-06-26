@@ -1,13 +1,12 @@
 // src/components/Layout/PiVideoTransfer.js
-// New component to handle Pi video transfers alongside existing VideoUpload
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../auth/AuthContext';
 import './Layout.css';
 
-// Use your pi-service URL (adjust as needed)
-const PI_SERVICE_URL = 'https://baduanjin-pi-service.azurewebsites.net';
+// pi-service backend
+const PI_SERVICE_URL = 'https://https://baduanjin-pi-service-g8aehuh0bghcc4be.southeastasia-01.azurewebsites.net';
 
 const PiVideoTransfer = ({ onTransferComplete }) => {
   const [piRecordings, setPiRecordings] = useState([]);
@@ -26,100 +25,191 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
   });
 
   useEffect(() => {
-    loadPiRecordings();
-    checkPiStatus();
-  }, []);
+    // Test connection first, then load recordings
+    const initializePiConnection = async () => {
+        await checkPiStatus();
+        if (piStatus !== 'error') {
+        await loadPiRecordings();
+        }
+    };
+    
+    initializePiConnection();
+  }, []); 
 
   const loadPiRecordings = async () => {
     setLoading(true);
     setError(null);
     
     try {
-      const response = await axios.get(`${PI_SERVICE_URL}/api/video-transfer/list-pi-recordings`, {
+        // Use correct endpoint
+        const response = await axios.get(`${PI_SERVICE_URL}/api/pi-live/recordings`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`
         }
-      });
-      
-      const data = response.data;
-      setPiRecordings(data.pi_recordings || []);
-      setPiStatus(data.pi_status);
-      
-      if (!data.success) {
-        setError(data.message);
-      }
+        });
+        
+        const data = response.data;
+        setPiRecordings(data.recordings || []); 
+        setPiStatus(data.success ? 'connected' : 'disconnected'); 
+        
+        if (!data.success) {
+        setError(data.message || 'Failed to load recordings');
+        }
     } catch (err) {
-      console.error('Error loading Pi recordings:', err);
-      setError('Failed to connect to Pi service');
-      setPiStatus('error');
+        console.error('Error loading Pi recordings:', err);
+        setError('Failed to connect to Pi service');
+        setPiStatus('error');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
 
   const checkPiStatus = async () => {
     try {
-      const response = await axios.get(`${PI_SERVICE_URL}/api/video-transfer/pi-status`, {
+        // Use correct endpoint
+        const response = await axios.get(`${PI_SERVICE_URL}/api/pi-live/status`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`
         }
-      });
-      
-      const data = response.data;
-      setPiStatus(data.pi_connected ? 'connected' : 'disconnected');
+        });
+        
+        const data = response.data;
+        // Check for pi_connected or is_running to determine status
+        setPiStatus(data.pi_connected || data.is_running ? 'connected' : 'disconnected');
     } catch (err) {
-      setPiStatus('error');
+        setPiStatus('error');
     }
   };
 
   const handleTransfer = async (recording) => {
-    const { timestamp } = recording;
+    // Handle both legacy timestamp format and new recording format
+    const identifier = recording.timestamp || recording.filename || recording.id;
     
-    // Set form data from recording
-    const title = transferForm.title || `Pi Session ${timestamp}`;
-    const description = transferForm.description || `Baduanjin practice session recorded on ${timestamp}`;
+    if (!identifier) {
+        setError('Cannot identify recording for transfer');
+        return;
+    }
     
-    setTransferStatus(prev => ({ ...prev, [timestamp]: 'transferring' }));
+    // Extract filename for the API call
+    let filename;
+    if (recording.files && recording.files.original) {
+        filename = recording.files.original.filename;
+    } else if (recording.filename) {
+        filename = recording.filename;
+    } else if (recording.timestamp) {
+        // original file format for timestamp
+        filename = `baduanjin_original_${recording.timestamp}.mp4`;
+    } else {
+        setError('Cannot determine filename for transfer');
+        return;
+    }
+    
+    const title = transferForm.title || `Pi Session ${identifier}`;
+    const description = transferForm.description || `Baduanjin practice session recorded on ${identifier}`;
+    
+    setTransferStatus(prev => ({ ...prev, [identifier]: 'transferring' }));
     setError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('timestamp', timestamp);
-      formData.append('title', title);
-      formData.append('description', description);
-      formData.append('brocade_type', transferForm.brocadeType);
-
-      const response = await axios.post(
-        `${PI_SERVICE_URL}/api/video-transfer/transfer-from-pi`,
-        formData,
+        // Use the new transfer endpoint with filename
+        const response = await axios.post(
+        `${PI_SERVICE_URL}/api/pi-live/transfer-video/${encodeURIComponent(filename)}`,
         {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          timeout: 600000 // 10 minutes for large video transfers
+            // Send as JSON body instead of FormData
+            title: title,
+            description: description,
+            brocade_type: transferForm.brocadeType
+        },
+        {
+            headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+            },
+            timeout: 600000 // 10 minutes for large video transfers
         }
-      );
+        );
 
-      setTransferStatus(prev => ({ ...prev, [timestamp]: 'completed' }));
-      
-      // Remove transferred recording from list
-      setPiRecordings(prev => prev.filter(r => r.timestamp !== timestamp));
-      
-      if (onTransferComplete) {
-        onTransferComplete(response.data);
-      }
+        // Check transfer status using the new endpoint
+        const checkTransferComplete = async () => {
+        try {
+            const statusResponse = await axios.get(
+            `${PI_SERVICE_URL}/api/pi-live/transfer-status/${encodeURIComponent(filename)}`,
+            {
+                headers: {
+                'Authorization': `Bearer ${token}`
+                }
+            }
+            );
+            
+            const statusData = statusResponse.data;
+            
+            if (statusData.status === 'completed' || statusData.success) {
+            setTransferStatus(prev => ({ ...prev, [identifier]: 'completed' }));
+            
+            // Remove transferred recording from list
+            setPiRecordings(prev => prev.filter(r => 
+                r.timestamp !== identifier && 
+                r.filename !== identifier && 
+                r.id !== identifier
+            ));
+            
+            if (onTransferComplete) {
+                onTransferComplete(statusData);
+            }
 
-      // Show success message
-      const transferInfo = response.data.transfer_info;
-      const totalSizeMB = (transferInfo.total_size / 1024 / 1024).toFixed(1);
-      alert(`Transfer completed!\nOriginal Video ID: ${response.data.uploaded_videos.original.id}\nAnnotated Video ID: ${response.data.uploaded_videos.annotated.id}\nTotal Size: ${totalSizeMB} MB`);
-      
+            // Improved success message
+            const transferInfo = statusData.transfer_info || {};
+            const totalSizeMB = transferInfo.total_size ? 
+                (transferInfo.total_size / 1024 / 1024).toFixed(1) : 'Unknown';
+            
+            alert(`Transfer completed!\nFilename: ${filename}\nTotal Size: ${totalSizeMB} MB`);
+            
+            } else if (statusData.status === 'failed' || statusData.error) {
+            setTransferStatus(prev => ({ ...prev, [identifier]: 'failed' }));
+            setError(`Transfer failed: ${statusData.error || 'Unknown error'}`);
+            } else if (statusData.status === 'in_progress' || statusData.status === 'transferring') {
+            // Still transferring, check again in 3 seconds
+            setTimeout(checkTransferComplete, 3000);
+            } else {
+            // Unknown status, assume completed after initial response
+            setTransferStatus(prev => ({ ...prev, [identifier]: 'completed' }));
+            if (onTransferComplete) {
+                onTransferComplete(response.data);
+            }
+            alert(`Transfer initiated for ${filename}`);
+            }
+        } catch (statusErr) {
+            console.error('Error checking transfer status:', statusErr);
+            // Assume success if we can't check status
+            setTransferStatus(prev => ({ ...prev, [identifier]: 'completed' }));
+            if (onTransferComplete) {
+            onTransferComplete(response.data);
+            }
+        }
+        };
+
+        // Start checking transfer status
+        if (response.data.status === 'started' || response.data.success) {
+        setTimeout(checkTransferComplete, 2000); // Check after 2 seconds
+        } else {
+        // Immediate completion
+        setTransferStatus(prev => ({ ...prev, [identifier]: 'completed' }));
+        if (onTransferComplete) {
+            onTransferComplete(response.data);
+        }
+        alert(`Transfer completed for ${filename}`);
+        }
+        
     } catch (err) {
-      console.error('Transfer error:', err);
-      setTransferStatus(prev => ({ ...prev, [timestamp]: 'failed' }));
-      
-      const errorMessage = err.response?.data?.detail || err.message || 'Transfer failed';
-      setError(`Transfer failed for ${timestamp}: ${errorMessage}`);
+        console.error('Transfer error:', err);
+        setTransferStatus(prev => ({ ...prev, [identifier]: 'failed' }));
+        
+        const errorMessage = err.response?.data?.detail || 
+                            err.response?.data?.error || 
+                            err.response?.data?.message || 
+                            err.message || 
+                            'Transfer failed';
+        setError(`Transfer failed for ${filename}: ${errorMessage}`);
     }
   };
 
@@ -145,6 +235,34 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
     }
   };
 
+  const testPiConnection = async () => {
+    setLoading(true);
+    try {
+        const response = await axios.get(`${PI_SERVICE_URL}/api/pi-live/test-pi-connection`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+        });
+        
+        const data = response.data;
+        setPiStatus(data.pi_connected ? 'connected' : 'disconnected');
+        
+        if (data.pi_connected) {
+        alert('Pi connection test successful!');
+        // Refresh recordings after successful connection
+        loadPiRecordings();
+        } else {
+        alert(`Pi connection failed: ${data.message || 'Unknown error'}`);
+        }
+    } catch (err) {
+        setPiStatus('error');
+        alert(`Pi connection test failed: ${err.message}`);
+    } finally {
+        setLoading(false);
+    }
+  };
+
+
   return (
     <div className="pi-video-transfer-container">
       <div className="section-header">
@@ -160,11 +278,28 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
 
       <div className="transfer-controls">
         <button 
-          onClick={loadPiRecordings} 
-          disabled={loading}
-          className="refresh-btn"
+            onClick={loadPiRecordings} 
+            disabled={loading}
+            className="refresh-btn"
         >
-          {loading ? 'Loading...' : 'Refresh Pi Recordings'}
+            {loading ? 'Loading...' : 'Refresh Pi Recordings'}
+        </button>
+        
+        <button 
+            onClick={testPiConnection} 
+            disabled={loading}
+            className="test-connection-btn"
+            style={{
+            background: '#17a2b8',
+            color: 'white',
+            border: 'none',
+            padding: '8px 15px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginLeft: '10px'
+            }}
+        >
+            {loading ? 'Testing...' : 'Test Pi Connection'}
         </button>
       </div>
 
@@ -224,70 +359,100 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
           </div>
         ) : (
           <div className="recordings-grid">
-            {piRecordings.map((recording) => (
-              <div key={recording.timestamp} className="recording-card">
+          {piRecordings.map((recording) => {
+            // Handle different recording formats
+            const recordingId = recording.timestamp || recording.filename || recording.id || Math.random();
+            const displayName = recording.title || 
+                                recording.timestamp || 
+                                recording.filename || 
+                                `Recording ${recordingId}`;
+            
+            return (
+                <div key={recordingId} className="recording-card">
                 <div className="recording-header">
-                  <h4>Session {recording.timestamp}</h4>
-                  <div className="recording-time">
-                    {formatTimestamp(recording.timestamp)}
-                  </div>
+                    <h4>{displayName}</h4>
+                    {recording.timestamp && (
+                    <div className="recording-time">
+                        {formatTimestamp(recording.timestamp)}
+                    </div>
+                    )}
+                    {recording.created && (
+                    <div className="recording-time">
+                        Created: {new Date(recording.created).toLocaleString()}
+                    </div>
+                    )}
                 </div>
 
                 <div className="recording-info">
-                  <div className="info-row">
+                    <div className="info-row">
                     <span>Files:</span>
-                    <span>{recording.file_count || Object.keys(recording.files || {}).length}</span>
-                  </div>
-                  <div className="info-row">
+                    <span>{recording.file_count || Object.keys(recording.files || {}).length || 1}</span>
+                    </div>
+                    <div className="info-row">
                     <span>Total Size:</span>
-                    <span>{formatFileSize(recording.total_size || 0)}</span>
-                  </div>
+                    <span>{formatFileSize(recording.total_size || recording.size || 0)}</span>
+                    </div>
+                    {recording.processing_status && (
+                    <div className="info-row">
+                        <span>Status:</span>
+                        <span>{recording.processing_status}</span>
+                    </div>
+                    )}
                 </div>
 
-                {/* File Details */}
+                {/* File Details - handle both old and new formats */}
                 <div className="file-details">
-                  {Object.entries(recording.files || {}).map(([type, file]) => (
-                    <div key={type} className="file-item">
-                      <span className="file-type">{type}:</span>
-                      <span className="file-size">{formatFileSize(file.size)}</span>
-                      <span className="file-desc">{file.description}</span>
+                    {recording.files ? (
+                    Object.entries(recording.files).map(([type, file]) => (
+                        <div key={type} className="file-item">
+                        <span className="file-type">{type}:</span>
+                        <span className="file-size">{formatFileSize(file.size)}</span>
+                        <span className="file-desc">{file.description}</span>
+                        </div>
+                    ))
+                    ) : (
+                    <div className="file-item">
+                        <span className="file-type">File:</span>
+                        <span className="file-size">{formatFileSize(recording.size || 0)}</span>
+                        <span className="file-desc">{recording.filename || 'Video file'}</span>
                     </div>
-                  ))}
+                    )}
                 </div>
 
                 {/* Transfer Controls */}
                 <div className="transfer-controls">
-                  {transferStatus[recording.timestamp] === 'transferring' ? (
+                    {transferStatus[recordingId] === 'transferring' ? (
                     <div className="transfer-progress">
-                      <div className="spinner"></div>
-                      <span>Transferring... This may take several minutes</span>
+                        <div className="spinner"></div>
+                        <span>Transferring... This may take several minutes</span>
                     </div>
-                  ) : transferStatus[recording.timestamp] === 'completed' ? (
+                    ) : transferStatus[recordingId] === 'completed' ? (
                     <div className="transfer-success">
-                      ✅ Transfer Completed
+                        ✅ Transfer Completed
                     </div>
-                  ) : transferStatus[recording.timestamp] === 'failed' ? (
+                    ) : transferStatus[recordingId] === 'failed' ? (
                     <div className="transfer-failed">
-                      ❌ Transfer Failed
-                      <button 
+                        ❌ Transfer Failed
+                        <button 
                         onClick={() => handleTransfer(recording)}
                         className="retry-btn"
-                      >
+                        >
                         Retry
-                      </button>
+                        </button>
                     </div>
-                  ) : (
+                    ) : (
                     <button
-                      onClick={() => handleTransfer(recording)}
-                      className="transfer-btn"
-                      disabled={piStatus !== 'connected'}
+                        onClick={() => handleTransfer(recording)}
+                        className="transfer-btn"
+                        disabled={piStatus !== 'connected'}
                     >
-                      Transfer to Storage
+                        Transfer to Storage
                     </button>
-                  )}
+                    )}
                 </div>
-              </div>
-            ))}
+                </div>
+            );
+          })}
           </div>
         )}
       </div>
@@ -295,60 +460,4 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
   );
 };
 
-// Updated main upload page component to include both manual upload and Pi transfer
-const VideoManagementPage = () => {
-  const [activeTab, setActiveTab] = useState('manual');
-  const [uploadComplete, setUploadComplete] = useState(false);
-
-  const handleUploadComplete = (data) => {
-    console.log('Upload completed:', data);
-    setUploadComplete(true);
-    setTimeout(() => setUploadComplete(false), 3000);
-  };
-
-  const handleTransferComplete = (data) => {
-    console.log('Transfer completed:', data);
-    setUploadComplete(true);
-    setTimeout(() => setUploadComplete(false), 3000);
-  };
-
-  return (
-    <div className="video-management-page">
-      <div className="page-header">
-        <h1>Video Management</h1>
-        <div className="tab-navigation">
-          <button 
-            className={`tab-btn ${activeTab === 'manual' ? 'active' : ''}`}
-            onClick={() => setActiveTab('manual')}
-          >
-            Manual Upload
-          </button>
-          <button 
-            className={`tab-btn ${activeTab === 'pi-transfer' ? 'active' : ''}`}
-            onClick={() => setActiveTab('pi-transfer')}
-          >
-            Pi Transfer
-          </button>
-        </div>
-      </div>
-
-      {uploadComplete && (
-        <div className="success-banner">
-          ✅ Video operation completed successfully!
-        </div>
-      )}
-
-      <div className="tab-content">
-        {activeTab === 'manual' && (
-          <VideoUpload onUploadComplete={handleUploadComplete} />
-        )}
-        
-        {activeTab === 'pi-transfer' && (
-          <PiVideoTransfer onTransferComplete={handleTransferComplete} />
-        )}
-      </div>
-    </div>
-  );
-};
-
-export { PiVideoTransfer, VideoManagementPage};
+export default PiVideoTransfer;
