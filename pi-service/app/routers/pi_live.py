@@ -1134,3 +1134,104 @@ async def transfer_file_background_enhanced(filename: str, local_path: Path, use
             "progress": f"Exception occurred: {error_msg}"
         })
         print(f"❌ {error_msg}")
+
+@router.get("/current-frame")
+async def get_current_frame(current_user: User = Depends(get_current_user)):
+    """Get current video frame from Pi for live streaming"""
+    
+    try:
+        # Check if Pi is connected
+        pi_status = await pi_service.check_pi_status()
+        if not pi_status["connected"]:
+            return {
+                "success": False,
+                "error": "Pi not connected",
+                "pi_status": pi_status.get("error", "Unknown connection error")
+            }
+        
+        # Get current frame from Pi
+        headers = {
+            'ngrok-skip-browser-warning': 'true',
+            'User-Agent': 'Azure-Pi-Service/1.0',
+            'Accept': 'application/json'
+        }
+        
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.get(
+                f"{PI_BASE_URL}/current_frame",  # This should match your Pi's endpoint
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                frame_data = response.json()
+                
+                # Add timestamp and additional info
+                return {
+                    "success": True,
+                    "image": frame_data.get("image"),
+                    "timestamp": frame_data.get("timestamp", datetime.now().timestamp() * 1000),
+                    "stats": {
+                        "current_fps": frame_data.get("fps", 0),
+                        "persons_detected": frame_data.get("persons_detected", 0),
+                        "processing_time": frame_data.get("processing_time", 0)
+                    },
+                    "pose_data": frame_data.get("pose_data", []),
+                    "is_recording": frame_data.get("is_recording", False),
+                    "pi_timestamp": frame_data.get("timestamp"),
+                    "server_timestamp": datetime.now().timestamp() * 1000
+                }
+            else:
+                error_text = await response.atext()
+                return {
+                    "success": False,
+                    "error": f"Pi returned HTTP {response.status_code}: {error_text[:200]}"
+                }
+                
+    except httpx.TimeoutException:
+        return {
+            "success": False,
+            "error": "Pi frame timeout - mobile network may be slow",
+            "suggestion": "Check mobile network connection"
+        }
+    except httpx.ConnectError:
+        return {
+            "success": False,
+            "error": "Cannot reach Pi - ngrok tunnel may be down",
+            "suggestion": "Verify ngrok tunnel is running on Pi"
+        }
+    except Exception as e:
+        print(f"❌ Frame fetch error: {str(e)}")
+        return {
+            "success": False,
+            "error": f"Frame fetch failed: {str(e)}"
+        }
+
+# Also add this enhanced method to the EnhancedPiService class
+async def get_pi_current_frame(self) -> Dict[str, Any]:
+    """Get current video frame from Pi"""
+    try:
+        headers = {
+            'ngrok-skip-browser-warning': 'true',
+            'User-Agent': 'Azure-Pi-Service/1.0',
+            'Accept': 'application/json'
+        }
+        
+        async with httpx.AsyncClient(timeout=3.0) as client:
+            response = await client.get(
+                f"{PI_BASE_URL}/current_frame",
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return {
+                    "success": False,
+                    "error": f"HTTP {response.status_code}"
+                }
+                
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
