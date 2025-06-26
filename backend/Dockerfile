@@ -136,7 +136,8 @@ RUN pip install --no-cache-dir \
  tomli==2.2.1 \
  tqdm==4.65.2 \
  typing_extensions==4.13.2 \
- urllib3==1.26.20
+ urllib3==1.26.20 \
+ httpx==0.24.1
 
 # 12. Install database support
 RUN pip install --no-cache-dir \
