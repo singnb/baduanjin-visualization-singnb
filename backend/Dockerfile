@@ -40,7 +40,6 @@ RUN pip install --no-cache-dir \
  matplotlib==3.10.1
 
 # 3. Install PyTorch (CPU version to match structure, but with newer versions)
-# Note: Using CPU version since you're likely deploying without GPU
 RUN pip install --no-cache-dir \
  torch==2.0.0 \
  torchvision==0.15.1 \
@@ -69,91 +68,124 @@ RUN pip install --no-cache-dir \
  fastapi==0.115.12 \
  uvicorn[standard]==0.34.2
 
-# 11. Install other core dependencies from your pip list
+# 11. Install HTTP clients and core web dependencies
+RUN pip install --no-cache-dir \
+ httpx==0.13.3 \
+ httpcore==0.9.1 \
+ h11==0.9.0 \
+ requests==2.28.2 \
+ aiofiles==24.1.0
+
+# 12. Install validation and settings
+RUN pip install --no-cache-dir \
+ pydantic==2.11.3 \
+ pydantic_core==2.33.1 \
+ pydantic-settings==2.9.1 \
+ email_validator==2.2.0 \
+ python-dotenv==1.1.0 \
+ python-multipart==0.0.20
+
+# 13. Install basic utilities
+RUN pip install --no-cache-dir \
+ click==8.1.8 \
+ colorama==0.4.6 \
+ tqdm==4.65.2 \
+ rich==13.4.2 \
+ termcolor==3.0.1 \
+ tabulate==0.9.0
+
+# 14. Install data processing utilities
 RUN pip install --no-cache-dir \
  addict==2.4.0 \
- aiofiles==24.1.0 \
+ easydict==1.13 \
+ joblib==1.4.2 \
+ psutil==5.9.0 \
+ py-cpuinfo==9.0.0
+
+# 15. Install JSON and serialization
+RUN pip install --no-cache-dir \
+ json-tricks==3.17.3 \
+ jsonschema==4.23.0 \
+ jsonschema-specifications==2023.7.1 \
+ PyYAML==6.0.2
+
+# 16. Install ML/AI utilities
+RUN pip install --no-cache-dir \
+ scikit-learn==1.6.1 \
+ seaborn==0.13.2 \
+ pycocotools==2.0.8 \
+ timm==0.1.20 \
+ model-index==0.1.11
+
+# 17. Install image/video processing
+RUN pip install --no-cache-dir \
+ imageio==2.37.0 \
+ imageio-ffmpeg==0.6.0 \
+ contourpy==1.3.2 \
+ shapely==2.1.0
+
+# 18. Install text and markup processing
+RUN pip install --no-cache-dir \
+ Markdown==3.8 \
+ MarkupSafe==3.0.2 \
+ Pygments==2.19.1
+
+# 19. Install system and compatibility packages
+RUN pip install --no-cache-dir \
  annotated-types==0.7.0 \
  anyio==4.7.0 \
  attrs==24.3.0 \
  certifi==2025.4.26 \
  charset-normalizer==3.3.2 \
- click==8.1.8 \
- colorama==0.4.6 \
- contourpy==1.3.2 \
  cycler==0.12.1 \
- Cython==3.0.12 \
- easydict==1.13 \
- email_validator==2.2.0 \
  exceptiongroup==1.2.0 \
  filelock==3.14.0 \
  fonttools==4.57.0 \
  fsspec==2025.3.2 \
- h11==0.9.0 \
- httpx==0.13.3 \ 
- idna==2.10 \
- imageio==2.37.0 \
- imageio-ffmpeg==0.6.0 \
+ idna==2.10
+
+# 20. Install additional utilities
+RUN pip install --no-cache-dir \
  jmespath==0.10.0 \
- joblib==1.4.2 \
- json-tricks==3.17.3 \
- jsonschema==4.23.0 \
- jsonschema-specifications==2023.7.1 \
  kiwisolver==1.4.8 \
- Markdown==3.8 \
- MarkupSafe==3.0.2 \
- model-index==0.1.11 \
  munkres==1.1.4 \
  natsort==8.4.0 \
  networkx==3.4.2 \
  packaging==24.2 \
  prettytable==3.16.0 \
- psutil==5.9.0 \
- py-cpuinfo==9.0.0 \
- pycocotools==2.0.8 \
  pycparser==2.21 \
- pydantic==2.11.3 \
- pydantic_core==2.33.1 \
- pydantic-settings==2.9.1 \
- Pygments==2.19.1 \
- pyparsing==3.2.3 \
+ pyparsing==3.2.3
+
+# 21. Install date/time and type utilities
+RUN pip install --no-cache-dir \
  python-dateutil==2.9.0.post0 \
- python-dotenv==1.1.0 \
- python-multipart==0.0.20 \
  pytz==2023.4 \
- PyYAML==6.0.2 \
- requests==2.28.2 \
- rich==13.4.2 \
- scikit-learn==1.6.1 \
- seaborn==0.13.2 \
- shapely==2.1.0 \
  six==1.17.0 \
  starlette==0.46.2 \
  sympy==1.13.3 \
- tabulate==0.9.0 \
- termcolor==3.0.1 \
  threadpoolctl==3.6.0 \
- timm==0.1.20 \
  tomli==2.2.1 \
- tqdm==4.65.2 \
  typing_extensions==4.13.2 \
- urllib3==1.26.20 \
+ urllib3==1.26.20
 
-# 12. Install database support
+# 22. Install Cython separately (can be problematic)
+RUN pip install --no-cache-dir Cython==3.0.12
+
+# 23. Install database support
 RUN pip install --no-cache-dir \
  SQLAlchemy==2.0.40 \
  psycopg2-binary==2.9.10
 
-# 13. Install authentication
+# 24. Install authentication
 RUN pip install --no-cache-dir \
  python-jose==3.4.0 \
  passlib==1.7.4 \
  PyJWT==2.10.1
 
-# 14. Install Azure storage (matches your localhost)
+# 25. Install Azure storage (matches your localhost)
 RUN pip install --no-cache-dir azure-storage-blob==12.25.1
 
-# 15. Install additional packages from your localhost
+# 26. Install additional packages from your localhost
 RUN pip install --no-cache-dir \
  openmim==0.3.9 \
  openxlab==0.1.2 \
@@ -167,6 +199,7 @@ RUN python -c "import mmpose; print('MMPose version:', mmpose.__version__); asse
 RUN python -c "import mmengine; print('MMEngine version:', mmengine.__version__); assert mmengine.__version__ == '0.10.7'"
 RUN python -c "import fastapi; print('FastAPI version:', fastapi.__version__)"
 RUN python -c "import torch; print('PyTorch version:', torch.__version__)"
+RUN python -c "import httpx; print('httpx version:', httpx.__version__)"
 
 # Test mmpose import specifically
 RUN python -c "from mmpose.apis import MMPoseInferencer; print('MMPose APIs import successful')"
