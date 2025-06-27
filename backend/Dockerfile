@@ -45,6 +45,14 @@ RUN pip install --no-cache-dir \
  torchvision==0.15.1 \
  --index-url https://download.pytorch.org/whl/cpu
 
+# 11. Install HTTP clients and core web dependencies
+RUN pip install --no-cache-dir \
+ httpx==0.13.3 \
+ httpcore==0.9.1 \
+ h11==0.9.0 \
+ requests==2.28.2 \
+ aiofiles==24.1.0
+ 
 # 4. Install OpenCV (matches your localhost)
 RUN pip install --no-cache-dir opencv-python==4.11.0.86
 
@@ -67,14 +75,6 @@ RUN pip install --no-cache-dir mmpose==1.3.2
 RUN pip install --no-cache-dir \
  fastapi==0.115.12 \
  uvicorn[standard]==0.34.2
-
-# 11. Install HTTP clients and core web dependencies
-RUN pip install --no-cache-dir \
- httpx==0.13.3 \
- httpcore==0.9.1 \
- h11==0.9.0 \
- requests==2.28.2 \
- aiofiles==24.1.0
 
 # 12. Install validation and settings
 RUN pip install --no-cache-dir \
