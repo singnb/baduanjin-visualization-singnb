@@ -90,6 +90,7 @@ RUN pip install --no-cache-dir \
  fonttools==4.57.0 \
  fsspec==2025.3.2 \
  h11==0.9.0 \
+httpx==0.24.1 \ 
  idna==2.10 \
  imageio==2.37.0 \
  imageio-ffmpeg==0.6.0 \
@@ -137,7 +138,6 @@ RUN pip install --no-cache-dir \
  tqdm==4.65.2 \
  typing_extensions==4.13.2 \
  urllib3==1.26.20 \
- httpx==0.24.1
 
 # 12. Install database support
 RUN pip install --no-cache-dir \

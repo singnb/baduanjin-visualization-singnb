@@ -1,5 +1,6 @@
 # pi-service/app/main.py
 # Azure Pi Service - FastAPI Main Application
+# CLEANED VERSION - Focuses only on Pi communication, video transfer moved to main backend
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,18 +9,18 @@ import os
 import sys
 from datetime import datetime
 
-print("Initializing Baduanjin Pi Service for Video Transfer...")
+print("Initializing Baduanjin Pi Service for Pi Communication...")
 
 # Create FastAPI app
 app = FastAPI(
     title="Baduanjin Pi Service",
-    description="Pi coordination and video transfer service - integrates with main backend",
-    version="1.2.0",
+    description="Pi communication and coordination service",
+    version="1.3.0",
     docs_url="/docs",
     redoc_url="/redoc"
 )
 
-# Configure CORS (match your existing CORS setup)
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -30,7 +31,7 @@ app.add_middleware(
         # Your main backend 
         "https://baduanjin-backend-docker.azurewebsites.net",
         
-        # Physical Pi (update with your actual Pi IP)
+        # Physical Pi
         "http://172.20.10.5:5001",
         "http://172.20.10.6:5001",
         
@@ -60,15 +61,6 @@ try:
 except Exception as e:
     print(f"⚠️ Could not include pi_live router: {e}")
 
-# NEW: Include video transfer router
-try:
-    from routers.video_transfer import router as video_transfer_router
-    app.include_router(video_transfer_router)
-    print("✅ Video Transfer router included")
-except Exception as e:
-    print(f"⚠️ Could not include video_transfer router: {e}")
-    print("🔧 To fix: Create routers/video_transfer.py with the transfer endpoints")
-
 # Root endpoint
 @app.get("/")
 async def root():
@@ -76,35 +68,36 @@ async def root():
     return {
         "service": "Baduanjin Pi Service", 
         "status": "running",
-        "version": "1.2.0",
-        "description": "Pi coordination and video transfer service",
+        "version": "1.3.0",
+        "description": "Pi communication and coordination service",
         "environment": os.getenv("ENVIRONMENT", "production"),
         "timestamp": datetime.now().isoformat(),
         "integration": {
             "main_backend": os.getenv("MAIN_BACKEND_URL", "https://baduanjin-backend-docker.azurewebsites.net"),
             "pi_device": os.getenv("PI_BASE_URL", "http://172.20.10.5:5001"),
-            "transfer_enabled": True
+            "video_transfer": "Handled by main backend"
         },
         "features": [
-            "Pi device coordination",
-            "Video transfer from Pi to main backend",
-            "Dual video support (original + annotated)",
-            "Automatic Pi cleanup after transfer",
-            "Integration with existing upload system"
+            "Pi device communication",
+            "Live session management", 
+            "Real-time pose data streaming",
+            "Pi status monitoring",
+            "Video recording coordination"
         ],
         "endpoints": {
             "health": "/health",
             "docs": "/docs",
-            "video_transfer": "/api/video-transfer",
-            "pi_recordings": "/api/video-transfer/list-pi-recordings",
-            "transfer": "/api/video-transfer/transfer-from-pi"
-        }
+            "pi_live": "/api/pi-live",
+            "pi_status": "/api/pi-live/status",
+            "recordings": "/api/pi-live/recordings"
+        },
+        "note": "Video transfer functionality moved to main backend"
     }
 
 # Enhanced health check
 @app.get("/health")
 async def health_check():
-    """Health check with Pi and main backend connectivity"""
+    """Health check with Pi connectivity"""
     try:
         # Test database connection if available
         db_connected = False
@@ -129,22 +122,7 @@ async def health_check():
         except Exception:
             pi_status = "unreachable"
         
-        # Test main backend connectivity
-        backend_status = "unknown"
-        backend_url = os.getenv("MAIN_BACKEND_URL", "https://baduanjin-backend-docker.azurewebsites.net")
-        try:
-            import httpx
-            async with httpx.AsyncClient(timeout=5.0) as client:
-                response = await client.get(f"{backend_url}/health")
-                backend_status = "connected" if response.status_code == 200 else "unreachable"
-        except Exception:
-            backend_status = "unreachable"
-        
-        overall_status = "healthy"
-        if pi_status == "unreachable" and backend_status == "unreachable":
-            overall_status = "critical"
-        elif pi_status == "unreachable" or backend_status == "unreachable":
-            overall_status = "degraded"
+        overall_status = "healthy" if pi_status == "connected" else "degraded"
         
         return {
             "status": overall_status,
@@ -152,18 +130,16 @@ async def health_check():
             "environment": os.getenv("ENVIRONMENT", "production"),
             "database_connected": db_connected,
             "pi_connectivity": pi_status,
-            "main_backend_connectivity": backend_status,
-            "video_transfer_ready": pi_status == "connected" and backend_status == "connected",
+            "pi_communication_ready": pi_status == "connected",
             "timestamp": datetime.now().isoformat(),
             "urls": {
-                "pi": pi_url,
-                "main_backend": backend_url
+                "pi": pi_url
             },
             "capabilities": {
-                "video_transfer": True,
-                "dual_recording": True,
-                "pi_cleanup": True,
-                "backend_integration": True
+                "pi_communication": True,
+                "live_sessions": True,
+                "pose_streaming": True,
+                "status_monitoring": True
             }
         }
     except Exception as e:
@@ -180,31 +156,26 @@ async def service_info():
     """Get Pi service information"""
     return {
         "service_name": "Baduanjin Pi Service",
-        "service_type": "Pi Coordination & Video Transfer Service",
-        "version": "1.2.0",
+        "service_type": "Pi Communication & Coordination Service",
+        "version": "1.3.0",
         "capabilities": [
-            "Pi device management",
-            "Video transfer coordination", 
-            "Dual video handling (original + annotated)",
-            "Integration with main backend upload API",
-            "Automatic Pi storage cleanup",
-            "Real-time Pi status monitoring"
+            "Pi device communication",
+            "Live session management", 
+            "Real-time pose data streaming",
+            "Pi status monitoring",
+            "Video recording coordination"
         ],
         "integration": {
             "main_backend_url": os.getenv("MAIN_BACKEND_URL", "https://baduanjin-backend-docker.azurewebsites.net"),
             "pi_device_url": os.getenv("PI_BASE_URL", "http://172.20.10.5:5001"),
-            "upload_endpoint": "/api/videos/upload",
-            "uses_existing_auth": True,
-            "uses_existing_storage": True
+            "video_transfer": "Handled by main backend /api/videos/pi-transfer endpoint"
         },
         "workflow": [
-            "1. Pi records dual videos (original + annotated)",
-            "2. Frontend calls /api/video-transfer/list-pi-recordings",
-            "3. User selects recording to transfer", 
-            "4. Pi-service downloads videos from Pi",
-            "5. Pi-service uploads to main backend via existing API",
-            "6. Pi files automatically cleaned up",
-            "7. Videos appear in user's normal video list"
+            "1. Pi records videos during live sessions",
+            "2. Frontend gets recording list via pi-service",
+            "3. Frontend requests transfer via main backend", 
+            "4. Main backend downloads from Pi and stores videos",
+            "5. Videos appear in user's normal video list"
         ],
         "status": "operational"
     }
@@ -248,10 +219,10 @@ async def get_config():
         "pi_base_url": os.getenv("PI_BASE_URL", "http://172.20.10.5:5001"),
         "main_backend_url": os.getenv("MAIN_BACKEND_URL", "https://baduanjin-backend-docker.azurewebsites.net"),
         "environment": os.getenv("ENVIRONMENT", "production"),
-        "transfer_timeout": "600 seconds",
-        "supported_formats": ["mp4"],
-        "dual_video_support": True,
-        "auto_cleanup": True
+        "pi_communication_timeout": "10 seconds",
+        "live_session_support": True,
+        "pose_streaming_support": True,
+        "video_transfer_location": "main_backend"
     }
 
 # Startup event
@@ -282,23 +253,11 @@ async def startup_event():
         except Exception as pi_error:
             print(f"⚠️ Pi device not reachable: {pi_error}")
         
-        # Test main backend connectivity
-        backend_url = os.getenv("MAIN_BACKEND_URL", "https://baduanjin-backend-docker.azurewebsites.net")
-        try:
-            import httpx
-            async with httpx.AsyncClient(timeout=5.0) as client:
-                response = await client.get(f"{backend_url}/health")
-                if response.status_code == 200:
-                    print(f"✅ Main backend connected: {backend_url}")
-                else:
-                    print(f"⚠️ Main backend issues: HTTP {response.status_code}")
-        except Exception as backend_error:
-            print(f"⚠️ Main backend not reachable: {backend_error}")
-        
         print("✅ Pi Service running on Azure")
-        print("🎥 Video transfer service ready")
-        print("🔗 Integrated with existing backend upload system")
-        print("🧹 Automatic Pi cleanup enabled")
+        print("📡 Pi communication service ready")
+        print("🎥 Live session management enabled")
+        print("📊 Pose streaming support active")
+        print("🔗 Video transfer handled by main backend")
         print("✨ Pi Service startup complete!")
         
     except Exception as e:
@@ -318,11 +277,13 @@ async def not_found_handler(request: Request, exc):
                 "/health", 
                 "/docs",
                 "/api/pi-service/info",
-                "/api/video-transfer/list-pi-recordings",
-                "/api/video-transfer/transfer-from-pi",
+                "/api/pi-live/status",
+                "/api/pi-live/recordings",
+                "/api/pi-live/start-session",
                 "/api/pi-test",
                 "/api/config"
             ],
+            "note": "Video transfer endpoints moved to main backend",
             "suggestion": "Check /docs for full API documentation"
         }
     )
@@ -339,7 +300,7 @@ async def internal_error_handler(request: Request, exc):
         }
     )
 
-print("✅ Baduanjin Pi Service with Video Transfer initialized successfully")
+print("✅ Baduanjin Pi Service (Communication Only) initialized successfully")
 
 # For local development
 if __name__ == "__main__":
