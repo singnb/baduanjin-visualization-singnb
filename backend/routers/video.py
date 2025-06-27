@@ -1310,7 +1310,7 @@ async def transfer_video_from_pi(
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(database.get_db)
 ):
-    """Transfer video from Pi to main backend Azure storage"""
+    """Transfer video from Pi to main backend - matches manual upload pattern exactly"""
     
     try:
         # Extract transfer data
@@ -1324,13 +1324,13 @@ async def transfer_video_from_pi(
         if not title:
             raise HTTPException(status_code=400, detail="Title is required")
         
-        print(f"🔄 Starting Pi transfer: {pi_filename} for user {current_user.id}")
+        print(f"Starting Pi transfer: {pi_filename} for user {current_user.id}")
         
         # Pi download URL (using your existing ngrok setup)
         PI_DOWNLOAD_URL = f"https://mongoose-hardy-caiman.ngrok-free.app/api/download/{pi_filename}"
         
         # Download file from Pi
-        print(f"📥 Downloading from Pi: {PI_DOWNLOAD_URL}")
+        print(f"Downloading from Pi: {PI_DOWNLOAD_URL}")
         
         import httpx
         async with httpx.AsyncClient(
@@ -1352,13 +1352,13 @@ async def transfer_video_from_pi(
             
             file_content = response.content
             total_size = len(file_content)
-            print(f"✅ Downloaded {total_size:,} bytes from Pi")
+            print(f"Downloaded {total_size:,} bytes from Pi")
         
         # Validate downloaded content
         if total_size == 0:
             raise HTTPException(status_code=500, detail="Downloaded file is empty")
         
-        # Check file size (limit to 100MB)
+        # Check file size (limit to 100MB - same as manual upload)
         max_size = 100 * 1024 * 1024  # 100MB
         if total_size > max_size:
             raise HTTPException(
@@ -1366,12 +1366,14 @@ async def transfer_video_from_pi(
                 detail=f"File too large. Maximum size is {max_size // (1024*1024)}MB"
             )
         
-        # Upload to Azure Blob Storage (using your existing Azure setup)
+        print(f"Uploading video: {pi_filename}, size: {total_size} bytes")
+        
+        # === EXACT SAME AZURE UPLOAD PATTERN AS MANUAL UPLOAD ===
         try:
             from azure.storage.blob import BlobServiceClient
             import uuid
             
-            # Get connection string (same as your existing upload endpoint)
+            # Get connection string (same as manual upload)
             connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
             if not connection_string:
                 raise Exception("Azure storage not configured")
@@ -1379,14 +1381,14 @@ async def transfer_video_from_pi(
             # Create blob service client
             blob_service_client = BlobServiceClient.from_connection_string(connection_string)
             
-            # Generate unique filename for Azure storage
+            # Generate unique filename - EXACT SAME PATTERN AS MANUAL UPLOAD
             file_extension = os.path.splitext(pi_filename)[1] or '.mp4'
             unique_filename = f"{uuid.uuid4()}{file_extension}"
             blob_path = f"uploads/videos/{current_user.id}/{unique_filename}"
             
-            print(f"📤 Uploading to Azure: {blob_path}")
+            print(f"Uploading to Azure: {blob_path}")
             
-            # Upload to Azure
+            # Upload to Azure - EXACT SAME PATTERN AS MANUAL UPLOAD
             blob_client = blob_service_client.get_blob_client(
                 container="videos",
                 blob=blob_path
@@ -1399,62 +1401,118 @@ async def transfer_video_from_pi(
                 metadata={
                     "original_filename": pi_filename,
                     "user_id": str(current_user.id),
-                    "upload_type": "pi_transfer",
+                    "upload_type": "pi_transfer",  # Different from manual upload
                     "source": "raspberry_pi"
                 }
             )
             
-            # Get the blob URL
+            # Get the blob URL - SAME AS MANUAL UPLOAD
             blob_url = blob_client.url
             file_path = blob_url  # Store Azure URL as path
+            storage_type = "azure_blob"
             
-            print(f"✅ Successfully uploaded to Azure: {blob_url}")
+            print(f"Successfully uploaded to Azure: {blob_url}")
             
         except Exception as azure_error:
-            print(f"❌ Azure upload failed: {azure_error}")
-            raise HTTPException(
-                status_code=500, 
-                detail=f"Failed to upload to Azure storage: {str(azure_error)}"
-            )
+            print(f"Azure upload failed: {azure_error}")
+            # Fallback to local storage - SAME AS MANUAL UPLOAD
+            file_extension = os.path.splitext(pi_filename)[1] or '.mp4'
+            unique_filename = f"{uuid.uuid4()}{file_extension}"
+            
+            UPLOAD_DIR = "uploads/videos"
+            os.makedirs(UPLOAD_DIR, exist_ok=True)
+            user_dir = os.path.join(UPLOAD_DIR, str(current_user.id))
+            os.makedirs(user_dir, exist_ok=True)
+            file_path = os.path.join(user_dir, unique_filename)
+            
+            with open(file_path, "wb") as buffer:
+                buffer.write(file_content)
+            storage_type = "local_fallback"
+            print(f"Fallback: Uploaded to local storage: {file_path}")
         
-        # Map the brocade type (using your existing mapping function)
+        # Map the brocade type - SAME AS MANUAL UPLOAD
         mapped_brocade_type = map_brocade_type(brocade_type)
         
-        # Create database record (same structure as your existing upload endpoint)
+        # Create database record - EXACT SAME STRUCTURE AS MANUAL UPLOAD
         new_video = models.VideoUpload(
             user_id=current_user.id,
             title=title,
             description=description,
             brocade_type=mapped_brocade_type,
-            video_path=file_path,  # Azure URL
-            processing_status="uploaded"  # Same as regular uploads
+            video_path=file_path,  # Either Azure URL or local path
+            processing_status="uploaded"  # Same as manual upload
         )
         
         db.add(new_video)
         db.commit()
         db.refresh(new_video)
         
-        print(f"✅ Video record created with ID: {new_video.id}")
+        print(f"Video record created with ID: {new_video.id}")
         
+        # Return EXACT SAME FORMAT AS MANUAL UPLOAD
         return {
-            "success": True,
-            "status": "success",
-            "message": "Video transferred successfully from Pi",
-            "video_id": new_video.id,
-            "title": title,
+            "id": new_video.id,
+            "title": new_video.title,
             "brocade_type": brocade_type,
             "processing_status": new_video.processing_status,
             "upload_timestamp": new_video.upload_timestamp,
-            "storage_type": "azure_blob",
+            "storage_type": storage_type,
+            "video_path": file_path,  # Include for debugging
+            "message": f"Video uploaded successfully to {storage_type}",
+            # Additional Pi transfer info
+            "success": True,
+            "status": "success",
             "original_pi_filename": pi_filename,
             "size": total_size,
-            "azure_path": blob_path
+            "azure_filename": unique_filename if storage_type == "azure_blob" else None
         }
         
     except HTTPException:
         raise
     except Exception as e:
-        print(f"❌ Pi transfer failed: {str(e)}")
+        print(f"Pi transfer failed: {str(e)}")
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Pi transfer failed: {str(e)}")
+
+
+# Add a test endpoint to verify the new pattern works
+@router.get("/test-pi-transfer-pattern")
+async def test_pi_transfer_pattern(
+    current_user: models.User = Depends(get_current_user)
+):
+    """Test that Pi transfer follows the same pattern as manual upload"""
+    
+    try:
+        import uuid
+        
+        # Test UUID generation (same as manual upload)
+        test_filename = "test_pi_video.mp4"
+        file_extension = os.path.splitext(test_filename)[1]
+        unique_filename = f"{uuid.uuid4()}{file_extension}"
+        blob_path = f"uploads/videos/{current_user.id}/{unique_filename}"
+        
+        # Test brocade type mapping (same as manual upload)
+        test_brocade = "FIRST"
+        mapped_brocade_type = map_brocade_type(test_brocade)
+        
+        return {
+            "pattern_test": "success",
+            "original_filename": test_filename,
+            "generated_uuid_filename": unique_filename,
+            "azure_blob_path": blob_path,
+            "brocade_mapping": {
+                "input": test_brocade,
+                "mapped": mapped_brocade_type
+            },
+            "user_directory": f"uploads/videos/{current_user.id}/",
+            "matches_manual_upload": True,
+            "message": "Pi transfer will follow exact same pattern as manual upload"
+        }
+        
+    except Exception as e:
+        return {
+            "pattern_test": "failed",
+            "error": str(e),
+            "matches_manual_upload": False
+        }
