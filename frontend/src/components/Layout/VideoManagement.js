@@ -888,8 +888,7 @@ const VideoManagement = () => {
     }
   };
 
-  // Add these buttons to video actions section:
-  {selectedVideo.processing_status === 'uploaded' && (
+  {selectedVideo && selectedVideo.processing_status === 'uploaded' && (
     <div className="conversion-actions" style={{ marginTop: '15px' }}>
       <h4>Convert for Web Playback:</h4>
       
@@ -1022,14 +1021,14 @@ const VideoManagement = () => {
                       <div className="info-item">
                         <span className="info-label">Status:</span>
                         <span className={`info-value status-badge status-${selectedVideo.processing_status}`}>
-                          {selectedVideo.processing_status === 'processing' ? 'Processing...' : selectedVideo.processing_status}
+                          {selectedVideo && selectedVideo.processing_status === 'processing' ? 'Processing...' : selectedVideo.processing_status}
                         </span>
                       </div>
                     </div>
                   </div>
                   
                   {/* FIXED: Processing section with null checks */}
-                  {selectedVideo.processing_status === 'processing' ? (
+                  {selectedVideo && selectedVideo.processing_status === 'processing' ?(
                     <div className="processing-message">
                       <h3>Video Processing</h3>
                       <p>Your video "{selectedVideo.title}" is currently being processed.</p>
@@ -1262,14 +1261,14 @@ const VideoManagement = () => {
                     </div>
                   )}
                   
-                  {/* FIXED: Analysis Actions with null checks */}
+                  {/* Analysis Actions with null checks */}
                   <div className="video-actions-section">
-                    {selectedVideo.processing_status === 'processing' ? (
+                    {selectedVideo && selectedVideo.processing_status === 'processing' ? (
                       <button className="btn processing-btn" disabled>
                         <span className="processing-spinner"></span>
                         Processing... Please wait
                       </button>
-                    ) : selectedVideo.processing_status === 'completed' ? (
+                    ) : selectedVideo && selectedVideo.processing_status === 'completed' ? (
                       <>
                         <button 
                           className="btn view-results-btn"
@@ -1294,7 +1293,7 @@ const VideoManagement = () => {
                           </button>
                         )}
                       </>
-                    ) : selectedVideo.processing_status === 'failed' ? (
+                    ) : selectedVideo && selectedVideo.processing_status === 'failed' ? (
                       <>
                         <div className="error-message">Analysis failed. Please try again.</div>
                         <button 
