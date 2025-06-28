@@ -152,6 +152,36 @@ def debug_paths():
     
     return results
 
+@app.get("/api/debug/routes")
+async def debug_routes():
+    """Debug endpoint to see all registered routes - ADD THIS TO YOUR main.py"""
+    routes = []
+    for route in app.routes:
+        if hasattr(route, 'path') and hasattr(route, 'methods'):
+            routes.append({
+                "path": route.path,
+                "methods": list(route.methods),
+                "name": getattr(route, 'name', 'unknown')
+            })
+    
+    # Filter to show video routes specifically
+    video_routes = [r for r in routes if '/api/videos' in r['path']]
+    pi_routes = [r for r in routes if 'pi-transfer' in r['path']]
+    
+    return {
+        "total_routes": len(routes),
+        "video_routes": video_routes,
+        "pi_transfer_routes": pi_routes,
+        "found_pi_transfer": len(pi_routes) > 0,
+        "all_routes": routes
+    }
+
+# Also add a simple test endpoint to verify the video router is working
+@app.post("/api/videos/test-post-endpoint")
+async def test_post_endpoint():
+    """Simple test to verify POST endpoints work in video router"""
+    return {"success": True, "message": "POST endpoint in video router works"}
+
 # Add custom MIME types
 add_type("video/mp4", ".MP4")  # Add .MP4 (uppercase) mapping
 
