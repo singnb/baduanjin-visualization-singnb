@@ -818,6 +818,109 @@ const VideoManagement = () => {
     setTimeout(() => setPiTransferComplete(false), 3000);
   };
 
+  // convert from 15 fps to 30 fps
+  const convertForWeb = async (videoId, method = 'blend', targetFps = 30) => {
+    const methods = {
+      'duplicate': 'Frame Duplication (Fastest)',
+      'blend': 'Frame Blending (Recommended)', 
+      'mci': 'Motion Interpolation (Best Quality, Slowest)'
+    };
+    
+    const methodName = methods[method] || methods['blend'];
+    
+    if (!window.confirm(`Convert video for web playback?\n\nMethod: ${methodName}\nFrame Rate: 15fps → ${targetFps}fps\n\nThis may take several minutes.`)) {
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      
+      const response = await axios.post(
+        `${API_URL}/api/videos/${videoId}/convert-for-web`,
+        {}, 
+        {
+          headers: { 'Authorization': `Bearer ${token}` },
+          params: {
+            interpolation_method: method,
+            target_fps: targetFps
+          }
+        }
+      );
+      
+      alert(`Conversion started!\n${response.data.message}\n\nThe video will be optimized for web playback with ${targetFps}fps frame rate.`);
+      
+      // Start polling for completion
+      startStatusPolling(videoId);
+      
+    } catch (err) {
+      console.error('Conversion error:', err);
+      alert('Conversion failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const quickWebConvert = async (videoId) => {
+    if (!window.confirm('Quick convert this Pi video for web playback?\n\n• 15fps → 30fps\n• Optimized for browsers\n• Frame blending for smooth playback\n\nThis may take 2-3 minutes.')) {
+      return;
+    }
+    
+    try {
+      const response = await axios.post(`${API_URL}/api/videos/${videoId}/quick-web-convert`, {}, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      alert('Quick conversion started! Your Pi video will be optimized for web playback.');
+      startStatusPolling(videoId);
+      
+    } catch (err) {
+      console.error('Quick conversion error:', err);
+      alert('Quick conversion failed. Please try again.');
+    }
+  };
+
+  // Add these buttons to your video actions section:
+  {selectedVideo.processing_status === 'uploaded' && (
+    <div className="conversion-actions" style={{ marginTop: '15px' }}>
+      <h4>Convert for Web Playback:</h4>
+      
+      <button 
+        onClick={() => quickWebConvert(selectedVideo.id)}
+        className="btn quick-convert-btn"
+        style={{ backgroundColor: '#28a745', color: 'white', marginRight: '10px' }}
+      >
+        🚀 Quick Convert (15fps→30fps)
+      </button>
+      
+      <div className="advanced-options" style={{ marginTop: '10px' }}>
+        <h5>Advanced Options:</h5>
+        <button 
+          onClick={() => convertForWeb(selectedVideo.id, 'duplicate', 30)}
+          className="btn"
+          style={{ backgroundColor: '#17a2b8', color: 'white', marginRight: '5px', fontSize: '12px' }}
+        >
+          Fast (Duplicate)
+        </button>
+        
+        <button 
+          onClick={() => convertForWeb(selectedVideo.id, 'blend', 30)}
+          className="btn"
+          style={{ backgroundColor: '#007bff', color: 'white', marginRight: '5px', fontSize: '12px' }}
+        >
+          Balanced (Blend)
+        </button>
+        
+        <button 
+          onClick={() => convertForWeb(selectedVideo.id, 'mci', 30)}
+          className="btn"
+          style={{ backgroundColor: '#6f42c1', color: 'white', marginRight: '5px', fontSize: '12px' }}
+        >
+          Best Quality (MCI)
+        </button>
+      </div>
+    </div>
+  )}
+
 
   return (
     <div className="dashboard-container">

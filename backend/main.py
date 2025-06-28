@@ -154,26 +154,46 @@ def debug_paths():
 
 @app.get("/api/debug/routes")
 async def debug_routes():
-    """Debug endpoint to see all registered routes - ADD THIS TO YOUR main.py"""
-    routes = []
-    for route in app.routes:
-        if hasattr(route, 'path') and hasattr(route, 'methods'):
-            routes.append({
-                "path": route.path,
-                "methods": list(route.methods),
-                "name": getattr(route, 'name', 'unknown')
-            })
-    
-    # Filter to show video routes specifically
-    video_routes = [r for r in routes if '/api/videos' in r['path']]
-    pi_routes = [r for r in routes if 'pi-transfer' in r['path']]
-    
+    """Debug endpoint to see all registered routes"""
+    try:
+        routes = []
+        for route in app.routes:
+            if hasattr(route, 'path') and hasattr(route, 'methods'):
+                routes.append({
+                    "path": route.path,
+                    "methods": list(route.methods),
+                    "name": getattr(route, 'name', 'unknown')
+                })
+        
+        # Filter routes
+        pi_routes = [r for r in routes if 'pi-transfer' in r['path']]
+        video_routes = [r for r in routes if '/api/videos' in r['path']]
+        all_video_routes = [r for r in routes if 'video' in r['path'].lower()]
+        
+        return {
+            "status": "success",
+            "total_routes": len(routes),
+            "pi_transfer_routes": pi_routes,
+            "video_routes": video_routes,
+            "all_video_routes": all_video_routes,
+            "found_pi_transfer": len(pi_routes) > 0,
+            "timestamp": "2025-01-01-debug"  # Change this each time you deploy
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": "2025-01-01-debug"
+        }
+
+# Also add a simple test to verify deployment updated
+@app.get("/api/debug/deployment-test")
+async def deployment_test():
+    """Simple test to verify deployment updated"""
     return {
-        "total_routes": len(routes),
-        "video_routes": video_routes,
-        "pi_transfer_routes": pi_routes,
-        "found_pi_transfer": len(pi_routes) > 0,
-        "all_routes": routes
+        "message": "Deployment updated successfully",
+        "timestamp": "2025-01-01-v2",  # Change this each time
+        "app_working": True
     }
 
 # Also add a simple test endpoint to verify the video router is working
