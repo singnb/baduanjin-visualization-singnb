@@ -796,7 +796,7 @@ const VideoManagement = () => {
     }
   };
 
-  // ADDED: Early return if no user context
+  // Early return if no user context
   if (!user) {
     return (
       <div className="dashboard-container">
@@ -818,374 +818,6 @@ const VideoManagement = () => {
     setTimeout(() => setPiTransferComplete(false), 3000);
   };
 
-  // convert from 15 fps to 30 fps
-  const convertForWeb = async (videoId, method = 'blend', targetFps = 30) => {
-    // Safety checks
-    if (!videoId || !selectedVideo) {
-      alert('Please select a video first.');
-      return;
-    }
-
-    const methods = {
-      'duplicate': 'Frame Duplication (Fastest)',
-      'blend': 'Frame Blending (Recommended)', 
-      'mci': 'Motion Interpolation (Best Quality, Slowest)'
-    };
-    
-    const methodName = methods[method] || methods['blend'];
-    
-    if (!window.confirm(`Convert video for web playback?\n\nMethod: ${methodName}\nFrame Rate: 15fps → ${targetFps}fps\n\nThis may take several minutes.`)) {
-      return;
-    }
-    
-    try {
-      const response = await axios.post(
-        `${API_URL}/api/videos/${videoId}/convert-for-web`,
-        {}, 
-        {
-          headers: { 'Authorization': `Bearer ${token}` },
-          params: {
-            interpolation_method: method,
-            target_fps: targetFps
-          }
-        }
-      );
-      
-      alert(`Conversion started!\n${response.data.message}\n\nThe video will be optimized for web playback with ${targetFps}fps frame rate.`);
-      
-      // Start polling for completion
-      startStatusPolling(videoId);
-      
-    } catch (err) {
-      console.error('Conversion error:', err);
-      alert(`Conversion failed: ${err.response?.data?.detail || err.message}`);
-    }
-  };
-
-  const debugConversion = async (videoId) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/videos/${videoId}/debug-conversion`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      const info = response.data;
-      console.log("Conversion debug info:", info);
-      
-      let message = `Conversion Debug Info:\n\n`;
-      message += `Video ID: ${info.video_id}\n`;
-      message += `Status: ${info.processing_status}\n`;
-      message += `FFmpeg Available: ${info.ffmpeg_available ? 'Yes' : 'No'}\n`;
-      message += `Conversion Possible: ${info.conversion_possible ? 'Yes' : 'No'}\n`;
-      message += `Video Accessible: ${info.video_accessible ? 'Yes' : 'No'}\n`;
-      
-      if (info.ffmpeg_error) {
-        message += `\nFFmpeg Error: ${info.ffmpeg_error}\n`;
-      }
-      
-      if (info.output_files && info.output_files.length > 0) {
-        message += `\nOutput Files: ${info.output_files.join(', ')}\n`;
-      }
-      
-      alert(message);
-      
-      // If FFmpeg is not available, offer simple conversion
-      if (!info.ffmpeg_available) {
-        if (window.confirm('FFmpeg is not available on this server. Would you like to try a simple conversion that just marks the video as web-compatible?')) {
-          simpleWebConvert(videoId);
-        }
-      }
-      
-    } catch (err) {
-      console.error('Debug error:', err);
-      alert('Debug failed. See console for details.');
-    }
-  };
-
-  const resetConversion = async (videoId) => {
-    if (!window.confirm('Reset the stuck conversion? This will change the status back to "uploaded".')) {
-      return;
-    }
-    
-    try {
-      const response = await axios.post(`${API_URL}/api/videos/${videoId}/reset-conversion`, {}, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      alert('Conversion status reset! You can try again.');
-      
-      // Stop polling and refresh
-      if (pollingIntervalRef.current) {
-        clearInterval(pollingIntervalRef.current);
-        pollingIntervalRef.current = null;
-      }
-      setAnalysisInProgress(false);
-      setProcessingVideoId(null);
-      
-      await fetchVideos();
-      
-    } catch (err) {
-      console.error('Reset error:', err);
-      alert('Reset failed. Please try again.');
-    }
-  };
-
-  const simpleWebConvert = async (videoId) => {
-    if (!window.confirm('Use simple web conversion? This will mark the video as web-compatible without FFmpeg processing.')) {
-      return;
-    }
-    
-    try {
-      const response = await axios.post(`${API_URL}/api/videos/${videoId}/simple-web-convert`, {}, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      alert(`Simple conversion completed!\n${response.data.message}`);
-      await fetchVideos();
-      
-    } catch (err) {
-      console.error('Simple conversion error:', err);
-      alert('Simple conversion failed. Please try again.');
-    }
-  };
-
-  const quickWebConvert = async (videoId) => {
-    if (!videoId || !selectedVideo) {
-      alert('Please select a video first.');
-      return;
-    }
-
-    if (!window.confirm('Quick convert for web playback? (15fps → 30fps)')) {
-      return;
-    }
-    
-    try {
-      const response = await axios.post(`${API_URL}/api/videos/${videoId}/quick-web-convert`, {}, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      alert('Quick conversion started!');
-      startStatusPolling(videoId);
-      
-      // Set a timeout to check if conversion is stuck
-      setTimeout(async () => {
-        const currentVideo = videos.find(v => v.id === videoId);
-        if (currentVideo && currentVideo.processing_status === 'converting') {
-          if (window.confirm('Conversion seems to be taking a long time. Would you like to debug what\'s happening?')) {
-            debugConversion(videoId);
-          }
-        }
-      }, 60000); // Check after 1 minute
-      
-    } catch (err) {
-      console.error('Quick conversion error:', err);
-      alert(`Quick conversion failed: ${err.response?.data?.detail || err.message}`);
-    }
-  };
-
-  {selectedVideo && selectedVideo.processing_status === 'uploaded' && (
-    <div className="conversion-actions" style={{ marginTop: '15px' }}>
-      <h4>Convert for Web Playback:</h4>
-      
-      <button 
-        onClick={() => quickWebConvert(selectedVideo.id)}
-        className="btn quick-convert-btn"
-        style={{ backgroundColor: '#28a745', color: 'white', marginRight: '10px' }}
-      >
-        🚀 Quick Convert (15fps→30fps)
-      </button>
-      
-      <div className="advanced-options" style={{ marginTop: '10px' }}>
-        <h5>Advanced Options:</h5>
-        <button 
-          onClick={() => convertForWeb(selectedVideo.id, 'duplicate', 30)}
-          className="btn"
-          style={{ backgroundColor: '#17a2b8', color: 'white', marginRight: '5px', fontSize: '12px' }}
-        >
-          Fast (Duplicate)
-        </button>
-        
-        <button 
-          onClick={() => convertForWeb(selectedVideo.id, 'blend', 30)}
-          className="btn"
-          style={{ backgroundColor: '#007bff', color: 'white', marginRight: '5px', fontSize: '12px' }}
-        >
-          Balanced (Blend)
-        </button>
-        
-        <button 
-          onClick={() => convertForWeb(selectedVideo.id, 'mci', 30)}
-          className="btn"
-          style={{ backgroundColor: '#6f42c1', color: 'white', marginRight: '5px', fontSize: '12px' }}
-        >
-          Best Quality (MCI)
-        </button>
-      </div>
-    </div>
-  )}
-
-  {selectedVideo && (selectedVideo.processing_status === 'converting' || selectedVideo.processing_status === 'processing') && (
-    <div className="emergency-controls" style={{ marginTop: '15px', padding: '10px', backgroundColor: '#fff3cd', border: '1px solid #ffeaa7', borderRadius: '4px' }}>
-      <h4>⚠️ Conversion Taking Too Long?</h4>
-      <p>If conversion has been running for more than 2 minutes, something might be wrong.</p>
-      
-      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-        <button 
-          onClick={() => debugConversion(selectedVideo.id)}
-          className="btn"
-          style={{ backgroundColor: '#17a2b8', color: 'white', fontSize: '12px' }}
-        >
-          🔍 Debug Conversion
-        </button>
-        
-        <button 
-          onClick={() => resetConversion(selectedVideo.id)}
-          className="btn"
-          style={{ backgroundColor: '#dc3545', color: 'white', fontSize: '12px' }}
-        >
-          🔄 Reset Status
-        </button>
-        
-        <button 
-          onClick={() => simpleWebConvert(selectedVideo.id)}
-          className="btn"
-          style={{ backgroundColor: '#28a745', color: 'white', fontSize: '12px' }}
-        >
-          💡 Simple Convert
-        </button>
-      </div>
-    </div>
-  )}
-
-  const checkVideoProperties = async (videoId) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/videos/${videoId}/video-properties`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      const props = response.data;
-      console.log("Video properties:", props);
-      
-      // Build detailed report
-      let report = `📊 VIDEO CONVERSION REPORT\n\n`;
-      
-      // Original video info
-      const orig = props.original_video;
-      if (orig.analysis_successful) {
-        report += `🎬 ORIGINAL VIDEO:\n`;
-        report += `• Frame Rate: ${orig.fps} fps\n`;
-        report += `• Resolution: ${orig.width}x${orig.height}\n`;
-        report += `• Duration: ${orig.duration}s\n`;
-        report += `• Size: ${orig.size_mb} MB\n`;
-        report += `• Codec: ${orig.codec}\n`;
-        report += `• Storage: ${orig.storage_type}\n\n`;
-      } else {
-        report += `🎬 ORIGINAL VIDEO: Analysis failed\n\n`;
-      }
-      
-      // Converted video info
-      const conv = props.converted_video;
-      if (conv.analysis_successful) {
-        report += `🚀 CONVERTED VIDEO:\n`;
-        report += `• Frame Rate: ${conv.fps} fps\n`;
-        report += `• Resolution: ${conv.width}x${conv.height}\n`;
-        report += `• Duration: ${conv.duration}s\n`;
-        report += `• Size: ${conv.size_mb} MB\n`;
-        report += `• Codec: ${conv.codec}\n`;
-        report += `• Storage: ${conv.storage_type}\n\n`;
-      } else {
-        report += `🚀 CONVERTED VIDEO: ${conv.exists ? 'Analysis failed' : 'Not found'}\n\n`;
-      }
-      
-      // Conversion analysis
-      if (props.conversion_analysis) {
-        const analysis = props.conversion_analysis;
-        report += `✅ CONVERSION RESULTS:\n`;
-        report += `• FPS Changed: ${analysis.fps_changed ? 'YES' : 'NO'}\n`;
-        report += `• Original FPS: ${analysis.original_fps}\n`;
-        report += `• New FPS: ${analysis.converted_fps}\n`;
-        if (analysis.fps_increase !== null) {
-          report += `• FPS Increase: +${analysis.fps_increase}\n`;
-        }
-        report += `• Web Compatible: ${analysis.conversion_successful ? 'YES' : 'NO'}\n\n`;
-      }
-      
-      // Storage info
-      report += `💾 STORAGE LOCATIONS:\n`;
-      report += `• Original: ${props.storage_info.original_path}\n`;
-      if (props.storage_info.converted_path) {
-        report += `• Converted: ${props.storage_info.converted_path}\n`;
-      }
-      report += `• Output Dir: ${props.storage_info.output_directory}\n`;
-      
-      alert(report);
-      
-      // Also show quick summary
-      if (props.conversion_analysis && props.conversion_analysis.fps_changed) {
-        alert(`🎉 SUCCESS! Video converted from ${props.conversion_analysis.original_fps}fps to ${props.conversion_analysis.converted_fps}fps`);
-      } else if (props.converted_video.exists) {
-        alert(`⚠️ Video exists but FPS may not have changed. Check the detailed report in console.`);
-      }
-      
-    } catch (err) {
-      console.error('Properties check error:', err);
-      alert('Failed to check video properties. See console for details.');
-    }
-  };
-
-  const checkConversionSummary = async (videoId) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/videos/${videoId}/conversion-summary`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      const summary = response.data;
-      
-      let message = `📋 CONVERSION SUMMARY\n\n`;
-      message += `Status: ${summary.status}\n`;
-      message += `Has Converted Version: ${summary.has_converted_version ? 'YES' : 'NO'}\n`;
-      message += `Conversion Completed: ${summary.conversion_completed ? 'YES' : 'NO'}\n`;
-      message += `Converted File Accessible: ${summary.converted_file_accessible ? 'YES' : 'NO'}\n`;
-      
-      alert(message);
-      
-    } catch (err) {
-      console.error('Summary check error:', err);
-      alert('Failed to get conversion summary.');
-    }
-  };
-
-  const listOutputFiles = async (videoId) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/videos/${videoId}/list-output-files`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      const info = response.data;
-      console.log("Output files:", info);
-      
-      let message = `📁 OUTPUT FILES\n\n`;
-      message += `Directory: ${info.output_directory}\n`;
-      message += `Exists: ${info.directory_exists ? 'YES' : 'NO'}\n\n`;
-      
-      if (info.files && info.files.length > 0) {
-        message += `Files found: ${info.files.length}\n\n`;
-        info.files.forEach(file => {
-          message += `• ${file.filename}\n`;
-          message += `  Size: ${file.size_mb} MB\n`;
-          message += `  Type: ${file.is_video ? 'Video' : 'Other'}\n`;
-          message += `  Modified: ${new Date(file.modified).toLocaleString()}\n\n`;
-        });
-      } else {
-        message += `No files found in output directory.\n`;
-      }
-      
-      alert(message);
-      
-    } catch (err) {
-      console.error('File list error:', err);
-      alert('Failed to list output files.');
-    }
-  };
 
   return (
     <div className="dashboard-container">
@@ -1284,7 +916,7 @@ const VideoManagement = () => {
                     </div>
                   </div>
                   
-                  {/* FIXED: Processing section with null checks */}
+                  {/* Processing section with null checks */}
                   {selectedVideo && selectedVideo.processing_status === 'processing' ?(
                     <div className="processing-message">
                       <h3>Video Processing</h3>
@@ -1315,7 +947,7 @@ const VideoManagement = () => {
                             cursor: 'pointer'
                           }}
                         >
-                          🔄 Refresh Status
+                          Refresh Status
                         </button>
                         
                         <button 
@@ -1330,7 +962,7 @@ const VideoManagement = () => {
                             cursor: 'pointer'
                           }}
                         >
-                          ✅ Check if Complete
+                          Check if Complete
                         </button>
                         
                         <button 
@@ -1345,7 +977,7 @@ const VideoManagement = () => {
                             cursor: 'pointer'
                           }}
                         >
-                          🔄 Reset Status
+                          Reset Status
                         </button>
                       </div>
                     </div>
@@ -1446,7 +1078,7 @@ const VideoManagement = () => {
                         </div>
                       )}
                       
-                      {/* FIXED: Video action buttons with null checks */}
+                      {/* Video action buttons with null checks */}
                       {selectedVideo.processing_status === 'uploaded' && (
                         <div className="video-actions-container">
                           {user?.role === 'master' && (
@@ -1473,82 +1105,8 @@ const VideoManagement = () => {
                               {analysisInProgress ? 'Processing...' : 'Analyze Video'}
                             </button>
                           </div>
-
-                          {/* FIXED: Web conversion section with proper null checks */}
-                          <div className="conversion-actions" style={{ marginTop: '15px' }}>
-                            <h4>Convert for Web Playback:</h4>
-                            
-                            <button 
-                              onClick={() => quickWebConvert(selectedVideo.id)}
-                              className="btn quick-convert-btn"
-                              style={{ backgroundColor: '#28a745', color: 'white', marginRight: '10px' }}
-                            >
-                              🚀 Quick Convert (15fps→30fps)
-                            </button>
-                            
-                            <div className="advanced-options" style={{ marginTop: '10px' }}>
-                              <h5>Advanced Options:</h5>
-                              <button 
-                                onClick={() => convertForWeb(selectedVideo.id, 'duplicate', 30)}
-                                className="btn"
-                                style={{ backgroundColor: '#17a2b8', color: 'white', marginRight: '5px', fontSize: '12px' }}
-                              >
-                                Fast (Duplicate)
-                              </button>
-                              
-                              <button 
-                                onClick={() => convertForWeb(selectedVideo.id, 'blend', 30)}
-                                className="btn"
-                                style={{ backgroundColor: '#007bff', color: 'white', marginRight: '5px', fontSize: '12px' }}
-                              >
-                                Balanced (Blend)
-                              </button>
-                              
-                              <button 
-                                onClick={() => convertForWeb(selectedVideo.id, 'mci', 30)}
-                                className="btn"
-                                style={{ backgroundColor: '#6f42c1', color: 'white', marginRight: '5px', fontSize: '12px' }}
-                              >
-                                Best Quality (MCI)
-                              </button>
-                            </div>
-                          </div>
                         </div>
                       )}
-                    </div>
-                  )}
-
-                  {/* Check the verification buttons when video is completed */}
-                  {selectedVideo && selectedVideo.processing_status === 'completed' && (
-                    <div className="verification-section" style={{ marginTop: '15px', padding: '10px', backgroundColor: '#e8f5e8', borderRadius: '4px' }}>
-                      <h4>🔍 Verify Conversion Results</h4>
-                      <p>Check if your video was successfully converted from 15fps to 30fps:</p>
-                      
-                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                        <button 
-                          onClick={() => checkVideoProperties(selectedVideo.id)}
-                          className="btn"
-                          style={{ backgroundColor: '#28a745', color: 'white', fontSize: '12px' }}
-                        >
-                          📊 Check Video Properties
-                        </button>
-                        
-                        <button 
-                          onClick={() => checkConversionSummary(selectedVideo.id)}
-                          className="btn"
-                          style={{ backgroundColor: '#17a2b8', color: 'white', fontSize: '12px' }}
-                        >
-                          📋 Quick Summary
-                        </button>
-                        
-                        <button 
-                          onClick={() => listOutputFiles(selectedVideo.id)}
-                          className="btn"
-                          style={{ backgroundColor: '#6f42c1', color: 'white', fontSize: '12px' }}
-                        >
-                          📁 List Files
-                        </button>
-                      </div>
                     </div>
                   )}
 
@@ -1612,7 +1170,7 @@ const VideoManagement = () => {
           {/* Success Banner - spans both columns */}
           {piTransferComplete && (
             <div className="transfer-success-banner-full">
-              ✅ Pi videos transferred successfully! Check your video list above.
+              Pi videos transferred successfully! Check your video list above.
             </div>
           )}
           
@@ -1620,7 +1178,7 @@ const VideoManagement = () => {
             {/* Left Column - Manual Upload */}
             <div className="upload-column manual-upload-column">
               <div className="column-header">
-                <h3>📤 Manual Upload</h3>
+                <h3>Manual Upload</h3>
                 <p>Upload videos directly from your device</p>
               </div>
               <div className="upload-section">
@@ -1631,7 +1189,7 @@ const VideoManagement = () => {
             {/* Right Column - Pi Transfer */}
             <div className="upload-column pi-transfer-column">
               <div className="column-header">
-                <h3>🤖 Pi Transfer</h3>
+                <h3>Pi Transfer</h3>
                 <p>Transfer recorded videos from your Pi device</p>
               </div>
               <div className="pi-transfer-section">
