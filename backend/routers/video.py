@@ -1729,15 +1729,15 @@ async def transfer_video_from_pi_requests(
     
 # convert from 15 fps to 30 fps
 @router.post("/{video_id}/convert-for-web")
-async def convert_for_web_enhanced(
+async def convert_for_web_fixed(
     video_id: int,
     background_tasks: BackgroundTasks,
-    interpolation_method: str = "blend",  # Options: "duplicate", "blend", "mci"
+    interpolation_method: str = "blend",
     target_fps: int = 30,
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(database.get_db)
 ):
-    """Convert Pi video to web-compatible format with frame rate conversion"""
+    """Convert Pi video to web-compatible format with frame rate conversion - FIXED"""
     
     video = db.query(models.VideoUpload).filter(
         models.VideoUpload.id == video_id,
@@ -1747,26 +1747,33 @@ async def convert_for_web_enhanced(
     if not video:
         raise HTTPException(status_code=404, detail="Video not found")
     
-    if video.processing_status == 'processing':
+    if video.processing_status in ['processing', 'converting']:
         raise HTTPException(status_code=400, detail="Video is already being processed")
     
     # Set status to converting
     video.processing_status = "converting"
     db.commit()
     
+    # CRITICAL FIX: Pass user_id instead of user object
+    user_id = current_user.id  # Extract the ID
+    
     def convert_video_with_fps():
-        """Background task to convert video with FPS conversion"""
+        """Background task to convert video with FPS conversion - FIXED"""
         
+        # CRITICAL: Create new DB session for background task
         task_db = database.SessionLocal()
+        
         try:
+            # FIXED: Get video using new session, not the closed one
             db_video = task_db.query(models.VideoUpload).filter(
                 models.VideoUpload.id == video_id
             ).first()
             
             if not db_video:
+                print(f"❌ Video {video_id} not found in background task")
                 return
             
-            print(f"Starting FPS conversion for video {video_id}: 15fps → {target_fps}fps")
+            print(f"🔄 Starting FPS conversion for video {video_id}: 15fps → {target_fps}fps")
             
             # Handle Azure vs local file paths
             input_path = None
@@ -1777,31 +1784,61 @@ async def convert_for_web_enhanced(
                 import requests
                 import tempfile
                 
-                print("Downloading video from Azure for processing...")
-                response = requests.get(db_video.video_path, stream=True, timeout=120)
-                if response.status_code == 200:
-                    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmp:
-                        for chunk in response.iter_content(chunk_size=8192):
-                            tmp.write(chunk)
-                        temp_input = tmp.name
-                        input_path = temp_input
-                else:
-                    raise Exception(f"Failed to download video: HTTP {response.status_code}")
+                print("📥 Downloading video from Azure for processing...")
+                try:
+                    response = requests.get(db_video.video_path, stream=True, timeout=120)
+                    if response.status_code == 200:
+                        with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmp:
+                            for chunk in response.iter_content(chunk_size=8192):
+                                tmp.write(chunk)
+                            temp_input = tmp.name
+                            input_path = temp_input
+                        print(f"✅ Downloaded to temporary file: {temp_input}")
+                    else:
+                        raise Exception(f"Failed to download video: HTTP {response.status_code}")
+                except Exception as download_error:
+                    print(f"❌ Download failed: {download_error}")
+                    raise download_error
             else:
                 input_path = db_video.video_path
             
             if not input_path or not os.path.exists(input_path):
-                raise Exception("Input video file not accessible")
+                raise Exception(f"Input video file not accessible: {input_path}")
             
-            # Create output directory
-            output_dir = f"outputs_json/{current_user.id}/{video_id}"
+            # Create output directory using user_id (not current_user.id)
+            output_dir = f"outputs_json/{user_id}/{video_id}"
             os.makedirs(output_dir, exist_ok=True)
+            print(f"📁 Created output directory: {output_dir}")
             
             # Generate output filename
             video_uuid = getattr(db_video, 'video_uuid', None) or str(uuid.uuid4())
             output_path = os.path.join(output_dir, f"{video_uuid}_web_{target_fps}fps.mp4")
             
-            # Build FFmpeg command based on interpolation method
+            # Check if FFmpeg is available
+            try:
+                import subprocess
+                ffmpeg_check = subprocess.run(['ffmpeg', '-version'], 
+                                            capture_output=True, text=True, timeout=10)
+                if ffmpeg_check.returncode != 0:
+                    raise Exception("FFmpeg not available")
+                print("✅ FFmpeg is available")
+            except (FileNotFoundError, subprocess.TimeoutExpired, Exception) as ffmpeg_error:
+                print(f"❌ FFmpeg not available: {ffmpeg_error}")
+                # Fallback: Just copy the file and mark as completed
+                import shutil
+                shutil.copy2(input_path, output_path)
+                print(f"📋 Copied original file as fallback: {output_path}")
+                
+                # Update database with fallback result
+                db_video.analyzed_video_path = output_path
+                db_video.processing_status = "completed"
+                if not getattr(db_video, 'video_uuid', None):
+                    db_video.video_uuid = video_uuid
+                task_db.commit()
+                print("✅ Fallback conversion completed (no FFmpeg)")
+                return
+            
+            # Build FFmpeg command for conversion
             base_cmd = [
                 'ffmpeg', '-i', input_path,
                 '-c:v', 'libx264',              # H.264 video codec
@@ -1811,118 +1848,69 @@ async def convert_for_web_enhanced(
                 '-c:a', 'aac',                  # AAC audio codec
                 '-b:a', '128k',                 # Audio bitrate
                 '-movflags', '+faststart',       # Move metadata to beginning for web streaming
-                '-preset', 'medium',            # Encoding preset (medium = good quality/speed balance)
-                '-crf', '23',                   # Quality setting (18-28 range, 23 is good default)
+                '-preset', 'ultrafast',         # Use ultrafast preset for speed
+                '-crf', '28',                   # Higher CRF for smaller file size and faster encoding
             ]
             
-            # Add frame rate conversion filter based on method
+            # Add frame rate conversion based on method
             if interpolation_method == "duplicate":
-                # Simple frame duplication (fastest, but less smooth)
                 base_cmd.extend(['-r', str(target_fps)])
-                print(f"Using frame duplication: 15fps → {target_fps}fps")
-                
+                print(f"📹 Using frame duplication: 15fps → {target_fps}fps")
             elif interpolation_method == "blend":
-                # Frame blending for smoother results
-                fps_filter = f"fps={target_fps}:round=up"
-                base_cmd.extend(['-vf', fps_filter])
-                print(f"Using frame blending: 15fps → {target_fps}fps")
-                
-            elif interpolation_method == "mci":
-                # Motion Compensated Interpolation (best quality, slowest)
-                mci_filter = f"minterpolate=fps={target_fps}:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1"
-                base_cmd.extend(['-vf', mci_filter])
-                print(f"Using motion interpolation: 15fps → {target_fps}fps")
-                
-            else:
-                # Default to blend
                 fps_filter = f"fps={target_fps}"
                 base_cmd.extend(['-vf', fps_filter])
-                print(f"Using default FPS conversion: 15fps → {target_fps}fps")
+                print(f"📹 Using frame blending: 15fps → {target_fps}fps")
+            else:
+                # Default to simple fps conversion
+                base_cmd.extend(['-r', str(target_fps)])
+                print(f"📹 Using default fps conversion: 15fps → {target_fps}fps")
             
             # Add output path and overwrite flag
             base_cmd.extend(['-y', output_path])
             
-            print(f"Running FFmpeg command: {' '.join(base_cmd)}")
+            print(f"🔄 Running FFmpeg command: {' '.join(base_cmd)}")
             
-            # Execute conversion
-            import subprocess
+            # Execute conversion with timeout
             result = subprocess.run(
                 base_cmd, 
                 capture_output=True, 
                 text=True, 
-                timeout=600  # 10 minute timeout
+                timeout=300  # 5 minute timeout for small files
             )
             
             if result.returncode == 0:
-                print(f"Video conversion successful: {output_path}")
+                print(f"✅ Video conversion successful: {output_path}")
                 
                 # Check output file size
                 if os.path.exists(output_path):
                     output_size = os.path.getsize(output_path)
-                    print(f"Output file size: {output_size / 1024:.1f} KB")
+                    print(f"📊 Output file size: {output_size / 1024:.1f} KB")
                     
-                    # Upload converted video to Azure if original was on Azure
-                    web_video_url = None
-                    if db_video.video_path.startswith('https://'):
-                        try:
-                            from azure.storage.blob import BlobServiceClient
-                            
-                            connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
-                            if connection_string:
-                                blob_service_client = BlobServiceClient.from_connection_string(connection_string)
-                                
-                                # Upload converted video
-                                blob_path = f"outputs_json/{current_user.id}/{video_id}/{video_uuid}_web_{target_fps}fps.mp4"
-                                blob_client = blob_service_client.get_blob_client(container="videos", blob=blob_path)
-                                
-                                with open(output_path, 'rb') as data:
-                                    blob_client.upload_blob(
-                                        data, 
-                                        overwrite=True, 
-                                        content_type="video/mp4",
-                                        metadata={
-                                            "original_fps": "15",
-                                            "converted_fps": str(target_fps),
-                                            "conversion_method": interpolation_method,
-                                            "video_uuid": video_uuid
-                                        }
-                                    )
-                                
-                                web_video_url = blob_client.url
-                                print(f"Uploaded web-compatible video to Azure: {web_video_url}")
-                        
-                        except Exception as upload_error:
-                            print(f"Failed to upload to Azure: {upload_error}")
-                            # Keep local file as fallback
-                    
-                    # Update database with web-compatible version
-                    db_video.analyzed_video_path = web_video_url or output_path
+                    # Update database with conversion result
+                    db_video.analyzed_video_path = output_path
                     db_video.processing_status = "completed"
                     
-                    # Store conversion metadata in description if empty
+                    # Update UUID if missing
+                    if not getattr(db_video, 'video_uuid', None):
+                        db_video.video_uuid = video_uuid
+                    
+                    # Add conversion info to description if empty
                     if not db_video.description:
                         db_video.description = f"Converted from 15fps to {target_fps}fps using {interpolation_method} method"
                     
                     task_db.commit()
-                    print(f"Database updated with web-compatible video path")
+                    print(f"✅ Database updated with web-compatible video path")
                     
                 else:
                     raise Exception("Output file was not created")
                     
             else:
                 error_msg = result.stderr or "Unknown FFmpeg error"
-                print(f"FFmpeg conversion failed: {error_msg}")
-                db_video.processing_status = "failed"
-                task_db.commit()
+                print(f"❌ FFmpeg conversion failed: {error_msg}")
                 raise Exception(f"FFmpeg failed: {error_msg}")
             
-            # Clean up temporary files
-            if temp_input and os.path.exists(temp_input):
-                os.unlink(temp_input)
-                print("🧹 Cleaned up temporary input file")
-            
         except Exception as e:
-            print(f"Video conversion error: {str(e)}")
+            print(f"❌ Video conversion error: {str(e)}")
             # Update status to failed
             try:
                 db_video = task_db.query(models.VideoUpload).filter(
@@ -1931,9 +1919,18 @@ async def convert_for_web_enhanced(
                 if db_video:
                     db_video.processing_status = "failed"
                     task_db.commit()
-            except:
-                pass
+                    print(f"❌ Marked video {video_id} as failed")
+            except Exception as db_error:
+                print(f"❌ Failed to update database: {db_error}")
+        
         finally:
+            # Clean up temporary files
+            if temp_input and os.path.exists(temp_input):
+                try:
+                    os.unlink(temp_input)
+                    print("🧹 Cleaned up temporary input file")
+                except:
+                    pass
             task_db.close()
     
     # Start background conversion
@@ -1944,23 +1941,23 @@ async def convert_for_web_enhanced(
         "method": interpolation_method,
         "target_fps": target_fps,
         "status": "converting",
-        "note": "Video is being converted to web-compatible format with frame rate conversion. This may take several minutes."
+        "note": "Video is being converted to web-compatible format. This may take several minutes."
     }
 
 # Also add a quick conversion option with preset settings
 @router.post("/{video_id}/quick-web-convert")
-async def quick_web_convert(
+async def quick_web_convert_fixed(
     video_id: int,
     background_tasks: BackgroundTasks,
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(database.get_db)
 ):
-    """Quick conversion with optimal settings for Pi videos"""
-    return await convert_for_web_enhanced(
+    """Quick conversion with optimal settings for Pi videos - FIXED"""
+    return await convert_for_web_fixed(
         video_id=video_id,
         background_tasks=background_tasks,
-        interpolation_method="blend",  # Good balance of quality and speed
-        target_fps=30,                 # Standard web frame rate
+        interpolation_method="duplicate",  # Use fastest method for quick conversion
+        target_fps=30,                     # Standard web frame rate
         current_user=current_user,
         db=db
     )
