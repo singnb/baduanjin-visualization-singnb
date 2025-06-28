@@ -2134,3 +2134,262 @@ async def simple_web_convert(
         video.processing_status = "failed"
         db.commit()
         raise HTTPException(status_code=500, detail=f"Simple conversion failed: {str(e)}")
+    
+@router.get("/{video_id}/video-properties")
+async def get_video_properties(
+    video_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(database.get_db)
+):
+    """Get detailed properties of original and converted video"""
+    
+    video = db.query(models.VideoUpload).filter(
+        models.VideoUpload.id == video_id,
+        models.VideoUpload.user_id == current_user.id
+    ).first()
+    
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    
+    properties = {
+        "video_id": video_id,
+        "title": video.title,
+        "processing_status": video.processing_status,
+        "original_video": {},
+        "converted_video": {},
+        "storage_info": {}
+    }
+    
+    # Function to analyze video file
+    def analyze_video_file(file_path, label="video"):
+        info = {"path": file_path, "exists": False, "accessible": False}
+        
+        try:
+            # Check if file exists and is accessible
+            if file_path.startswith('https://'):
+                # Azure blob - check if accessible
+                import requests
+                head_response = requests.head(file_path, timeout=10)
+                info["accessible"] = head_response.status_code == 200
+                info["size_bytes"] = head_response.headers.get('Content-Length')
+                if info["size_bytes"]:
+                    info["size_mb"] = round(int(info["size_bytes"]) / 1024 / 1024, 2)
+                info["storage_type"] = "Azure Blob"
+                
+                # Try to get video info by downloading a small part
+                try:
+                    # Download first 1MB for analysis
+                    headers = {'Range': 'bytes=0-1048576'}
+                    response = requests.get(file_path, headers=headers, timeout=30)
+                    if response.status_code in [200, 206]:
+                        import tempfile
+                        with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmp:
+                            tmp.write(response.content)
+                            temp_path = tmp.name
+                        
+                        # Analyze the partial file
+                        analyze_with_ffprobe(temp_path, info)
+                        
+                        # Clean up
+                        os.unlink(temp_path)
+                except Exception as e:
+                    info["analysis_error"] = f"Could not analyze Azure video: {str(e)}"
+                    
+            else:
+                # Local file
+                info["exists"] = os.path.exists(file_path)
+                info["accessible"] = info["exists"]
+                info["storage_type"] = "Local"
+                
+                if info["exists"]:
+                    info["size_bytes"] = os.path.getsize(file_path)
+                    info["size_mb"] = round(info["size_bytes"] / 1024 / 1024, 2)
+                    
+                    # Analyze with ffprobe
+                    analyze_with_ffprobe(file_path, info)
+                    
+        except Exception as e:
+            info["error"] = str(e)
+            
+        return info
+    
+    def analyze_with_ffprobe(file_path, info):
+        """Use ffprobe to get video properties"""
+        try:
+            import subprocess
+            import json
+            
+            cmd = [
+                'ffprobe', '-v', 'quiet', '-print_format', 'json',
+                '-show_format', '-show_streams', file_path
+            ]
+            
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            
+            if result.returncode == 0:
+                probe_data = json.loads(result.stdout)
+                
+                # Extract format info
+                format_info = probe_data.get('format', {})
+                info["duration"] = float(format_info.get('duration', 0))
+                info["format_name"] = format_info.get('format_name')
+                info["bit_rate"] = format_info.get('bit_rate')
+                
+                # Extract video stream info
+                video_streams = [s for s in probe_data.get('streams', []) if s.get('codec_type') == 'video']
+                if video_streams:
+                    video_stream = video_streams[0]
+                    info["codec"] = video_stream.get('codec_name')
+                    info["profile"] = video_stream.get('profile')
+                    info["pixel_format"] = video_stream.get('pix_fmt')
+                    info["width"] = video_stream.get('width')
+                    info["height"] = video_stream.get('height')
+                    
+                    # CRITICAL: Frame rate analysis
+                    fps_rational = video_stream.get('r_frame_rate', '0/0')
+                    if fps_rational and '/' in fps_rational:
+                        try:
+                            num, den = fps_rational.split('/')
+                            info["fps"] = round(float(num) / float(den), 2) if float(den) != 0 else 0
+                        except:
+                            info["fps"] = "unknown"
+                    
+                    info["avg_frame_rate"] = video_stream.get('avg_frame_rate')
+                    info["time_base"] = video_stream.get('time_base')
+                    info["nb_frames"] = video_stream.get('nb_frames')
+                
+                # Extract audio stream info
+                audio_streams = [s for s in probe_data.get('streams', []) if s.get('codec_type') == 'audio']
+                if audio_streams:
+                    audio_stream = audio_streams[0]
+                    info["audio_codec"] = audio_stream.get('codec_name')
+                    info["sample_rate"] = audio_stream.get('sample_rate')
+                    info["channels"] = audio_stream.get('channels')
+                
+                info["analysis_successful"] = True
+                
+            else:
+                info["ffprobe_error"] = result.stderr
+                info["analysis_successful"] = False
+                
+        except Exception as e:
+            info["analysis_error"] = str(e)
+            info["analysis_successful"] = False
+    
+    # Analyze original video
+    if video.video_path:
+        properties["original_video"] = analyze_video_file(video.video_path, "original")
+    
+    # Analyze converted video
+    if video.analyzed_video_path:
+        properties["converted_video"] = analyze_video_file(video.analyzed_video_path, "converted")
+    
+    # Storage information
+    properties["storage_info"] = {
+        "original_path": video.video_path,
+        "converted_path": video.analyzed_video_path,
+        "video_uuid": getattr(video, 'video_uuid', None),
+        "output_directory": f"outputs_json/{current_user.id}/{video_id}",
+        "processing_status": video.processing_status
+    }
+    
+    # Conversion analysis
+    if properties["original_video"].get("fps") and properties["converted_video"].get("fps"):
+        orig_fps = properties["original_video"]["fps"]
+        conv_fps = properties["converted_video"]["fps"]
+        
+        properties["conversion_analysis"] = {
+            "fps_changed": orig_fps != conv_fps,
+            "original_fps": orig_fps,
+            "converted_fps": conv_fps,
+            "fps_increase": conv_fps - orig_fps if isinstance(orig_fps, (int, float)) and isinstance(conv_fps, (int, float)) else None,
+            "conversion_successful": conv_fps >= 24  # Consider 24+ fps as web-compatible
+        }
+    
+    return properties
+
+@router.get("/{video_id}/conversion-summary")
+async def get_conversion_summary(
+    video_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(database.get_db)
+):
+    """Get a simple summary of conversion results"""
+    
+    video = db.query(models.VideoUpload).filter(
+        models.VideoUpload.id == video_id,
+        models.VideoUpload.user_id == current_user.id
+    ).first()
+    
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    
+    summary = {
+        "video_id": video_id,
+        "title": video.title,
+        "status": video.processing_status,
+        "has_converted_version": bool(video.analyzed_video_path),
+        "conversion_completed": video.processing_status == "completed" and bool(video.analyzed_video_path),
+        "storage_locations": {
+            "original": video.video_path,
+            "converted": video.analyzed_video_path
+        }
+    }
+    
+    # Quick file existence check
+    if video.analyzed_video_path:
+        try:
+            if video.analyzed_video_path.startswith('https://'):
+                import requests
+                head_response = requests.head(video.analyzed_video_path, timeout=5)
+                summary["converted_file_accessible"] = head_response.status_code == 200
+            else:
+                summary["converted_file_accessible"] = os.path.exists(video.analyzed_video_path)
+        except:
+            summary["converted_file_accessible"] = False
+    
+    return summary
+
+@router.get("/{video_id}/list-output-files")
+async def list_output_files(
+    video_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(database.get_db)
+):
+    """List all files in the video's output directory"""
+    
+    video = db.query(models.VideoUpload).filter(
+        models.VideoUpload.id == video_id,
+        models.VideoUpload.user_id == current_user.id
+    ).first()
+    
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    
+    output_dir = f"outputs_json/{current_user.id}/{video_id}"
+    
+    file_info = {
+        "video_id": video_id,
+        "output_directory": output_dir,
+        "directory_exists": os.path.exists(output_dir),
+        "files": []
+    }
+    
+    if os.path.exists(output_dir):
+        try:
+            for filename in os.listdir(output_dir):
+                file_path = os.path.join(output_dir, filename)
+                file_stat = os.stat(file_path)
+                
+                file_info["files"].append({
+                    "filename": filename,
+                    "size_bytes": file_stat.st_size,
+                    "size_mb": round(file_stat.st_size / 1024 / 1024, 2),
+                    "modified": datetime.fromtimestamp(file_stat.st_mtime).isoformat(),
+                    "is_video": filename.lower().endswith(('.mp4', '.webm', '.avi', '.mov')),
+                    "relative_path": file_path
+                })
+        except Exception as e:
+            file_info["error"] = str(e)
+    
+    return file_info
