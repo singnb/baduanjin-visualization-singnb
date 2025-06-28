@@ -862,15 +862,99 @@ const VideoManagement = () => {
     }
   };
 
+  const debugConversion = async (videoId) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/videos/${videoId}/debug-conversion`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      const info = response.data;
+      console.log("Conversion debug info:", info);
+      
+      let message = `Conversion Debug Info:\n\n`;
+      message += `Video ID: ${info.video_id}\n`;
+      message += `Status: ${info.processing_status}\n`;
+      message += `FFmpeg Available: ${info.ffmpeg_available ? 'Yes' : 'No'}\n`;
+      message += `Conversion Possible: ${info.conversion_possible ? 'Yes' : 'No'}\n`;
+      message += `Video Accessible: ${info.video_accessible ? 'Yes' : 'No'}\n`;
+      
+      if (info.ffmpeg_error) {
+        message += `\nFFmpeg Error: ${info.ffmpeg_error}\n`;
+      }
+      
+      if (info.output_files && info.output_files.length > 0) {
+        message += `\nOutput Files: ${info.output_files.join(', ')}\n`;
+      }
+      
+      alert(message);
+      
+      // If FFmpeg is not available, offer simple conversion
+      if (!info.ffmpeg_available) {
+        if (window.confirm('FFmpeg is not available on this server. Would you like to try a simple conversion that just marks the video as web-compatible?')) {
+          simpleWebConvert(videoId);
+        }
+      }
+      
+    } catch (err) {
+      console.error('Debug error:', err);
+      alert('Debug failed. See console for details.');
+    }
+  };
+
+  const resetConversion = async (videoId) => {
+    if (!window.confirm('Reset the stuck conversion? This will change the status back to "uploaded".')) {
+      return;
+    }
+    
+    try {
+      const response = await axios.post(`${API_URL}/api/videos/${videoId}/reset-conversion`, {}, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      alert('Conversion status reset! You can try again.');
+      
+      // Stop polling and refresh
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+        pollingIntervalRef.current = null;
+      }
+      setAnalysisInProgress(false);
+      setProcessingVideoId(null);
+      
+      await fetchVideos();
+      
+    } catch (err) {
+      console.error('Reset error:', err);
+      alert('Reset failed. Please try again.');
+    }
+  };
+
+  const simpleWebConvert = async (videoId) => {
+    if (!window.confirm('Use simple web conversion? This will mark the video as web-compatible without FFmpeg processing.')) {
+      return;
+    }
+    
+    try {
+      const response = await axios.post(`${API_URL}/api/videos/${videoId}/simple-web-convert`, {}, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      alert(`Simple conversion completed!\n${response.data.message}`);
+      await fetchVideos();
+      
+    } catch (err) {
+      console.error('Simple conversion error:', err);
+      alert('Simple conversion failed. Please try again.');
+    }
+  };
 
   const quickWebConvert = async (videoId) => {
-    // Safety checks
     if (!videoId || !selectedVideo) {
       alert('Please select a video first.');
       return;
     }
 
-    if (!window.confirm('Quick convert this Pi video for web playback?\n\n• 15fps → 30fps\n• Optimized for browsers\n• Frame blending for smooth playback\n\nThis may take 2-3 minutes.')) {
+    if (!window.confirm('Quick convert for web playback? (15fps → 30fps)')) {
       return;
     }
     
@@ -879,8 +963,18 @@ const VideoManagement = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
-      alert('Quick conversion started! Your Pi video will be optimized for web playback.');
+      alert('Quick conversion started!');
       startStatusPolling(videoId);
+      
+      // Set a timeout to check if conversion is stuck
+      setTimeout(async () => {
+        const currentVideo = videos.find(v => v.id === videoId);
+        if (currentVideo && currentVideo.processing_status === 'converting') {
+          if (window.confirm('Conversion seems to be taking a long time. Would you like to debug what\'s happening?')) {
+            debugConversion(videoId);
+          }
+        }
+      }, 60000); // Check after 1 minute
       
     } catch (err) {
       console.error('Quick conversion error:', err);
@@ -929,6 +1023,38 @@ const VideoManagement = () => {
     </div>
   )}
 
+  {selectedVideo && (selectedVideo.processing_status === 'converting' || selectedVideo.processing_status === 'processing') && (
+    <div className="emergency-controls" style={{ marginTop: '15px', padding: '10px', backgroundColor: '#fff3cd', border: '1px solid #ffeaa7', borderRadius: '4px' }}>
+      <h4>⚠️ Conversion Taking Too Long?</h4>
+      <p>If conversion has been running for more than 2 minutes, something might be wrong.</p>
+      
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button 
+          onClick={() => debugConversion(selectedVideo.id)}
+          className="btn"
+          style={{ backgroundColor: '#17a2b8', color: 'white', fontSize: '12px' }}
+        >
+          🔍 Debug Conversion
+        </button>
+        
+        <button 
+          onClick={() => resetConversion(selectedVideo.id)}
+          className="btn"
+          style={{ backgroundColor: '#dc3545', color: 'white', fontSize: '12px' }}
+        >
+          🔄 Reset Status
+        </button>
+        
+        <button 
+          onClick={() => simpleWebConvert(selectedVideo.id)}
+          className="btn"
+          style={{ backgroundColor: '#28a745', color: 'white', fontSize: '12px' }}
+        >
+          💡 Simple Convert
+        </button>
+      </div>
+    </div>
+  )}
 
   return (
     <div className="dashboard-container">

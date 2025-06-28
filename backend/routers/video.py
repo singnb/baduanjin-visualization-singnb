@@ -1964,3 +1964,176 @@ async def quick_web_convert(
         current_user=current_user,
         db=db
     )
+
+
+@router.get("/{video_id}/debug-conversion")
+async def debug_conversion_status(
+    video_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(database.get_db)
+):
+    """Debug what's happening with video conversion"""
+    
+    video = db.query(models.VideoUpload).filter(
+        models.VideoUpload.id == video_id,
+        models.VideoUpload.user_id == current_user.id
+    ).first()
+    
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    
+    debug_info = {
+        "video_id": video_id,
+        "title": video.title,
+        "processing_status": video.processing_status,
+        "video_path": video.video_path,
+        "analyzed_video_path": video.analyzed_video_path,
+        "video_uuid": getattr(video, 'video_uuid', None),
+        "ffmpeg_available": False,
+        "conversion_possible": False
+    }
+    
+    # Test if FFmpeg is available
+    try:
+        import subprocess
+        result = subprocess.run(['ffmpeg', '-version'], 
+                              capture_output=True, text=True, timeout=10)
+        if result.returncode == 0:
+            debug_info["ffmpeg_available"] = True
+            debug_info["ffmpeg_version"] = result.stdout.split('\n')[0]
+            debug_info["conversion_possible"] = True
+        else:
+            debug_info["ffmpeg_error"] = result.stderr
+    except FileNotFoundError:
+        debug_info["ffmpeg_error"] = "FFmpeg not found in PATH"
+    except Exception as e:
+        debug_info["ffmpeg_error"] = str(e)
+    
+    # Check output directory
+    output_dir = f"outputs_json/{current_user.id}/{video_id}"
+    debug_info["output_dir_exists"] = os.path.exists(output_dir)
+    
+    if debug_info["output_dir_exists"]:
+        try:
+            files = os.listdir(output_dir)
+            debug_info["output_files"] = files
+        except:
+            debug_info["output_files"] = []
+    
+    # Check if video file is accessible
+    if video.video_path:
+        if video.video_path.startswith('https://'):
+            try:
+                import requests
+                head_response = requests.head(video.video_path, timeout=10)
+                debug_info["video_accessible"] = head_response.status_code == 200
+                debug_info["video_size"] = head_response.headers.get('Content-Length', 'unknown')
+            except:
+                debug_info["video_accessible"] = False
+        else:
+            debug_info["video_accessible"] = os.path.exists(video.video_path)
+            if debug_info["video_accessible"]:
+                debug_info["video_size"] = os.path.getsize(video.video_path)
+    
+    return debug_info
+
+@router.post("/{video_id}/reset-conversion")
+async def reset_conversion_status(
+    video_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(database.get_db)
+):
+    """Reset stuck conversion status"""
+    
+    video = db.query(models.VideoUpload).filter(
+        models.VideoUpload.id == video_id,
+        models.VideoUpload.user_id == current_user.id
+    ).first()
+    
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    
+    # Reset status to uploaded
+    old_status = video.processing_status
+    video.processing_status = "uploaded"
+    db.commit()
+    
+    return {
+        "message": "Conversion status reset",
+        "old_status": old_status,
+        "new_status": "uploaded",
+        "video_id": video_id
+    }
+
+@router.post("/{video_id}/simple-web-convert")
+async def simple_web_convert(
+    video_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(database.get_db)
+):
+    """Simple web conversion without FFmpeg - just mark as web-compatible"""
+    
+    video = db.query(models.VideoUpload).filter(
+        models.VideoUpload.id == video_id,
+        models.VideoUpload.user_id == current_user.id
+    ).first()
+    
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    
+    try:
+        # Create output directory
+        output_dir = f"outputs_json/{current_user.id}/{video_id}"
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # For now, just copy the original video and mark it as web-compatible
+        # This is a fallback when FFmpeg is not available
+        video_uuid = getattr(video, 'video_uuid', None) or str(uuid.uuid4())
+        
+        if video.video_path.startswith('https://'):
+            # For Azure videos, we'll just mark the original as web-compatible
+            # since direct conversion isn't possible without FFmpeg
+            video.analyzed_video_path = video.video_path
+            video.processing_status = "completed"
+            
+            # Update UUID if missing
+            if not getattr(video, 'video_uuid', None):
+                video.video_uuid = video_uuid
+            
+            db.commit()
+            
+            return {
+                "success": True,
+                "message": "Video marked as web-compatible (FFmpeg not available)",
+                "note": "Original video will be used for playback",
+                "analyzed_video_path": video.analyzed_video_path
+            }
+        
+        else:
+            # For local videos, copy to output directory
+            import shutil
+            output_path = os.path.join(output_dir, f"{video_uuid}_web.mp4")
+            
+            if os.path.exists(video.video_path):
+                shutil.copy2(video.video_path, output_path)
+                
+                video.analyzed_video_path = output_path
+                video.processing_status = "completed"
+                
+                if not getattr(video, 'video_uuid', None):
+                    video.video_uuid = video_uuid
+                
+                db.commit()
+                
+                return {
+                    "success": True,
+                    "message": "Video copied as web-compatible version",
+                    "analyzed_video_path": output_path
+                }
+            else:
+                raise Exception("Original video file not found")
+    
+    except Exception as e:
+        video.processing_status = "failed"
+        db.commit()
+        raise HTTPException(status_code=500, detail=f"Simple conversion failed: {str(e)}")
