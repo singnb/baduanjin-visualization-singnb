@@ -820,6 +820,12 @@ const VideoManagement = () => {
 
   // convert from 15 fps to 30 fps
   const convertForWeb = async (videoId, method = 'blend', targetFps = 30) => {
+    // Safety checks
+    if (!videoId || !selectedVideo) {
+      alert('Please select a video first.');
+      return;
+    }
+
     const methods = {
       'duplicate': 'Frame Duplication (Fastest)',
       'blend': 'Frame Blending (Recommended)', 
@@ -833,8 +839,6 @@ const VideoManagement = () => {
     }
     
     try {
-      setLoading(true);
-      
       const response = await axios.post(
         `${API_URL}/api/videos/${videoId}/convert-for-web`,
         {}, 
@@ -854,13 +858,18 @@ const VideoManagement = () => {
       
     } catch (err) {
       console.error('Conversion error:', err);
-      alert('Conversion failed. Please try again.');
-    } finally {
-      setLoading(false);
+      alert(`Conversion failed: ${err.response?.data?.detail || err.message}`);
     }
   };
 
+
   const quickWebConvert = async (videoId) => {
+    // Safety checks
+    if (!videoId || !selectedVideo) {
+      alert('Please select a video first.');
+      return;
+    }
+
     if (!window.confirm('Quick convert this Pi video for web playback?\n\n• 15fps → 30fps\n• Optimized for browsers\n• Frame blending for smooth playback\n\nThis may take 2-3 minutes.')) {
       return;
     }
@@ -875,11 +884,11 @@ const VideoManagement = () => {
       
     } catch (err) {
       console.error('Quick conversion error:', err);
-      alert('Quick conversion failed. Please try again.');
+      alert(`Quick conversion failed: ${err.response?.data?.detail || err.message}`);
     }
   };
 
-  // Add these buttons to your video actions section:
+  // Add these buttons to video actions section:
   {selectedVideo.processing_status === 'uploaded' && (
     <div className="conversion-actions" style={{ marginTop: '15px' }}>
       <h4>Convert for Web Playback:</h4>
@@ -1019,7 +1028,7 @@ const VideoManagement = () => {
                     </div>
                   </div>
                   
-                  {/* ENHANCED: Processing section with manual controls */}
+                  {/* FIXED: Processing section with null checks */}
                   {selectedVideo.processing_status === 'processing' ? (
                     <div className="processing-message">
                       <h3>Video Processing</h3>
@@ -1085,13 +1094,13 @@ const VideoManagement = () => {
                       </div>
                     </div>
                   ) : (
-                    /* Video Preview Section */
+                    /* Video Preview Section - FIXED with null checks */
                     <div className="video-preview-section">
                       <h3 className="section-title">Video Preview</h3>
                       
                       {selectedVideo.analyzed_video_path && selectedVideo.processing_status === 'completed' ? (
                         <div className="video-players-container">
-                          {/* Original Video - FIXED URL */}
+                          {/* Original Video */}
                           <div className="video-player-container">
                             <h4>Original Video</h4>
                             <div className="video-player-wrapper">
@@ -1139,7 +1148,7 @@ const VideoManagement = () => {
                           </div>
                         </div>
                       ) : (
-                        /* Just show the original video - FIXED URL */
+                        /* Just show the original video */
                         <div className="video-player-wrapper">
                           <video 
                             controls 
@@ -1181,7 +1190,7 @@ const VideoManagement = () => {
                         </div>
                       )}
                       
-                      {/* Add video action buttons below the video player for uploaded videos */}
+                      {/* FIXED: Video action buttons with null checks */}
                       {selectedVideo.processing_status === 'uploaded' && (
                         <div className="video-actions-container">
                           {user?.role === 'master' && (
@@ -1208,12 +1217,52 @@ const VideoManagement = () => {
                               {analysisInProgress ? 'Processing...' : 'Analyze Video'}
                             </button>
                           </div>
+
+                          {/* FIXED: Web conversion section with proper null checks */}
+                          <div className="conversion-actions" style={{ marginTop: '15px' }}>
+                            <h4>Convert for Web Playback:</h4>
+                            
+                            <button 
+                              onClick={() => quickWebConvert(selectedVideo.id)}
+                              className="btn quick-convert-btn"
+                              style={{ backgroundColor: '#28a745', color: 'white', marginRight: '10px' }}
+                            >
+                              🚀 Quick Convert (15fps→30fps)
+                            </button>
+                            
+                            <div className="advanced-options" style={{ marginTop: '10px' }}>
+                              <h5>Advanced Options:</h5>
+                              <button 
+                                onClick={() => convertForWeb(selectedVideo.id, 'duplicate', 30)}
+                                className="btn"
+                                style={{ backgroundColor: '#17a2b8', color: 'white', marginRight: '5px', fontSize: '12px' }}
+                              >
+                                Fast (Duplicate)
+                              </button>
+                              
+                              <button 
+                                onClick={() => convertForWeb(selectedVideo.id, 'blend', 30)}
+                                className="btn"
+                                style={{ backgroundColor: '#007bff', color: 'white', marginRight: '5px', fontSize: '12px' }}
+                              >
+                                Balanced (Blend)
+                              </button>
+                              
+                              <button 
+                                onClick={() => convertForWeb(selectedVideo.id, 'mci', 30)}
+                                className="btn"
+                                style={{ backgroundColor: '#6f42c1', color: 'white', marginRight: '5px', fontSize: '12px' }}
+                              >
+                                Best Quality (MCI)
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
                   )}
                   
-                  {/* Analysis Actions */}
+                  {/* FIXED: Analysis Actions with null checks */}
                   <div className="video-actions-section">
                     {selectedVideo.processing_status === 'processing' ? (
                       <button className="btn processing-btn" disabled>
@@ -1256,8 +1305,7 @@ const VideoManagement = () => {
                           Retry Analysis
                         </button>
                       </>
-                    ) : null
-                    }
+                    ) : null}
                   </div>
                 </div>
               ) : (
