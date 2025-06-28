@@ -120,14 +120,14 @@ const PiVideoTransfer = ({ onTransferComplete }) => {
       console.log('📤 Transfer data:', transferData);
       
       const response = await axios.post(
-        `${MAIN_BACKEND_URL}/api/videos/pi-transfer`, // New endpoint on main backend
+        `${MAIN_BACKEND_URL}/api/videos/pi-transfer-requests`, // Note: different endpoint
         transferData,
         {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
-          timeout: 600000 // 10 minutes for large video transfers
+          timeout: 600000
         }
       );
 

@@ -15,10 +15,10 @@ from auth.router import get_current_user
 from azure_services import azure_blob_service
 from azure.storage.blob import BlobServiceClient
 from config import settings
-import io
 import json
 import httpx
 from datetime import datetime
+
 
 router = APIRouter(
     prefix="/api/videos",
@@ -1305,90 +1305,359 @@ async def debug_azure_contents():
         return {"error": str(e)}
     
 @router.post("/pi-transfer")
-async def transfer_video_from_pi(
+async def transfer_video_from_pi_debug(
     transfer_data: dict,
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(database.get_db)
 ):
-    """Transfer video from Pi to main backend - matches manual upload pattern exactly"""
+    """DEBUG VERSION - Transfer video from Pi with detailed error tracking"""
     
     try:
-        # Extract transfer data
+        print("🔍 DEBUG: Starting Pi transfer endpoint")
+        
+        # Step 1: Validate input
+        print("🔍 DEBUG: Step 1 - Validating input")
         pi_filename = transfer_data.get("pi_filename")
         title = transfer_data.get("title", "")
         description = transfer_data.get("description", "")
         brocade_type = transfer_data.get("brocade_type", "FIRST")
+        
+        print(f"🔍 DEBUG: Input data - filename: {pi_filename}, title: {title}")
         
         if not pi_filename:
             raise HTTPException(status_code=400, detail="Pi filename is required")
         if not title:
             raise HTTPException(status_code=400, detail="Title is required")
         
-        print(f"Starting Pi transfer: {pi_filename} for user {current_user.id}")
+        # Step 2: Test httpx import
+        print("🔍 DEBUG: Step 2 - Testing httpx import")
+        try:
+            import httpx
+            print("✅ DEBUG: httpx imported successfully")
+        except ImportError as import_error:
+            print(f"❌ DEBUG: httpx import failed: {import_error}")
+            raise HTTPException(
+                status_code=500, 
+                detail=f"httpx not available: {str(import_error)}"
+            )
         
-        # Pi download URL (using your existing ngrok setup)
+        # Step 3: Test Azure connection string
+        print("🔍 DEBUG: Step 3 - Checking Azure configuration")
+        connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+        print(f"🔍 DEBUG: Azure connection string exists: {bool(connection_string)}")
+        
+        # Step 4: Test Pi URL construction
+        print("🔍 DEBUG: Step 4 - Constructing Pi URL")
+        PI_DOWNLOAD_URL = f"https://mongoose-hardy-caiman.ngrok-free.app/api/download/{pi_filename}"
+        print(f"🔍 DEBUG: Pi URL: {PI_DOWNLOAD_URL}")
+        
+        # Step 5: Test Pi connectivity
+        print("🔍 DEBUG: Step 5 - Testing Pi connectivity")
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                headers = {
+                    'ngrok-skip-browser-warning': 'true',
+                    'User-Agent': 'Main-Backend-Pi-Transfer-Debug/1.0'
+                }
+                
+                # First test: Pi health check
+                health_url = "https://mongoose-hardy-caiman.ngrok-free.app/api/status"
+                health_response = await client.get(health_url, headers=headers)
+                print(f"🔍 DEBUG: Pi health check: HTTP {health_response.status_code}")
+                
+                if health_response.status_code != 200:
+                    raise HTTPException(
+                        status_code=503,
+                        detail=f"Pi not responding. Health check failed: HTTP {health_response.status_code}"
+                    )
+                
+        except httpx.TimeoutException:
+            print("❌ DEBUG: Pi connection timeout")
+            raise HTTPException(
+                status_code=503,
+                detail="Pi connection timeout - ngrok tunnel may be down"
+            )
+        except Exception as connectivity_error:
+            print(f"❌ DEBUG: Pi connectivity error: {connectivity_error}")
+            raise HTTPException(
+                status_code=503,
+                detail=f"Cannot reach Pi: {str(connectivity_error)}"
+            )
+        
+        # Step 6: Test file download from Pi
+        print("🔍 DEBUG: Step 6 - Testing file download")
+        try:
+            async with httpx.AsyncClient(
+                timeout=httpx.Timeout(connect=30.0, read=60.0, write=30.0, pool=30.0)
+            ) as client:
+                headers = {
+                    'ngrok-skip-browser-warning': 'true',
+                    'User-Agent': 'Main-Backend-Pi-Transfer-Debug/1.0'
+                }
+                
+                response = await client.get(PI_DOWNLOAD_URL, headers=headers)
+                print(f"🔍 DEBUG: Download response: HTTP {response.status_code}")
+                
+                if response.status_code != 200:
+                    error_text = response.text[:200] if hasattr(response, 'text') else 'Unknown error'
+                    raise HTTPException(
+                        status_code=503, 
+                        detail=f"Pi download failed: HTTP {response.status_code} - {error_text}"
+                    )
+                
+                file_content = response.content
+                total_size = len(file_content)
+                print(f"✅ DEBUG: Downloaded {total_size:,} bytes from Pi")
+                
+                if total_size == 0:
+                    raise HTTPException(status_code=500, detail="Downloaded file is empty")
+                
+        except httpx.TimeoutException:
+            print("❌ DEBUG: Download timeout")
+            raise HTTPException(
+                status_code=503,
+                detail="Download timeout - file may be too large or connection slow"
+            )
+        
+        # Step 7: Test UUID generation
+        print("🔍 DEBUG: Step 7 - Testing UUID generation")
+        try:
+            import uuid
+            file_extension = os.path.splitext(pi_filename)[1] or '.mp4'
+            unique_filename = f"{uuid.uuid4()}{file_extension}"
+            print(f"✅ DEBUG: Generated UUID filename: {unique_filename}")
+        except Exception as uuid_error:
+            print(f"❌ DEBUG: UUID generation failed: {uuid_error}")
+            raise HTTPException(status_code=500, detail=f"UUID generation failed: {str(uuid_error)}")
+        
+        # Step 8: Test Azure upload
+        print("🔍 DEBUG: Step 8 - Testing Azure upload")
+        try:
+            from azure.storage.blob import BlobServiceClient
+            
+            if not connection_string:
+                raise Exception("Azure storage not configured")
+            
+            blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+            blob_path = f"uploads/videos/{current_user.id}/{unique_filename}"
+            
+            blob_client = blob_service_client.get_blob_client(
+                container="videos",
+                blob=blob_path
+            )
+            
+            # Test upload
+            blob_client.upload_blob(
+                file_content,
+                overwrite=True,
+                content_type="video/mp4",
+                metadata={
+                    "original_filename": pi_filename,
+                    "user_id": str(current_user.id),
+                    "upload_type": "pi_transfer",
+                    "source": "raspberry_pi"
+                }
+            )
+            
+            blob_url = blob_client.url
+            file_path = blob_url
+            storage_type = "azure_blob"
+            
+            print(f"✅ DEBUG: Azure upload successful: {blob_url}")
+            
+        except Exception as azure_error:
+            print(f"⚠️ DEBUG: Azure upload failed, trying local fallback: {azure_error}")
+            # Fallback to local storage
+            try:
+                UPLOAD_DIR = "uploads/videos"
+                os.makedirs(UPLOAD_DIR, exist_ok=True)
+                user_dir = os.path.join(UPLOAD_DIR, str(current_user.id))
+                os.makedirs(user_dir, exist_ok=True)
+                file_path = os.path.join(user_dir, unique_filename)
+                
+                with open(file_path, "wb") as buffer:
+                    buffer.write(file_content)
+                
+                storage_type = "local_fallback"
+                print(f"✅ DEBUG: Local storage fallback successful: {file_path}")
+                
+            except Exception as local_error:
+                print(f"❌ DEBUG: Local storage also failed: {local_error}")
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Both Azure and local storage failed. Azure: {str(azure_error)}, Local: {str(local_error)}"
+                )
+        
+        # Step 9: Test database record creation
+        print("🔍 DEBUG: Step 9 - Creating database record")
+        try:
+            mapped_brocade_type = map_brocade_type(brocade_type)
+            print(f"🔍 DEBUG: Mapped brocade type: {brocade_type} -> {mapped_brocade_type}")
+            
+            new_video = models.VideoUpload(
+                user_id=current_user.id,
+                title=title,
+                description=description,
+                brocade_type=mapped_brocade_type,
+                video_path=file_path,
+                processing_status="uploaded"
+            )
+            
+            db.add(new_video)
+            db.commit()
+            db.refresh(new_video)
+            
+            print(f"✅ DEBUG: Database record created with ID: {new_video.id}")
+            
+        except Exception as db_error:
+            print(f"❌ DEBUG: Database error: {db_error}")
+            db.rollback()
+            raise HTTPException(
+                status_code=500,
+                detail=f"Database record creation failed: {str(db_error)}"
+            )
+        
+        # Success!
+        print("🎉 DEBUG: Pi transfer completed successfully!")
+        
+        return {
+            "success": True,
+            "status": "success",
+            "message": "DEBUG: Video transferred successfully from Pi",
+            "debug_info": {
+                "steps_completed": 9,
+                "video_id": new_video.id,
+                "storage_type": storage_type,
+                "file_size": total_size,
+                "azure_filename": unique_filename,
+                "original_pi_filename": pi_filename
+            },
+            # Standard response format
+            "id": new_video.id,
+            "title": new_video.title,
+            "brocade_type": brocade_type,
+            "processing_status": new_video.processing_status,
+            "upload_timestamp": new_video.upload_timestamp,
+            "video_path": file_path
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"❌ DEBUG: Unexpected error in Pi transfer: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=500, 
+            detail=f"DEBUG: Pi transfer failed at unknown step: {str(e)}"
+        )
+
+
+# Add this simple test endpoint to verify imports work
+@router.get("/test-imports")
+async def test_required_imports():
+    """Test that all required imports are available"""
+    
+    test_results = {
+        "timestamp": datetime.now().isoformat(),
+        "imports": {}
+    }
+    
+    # Test httpx
+    try:
+        import httpx
+        test_results["imports"]["httpx"] = {
+            "available": True,
+            "version": getattr(httpx, '__version__', 'unknown')
+        }
+    except ImportError as e:
+        test_results["imports"]["httpx"] = {
+            "available": False,
+            "error": str(e)
+        }
+    
+    # Test Azure
+    try:
+        from azure.storage.blob import BlobServiceClient
+        test_results["imports"]["azure_blob"] = {"available": True}
+    except ImportError as e:
+        test_results["imports"]["azure_blob"] = {
+            "available": False,
+            "error": str(e)
+        }
+    
+    # Test environment
+    test_results["environment"] = {
+        "azure_connection_string_exists": bool(os.getenv("AZURE_STORAGE_CONNECTION_STRING"))
+    }
+    
+    return test_results
+
+@router.post("/pi-transfer-requests")
+async def transfer_video_from_pi_requests(
+    transfer_data: dict,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(database.get_db)
+):
+    """Transfer video from Pi using requests instead of httpx"""
+    
+    try:
+        # Extract and validate input
+        pi_filename = transfer_data.get("pi_filename")
+        title = transfer_data.get("title", "")
+        description = transfer_data.get("description", "")
+        brocade_type = transfer_data.get("brocade_type", "FIRST")
+        
+        if not pi_filename or not title:
+            raise HTTPException(status_code=400, detail="Pi filename and title are required")
+        
+        print(f"🔄 Starting Pi transfer (requests): {pi_filename}")
+        
+        # Download from Pi using requests (synchronous)
         PI_DOWNLOAD_URL = f"https://mongoose-hardy-caiman.ngrok-free.app/api/download/{pi_filename}"
         
-        # Download file from Pi
-        print(f"Downloading from Pi: {PI_DOWNLOAD_URL}")
+        import requests  # You already have this
         
-        import httpx
-        async with httpx.AsyncClient(
-            timeout=httpx.Timeout(connect=30.0, read=300.0, write=30.0, pool=30.0)
-        ) as client:
-            headers = {
-                'ngrok-skip-browser-warning': 'true',
-                'User-Agent': 'Main-Backend-Pi-Transfer/1.0'
-            }
-            
-            response = await client.get(PI_DOWNLOAD_URL, headers=headers)
-            
-            if response.status_code != 200:
-                error_text = response.text[:200] if hasattr(response, 'text') else 'Unknown error'
-                raise HTTPException(
-                    status_code=503, 
-                    detail=f"Failed to download from Pi: HTTP {response.status_code} - {error_text}"
-                )
-            
-            file_content = response.content
-            total_size = len(file_content)
-            print(f"Downloaded {total_size:,} bytes from Pi")
+        headers = {
+            'ngrok-skip-browser-warning': 'true',
+            'User-Agent': 'Main-Backend-Pi-Transfer-Requests/1.0'
+        }
         
-        # Validate downloaded content
+        print(f"📥 Downloading from Pi: {PI_DOWNLOAD_URL}")
+        
+        # Download file
+        response = requests.get(PI_DOWNLOAD_URL, headers=headers, timeout=120)
+        
+        if response.status_code != 200:
+            raise HTTPException(
+                status_code=503,
+                detail=f"Pi download failed: HTTP {response.status_code}"
+            )
+        
+        file_content = response.content
+        total_size = len(file_content)
+        
         if total_size == 0:
             raise HTTPException(status_code=500, detail="Downloaded file is empty")
         
-        # Check file size (limit to 100MB - same as manual upload)
-        max_size = 100 * 1024 * 1024  # 100MB
-        if total_size > max_size:
-            raise HTTPException(
-                status_code=400, 
-                detail=f"File too large. Maximum size is {max_size // (1024*1024)}MB"
-            )
+        print(f"✅ Downloaded {total_size:,} bytes from Pi")
         
-        print(f"Uploading video: {pi_filename}, size: {total_size} bytes")
+        # Generate UUID filename (same as manual upload)
+        import uuid
+        file_extension = os.path.splitext(pi_filename)[1] or '.mp4'
+        unique_filename = f"{uuid.uuid4()}{file_extension}"
         
-        # === EXACT SAME AZURE UPLOAD PATTERN AS MANUAL UPLOAD ===
+        # Upload to Azure (same as manual upload)
         try:
             from azure.storage.blob import BlobServiceClient
-            import uuid
             
-            # Get connection string (same as manual upload)
             connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
             if not connection_string:
                 raise Exception("Azure storage not configured")
             
-            # Create blob service client
             blob_service_client = BlobServiceClient.from_connection_string(connection_string)
-            
-            # Generate unique filename - EXACT SAME PATTERN AS MANUAL UPLOAD
-            file_extension = os.path.splitext(pi_filename)[1] or '.mp4'
-            unique_filename = f"{uuid.uuid4()}{file_extension}"
             blob_path = f"uploads/videos/{current_user.id}/{unique_filename}"
             
-            print(f"Uploading to Azure: {blob_path}")
-            
-            # Upload to Azure - EXACT SAME PATTERN AS MANUAL UPLOAD
             blob_client = blob_service_client.get_blob_client(
                 container="videos",
                 blob=blob_path
@@ -1401,24 +1670,15 @@ async def transfer_video_from_pi(
                 metadata={
                     "original_filename": pi_filename,
                     "user_id": str(current_user.id),
-                    "upload_type": "pi_transfer",  # Different from manual upload
-                    "source": "raspberry_pi"
+                    "upload_type": "pi_transfer"
                 }
             )
             
-            # Get the blob URL - SAME AS MANUAL UPLOAD
-            blob_url = blob_client.url
-            file_path = blob_url  # Store Azure URL as path
+            file_path = blob_client.url
             storage_type = "azure_blob"
             
-            print(f"Successfully uploaded to Azure: {blob_url}")
-            
         except Exception as azure_error:
-            print(f"Azure upload failed: {azure_error}")
-            # Fallback to local storage - SAME AS MANUAL UPLOAD
-            file_extension = os.path.splitext(pi_filename)[1] or '.mp4'
-            unique_filename = f"{uuid.uuid4()}{file_extension}"
-            
+            # Fallback to local storage
             UPLOAD_DIR = "uploads/videos"
             os.makedirs(UPLOAD_DIR, exist_ok=True)
             user_dir = os.path.join(UPLOAD_DIR, str(current_user.id))
@@ -1427,92 +1687,42 @@ async def transfer_video_from_pi(
             
             with open(file_path, "wb") as buffer:
                 buffer.write(file_content)
+            
             storage_type = "local_fallback"
-            print(f"Fallback: Uploaded to local storage: {file_path}")
         
-        # Map the brocade type - SAME AS MANUAL UPLOAD
+        # Create database record (same as manual upload)
         mapped_brocade_type = map_brocade_type(brocade_type)
         
-        # Create database record - EXACT SAME STRUCTURE AS MANUAL UPLOAD
         new_video = models.VideoUpload(
             user_id=current_user.id,
             title=title,
             description=description,
             brocade_type=mapped_brocade_type,
-            video_path=file_path,  # Either Azure URL or local path
-            processing_status="uploaded"  # Same as manual upload
+            video_path=file_path,
+            processing_status="uploaded"
         )
         
         db.add(new_video)
         db.commit()
         db.refresh(new_video)
         
-        print(f"Video record created with ID: {new_video.id}")
+        print(f"✅ Video record created with ID: {new_video.id}")
         
-        # Return EXACT SAME FORMAT AS MANUAL UPLOAD
         return {
+            "success": True,
             "id": new_video.id,
             "title": new_video.title,
             "brocade_type": brocade_type,
             "processing_status": new_video.processing_status,
             "upload_timestamp": new_video.upload_timestamp,
             "storage_type": storage_type,
-            "video_path": file_path,  # Include for debugging
-            "message": f"Video uploaded successfully to {storage_type}",
-            # Additional Pi transfer info
-            "success": True,
-            "status": "success",
+            "message": f"Video uploaded successfully using requests",
             "original_pi_filename": pi_filename,
-            "size": total_size,
-            "azure_filename": unique_filename if storage_type == "azure_blob" else None
+            "size": total_size
         }
         
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Pi transfer failed: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Pi transfer failed: {str(e)}")
-
-
-# Add a test endpoint to verify the new pattern works
-@router.get("/test-pi-transfer-pattern")
-async def test_pi_transfer_pattern(
-    current_user: models.User = Depends(get_current_user)
-):
-    """Test that Pi transfer follows the same pattern as manual upload"""
-    
-    try:
-        import uuid
-        
-        # Test UUID generation (same as manual upload)
-        test_filename = "test_pi_video.mp4"
-        file_extension = os.path.splitext(test_filename)[1]
-        unique_filename = f"{uuid.uuid4()}{file_extension}"
-        blob_path = f"uploads/videos/{current_user.id}/{unique_filename}"
-        
-        # Test brocade type mapping (same as manual upload)
-        test_brocade = "FIRST"
-        mapped_brocade_type = map_brocade_type(test_brocade)
-        
-        return {
-            "pattern_test": "success",
-            "original_filename": test_filename,
-            "generated_uuid_filename": unique_filename,
-            "azure_blob_path": blob_path,
-            "brocade_mapping": {
-                "input": test_brocade,
-                "mapped": mapped_brocade_type
-            },
-            "user_directory": f"uploads/videos/{current_user.id}/",
-            "matches_manual_upload": True,
-            "message": "Pi transfer will follow exact same pattern as manual upload"
-        }
-        
-    except Exception as e:
-        return {
-            "pattern_test": "failed",
-            "error": str(e),
-            "matches_manual_upload": False
-        }
+        print(f"❌ Requests-based Pi transfer failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Transfer failed: {str(e)}")
