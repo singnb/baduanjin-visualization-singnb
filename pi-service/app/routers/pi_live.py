@@ -1235,3 +1235,92 @@ async def get_pi_current_frame(self) -> Dict[str, Any]:
             "success": False,
             "error": str(e)
         }
+    
+# Real time feedback control API endpoints
+@router.get("/baduanjin/exercises")
+async def get_exercises_via_azure(current_user: User = Depends(get_current_user)):
+    """Get Baduanjin exercises via Azure service"""
+    try:
+        headers = {
+            'ngrok-skip-browser-warning': 'true',
+            'User-Agent': 'Azure-Pi-Service/1.0'
+        }
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.get(f"{PI_BASE_URL}/baduanjin/exercises", headers=headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return {"success": False, "error": f"Pi returned HTTP {response.status_code}"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+@router.post("/baduanjin/start/{exercise_id}")
+async def start_exercise_via_azure(
+    exercise_id: int,
+    current_user: User = Depends(get_current_user)
+):
+    """Start exercise tracking via Azure service"""
+    try:
+        headers = {
+            'ngrok-skip-browser-warning': 'true',
+            'User-Agent': 'Azure-Pi-Service/1.0'
+        }
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(f"{PI_BASE_URL}/baduanjin/start/{exercise_id}", headers=headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return {"success": False, "error": f"Pi returned HTTP {response.status_code}"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+@router.get("/baduanjin/feedback")
+async def get_feedback_via_azure(current_user: User = Depends(get_current_user)):
+    """Get real-time feedback via Azure service"""
+    try:
+        headers = {
+            'ngrok-skip-browser-warning': 'true',
+            'User-Agent': 'Azure-Pi-Service/1.0'
+        }
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.get(f"{PI_BASE_URL}/baduanjin/feedback", headers=headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return {"success": False, "error": f"Pi returned HTTP {response.status_code}"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+@router.post("/baduanjin/stop")
+async def stop_exercise_via_azure(current_user: User = Depends(get_current_user)):
+    """Stop exercise tracking via Azure service"""
+    try:
+        headers = {
+            'ngrok-skip-browser-warning': 'true',
+            'User-Agent': 'Azure-Pi-Service/1.0'
+        }
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(f"{PI_BASE_URL}/baduanjin/stop", headers=headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return {"success": False, "error": f"Pi returned HTTP {response.status_code}"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+@router.get("/baduanjin/status")
+async def get_exercise_status_via_azure(current_user: User = Depends(get_current_user)):
+    """Get exercise tracking status via Azure service"""
+    try:
+        headers = {
+            'ngrok-skip-browser-warning': 'true',
+            'User-Agent': 'Azure-Pi-Service/1.0'
+        }
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.get(f"{PI_BASE_URL}/baduanjin/status", headers=headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return {"success": False, "error": f"Pi returned HTTP {response.status_code}"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}

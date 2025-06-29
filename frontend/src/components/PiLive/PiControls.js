@@ -31,6 +31,15 @@ const PiControls = ({
     transferVideo: true,
     selectedRecording: null
   });
+
+  // Exercise tracking state
+  const [exerciseState, setExerciseState] = useState({
+    isTracking: false,
+    currentExercise: null,
+    exercises: [],
+    feedback: null,
+    loading: false
+  });
   
   // Duration timers
   const [sessionDuration, setSessionDuration] = useState(0);
@@ -81,6 +90,24 @@ const PiControls = ({
     }
   }, [piState.availableRecordings, saveForm.selectedRecording]);
 
+  // Load exercises when component mounts
+  useEffect(() => {
+    if (piState.activeSession) {
+      loadExercises();
+    }
+  }, [piState.activeSession]);
+
+  // Poll for feedback when tracking
+  useEffect(() => {
+    let feedbackInterval;
+    if (exerciseState.isTracking) {
+      feedbackInterval = setInterval(fetchExerciseFeedback, 2000); // Every 2 seconds
+    }
+    return () => {
+      if (feedbackInterval) clearInterval(feedbackInterval);
+    };
+  }, [exerciseState.isTracking]);
+
   // === HELPER FUNCTIONS ===
   const formatDuration = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -116,7 +143,7 @@ const PiControls = ({
         setSaveError(null);
       }
     } catch (error) {
-      console.error('❌ Error stopping session:', error);
+      console.error('Error stopping session:', error);
       alert('Error stopping session. Please try again.');
     }
   };
@@ -152,7 +179,7 @@ const PiControls = ({
             transferSuccess = true;
           }
         } catch (transferError) {
-          console.error('❌ Video transfer failed:', transferError);
+          console.error('Video transfer failed:', transferError);
           setSaveError(`Video transfer failed: ${transferError.message}. Session will be saved without video.`);
         }
       }
@@ -186,7 +213,7 @@ const PiControls = ({
             headers: { 'Authorization': `Bearer ${token}` }
           });
         } catch (cleanupError) {
-          console.warn('⚠️ Failed to clean up Pi recording:', cleanupError);
+          console.warn('Failed to clean up Pi recording:', cleanupError);
         }
       }
       
@@ -203,7 +230,7 @@ const PiControls = ({
       alert(message);
 
     } catch (error) {
-      console.error('❌ Save error:', error);
+      console.error('Save error:', error);
       setSaveError(error.response?.data?.detail || 'Error saving session');
     } finally {
       setSaving(false);
@@ -227,9 +254,98 @@ const PiControls = ({
         }
 
       } catch (error) {
-        console.error('❌ Error discarding session:', error);
+        console.error('Error discarding session:', error);
         alert('Error discarding session. Please try again.');
       }
+    }
+  };
+
+  // Exercise functions
+  const loadExercises = async () => {
+    try {
+      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/baduanjin/exercises`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.data.success) {
+        setExerciseState(prev => ({ ...prev, exercises: response.data.exercises }));
+      }
+    } catch (error) {
+      console.error('Error loading exercises:', error);
+    }
+  };
+
+
+  const startExerciseTracking = async (exerciseId) => {
+    setExerciseState(prev => ({ ...prev, loading: true }));
+    
+    try {
+      const response = await axios.post(`${getPiUrl('api')}/api/pi-live/baduanjin/start/${exerciseId}`, {}, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.data.success) {
+        setExerciseState(prev => ({
+          ...prev,
+          isTracking: true,
+          currentExercise: response.data.exercise_info,
+          loading: false
+        }));
+        console.log('Exercise tracking started:', response.data.exercise_info.exercise_name);
+      } else {
+        throw new Error(response.data.error || 'Failed to start exercise tracking');
+      }
+    } catch (error) {
+      console.error('Error starting exercise:', error);
+      alert(`Failed to start exercise tracking: ${error.message}`);
+      setExerciseState(prev => ({ ...prev, loading: false }));
+    }
+  };
+
+  const stopExerciseTracking = async () => {
+    setExerciseState(prev => ({ ...prev, loading: true }));
+    
+    try {
+      const response = await axios.post(`${getPiUrl('api')}/api/pi-live/baduanjin/stop`, {}, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.data.success) {
+        setExerciseState(prev => ({
+          ...prev,
+          isTracking: false,
+          currentExercise: null,
+          feedback: null,
+          loading: false
+        }));
+        console.log('Exercise tracking stopped');
+        
+        // Show summary if available
+        if (response.data.summary) {
+          alert(`Exercise completed!\nFinal Score: ${response.data.summary.final_form_score || 'N/A'}`);
+        }
+      } else {
+        throw new Error(response.data.error || 'Failed to stop exercise tracking');
+      }
+    } catch (error) {
+      console.error('Error stopping exercise:', error);
+      setExerciseState(prev => ({ ...prev, loading: false }));
+    }
+  };
+
+  const fetchExerciseFeedback = async () => {
+    if (!exerciseState.isTracking) return;
+    
+    try {
+      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/baduanjin/feedback`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.data.feedback) {
+        setExerciseState(prev => ({ ...prev, feedback: response.data.feedback }));
+      }
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
     }
   };
 
@@ -348,6 +464,104 @@ const PiControls = ({
             >
               {piState.loading ? 'Stopping...' : '⏹️ Stop Session'}
             </button>
+          </div>
+      
+          {/* Exercise Tracking Section */}
+          <div className="exercise-section">
+            <h4>🥋 Baduanjin Exercise Tracking</h4>
+            
+            {!exerciseState.isTracking ? (
+              <div className="exercise-selection">
+                <p>Select an exercise to track your form:</p>
+                <div className="exercise-buttons">
+                  {exerciseState.exercises.slice(0, 4).map(exercise => (
+                    <button
+                      key={exercise.id}
+                      className="btn exercise-btn"
+                      onClick={() => startExerciseTracking(exercise.id)}
+                      disabled={exerciseState.loading}
+                      title={exercise.description}
+                    >
+                      {exercise.id}. {exercise.name.split('(')[0].trim()}
+                    </button>
+                  ))}
+                </div>
+                <details>
+                  <summary>More exercises ({exerciseState.exercises.length - 4} more)</summary>
+                  <div className="exercise-buttons">
+                    {exerciseState.exercises.slice(4).map(exercise => (
+                      <button
+                        key={exercise.id}
+                        className="btn exercise-btn"
+                        onClick={() => startExerciseTracking(exercise.id)}
+                        disabled={exerciseState.loading}
+                        title={exercise.description}
+                      >
+                        {exercise.id}. {exercise.name.split('(')[0].trim()}
+                      </button>
+                    ))}
+                  </div>
+                </details>
+              </div>
+            ) : (
+              <div className="exercise-active">
+                <div className="current-exercise">
+                  <h5>🎯 Tracking: {exerciseState.currentExercise?.exercise_name}</h5>
+                  <p>{exerciseState.currentExercise?.description}</p>
+                </div>
+                
+                {exerciseState.feedback && (
+                  <div className="live-feedback">
+                    <div className="feedback-scores">
+                      <div className="score-item">
+                        <span className="score-label">Form Score:</span>
+                        <span className={`score-value ${exerciseState.feedback.form_score > 80 ? 'excellent' : exerciseState.feedback.form_score > 60 ? 'good' : 'needs-work'}`}>
+                          {exerciseState.feedback.form_score?.toFixed(1) || 0}/100
+                        </span>
+                      </div>
+                      <div className="score-item">
+                        <span className="score-label">Progress:</span>
+                        <span className="score-value">
+                          {exerciseState.feedback.completion_percentage?.toFixed(1) || 0}%
+                        </span>
+                      </div>
+                      <div className="score-item">
+                        <span className="score-label">Phase:</span>
+                        <span className="score-value">
+                          {exerciseState.feedback.current_phase || 'Unknown'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {exerciseState.feedback.feedback_messages && exerciseState.feedback.feedback_messages.length > 0 && (
+                      <div className="feedback-messages">
+                        <h6>💡 Tips:</h6>
+                        {exerciseState.feedback.feedback_messages.slice(0, 2).map((msg, idx) => (
+                          <p key={idx} className="feedback-message">• {msg}</p>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {exerciseState.feedback.corrections && exerciseState.feedback.corrections.length > 0 && (
+                      <div className="feedback-corrections">
+                        <h6>⚠️ Corrections:</h6>
+                        {exerciseState.feedback.corrections.slice(0, 2).map((correction, idx) => (
+                          <p key={idx} className="feedback-correction">• {correction}</p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                <button
+                  className="btn stop-exercise-btn"
+                  onClick={stopExerciseTracking}
+                  disabled={exerciseState.loading}
+                >
+                  {exerciseState.loading ? 'Stopping...' : '⏹️ Stop Exercise Tracking'}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

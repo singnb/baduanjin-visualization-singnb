@@ -676,3 +676,121 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* Real time feedback exercise */
+.exercise-section {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.exercise-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.exercise-btn {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.exercise-btn:hover {
+  background-color: #0056b3;
+}
+
+.exercise-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.exercise-active {
+  background-color: #e7f3ff;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.current-exercise h5 {
+  color: #007bff;
+  margin: 0 0 5px 0;
+}
+
+.live-feedback {
+  margin: 15px 0;
+}
+
+.feedback-scores {
+  display: flex;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score-label {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.score-value {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.score-value.excellent {
+  color: #28a745;
+}
+
+.score-value.good {
+  color: #ffc107;
+}
+
+.score-value.needs-work {
+  color: #dc3545;
+}
+
+.feedback-messages, .feedback-corrections {
+  margin: 10px 0;
+}
+
+.feedback-messages h6, .feedback-corrections h6 {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.feedback-message {
+  color: #007bff;
+  margin: 2px 0;
+  font-size: 13px;
+}
+
+.feedback-correction {
+  color: #dc3545;
+  margin: 2px 0;
+  font-size: 13px;
+}
+
+.stop-exercise-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.stop-exercise-btn:hover {
+  background-color: #c82333;
+}
