@@ -617,4 +617,4 @@ const SimplifiedPiLiveSession = ({ onSessionComplete }) => {
   );
 };
 
-export default PiVideoStream;
+export default SimplifiedPiLiveSession;
