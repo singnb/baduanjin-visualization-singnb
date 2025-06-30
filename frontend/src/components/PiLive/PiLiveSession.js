@@ -125,7 +125,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
         connectionError: 'Failed to connect to Pi service'
       }));
     }
-  }, [token]);
+  }, [token, startUnifiedPolling]);
 
   // === EXISTING SESSION MANAGEMENT (KEPT FOR INTERNAL USE) ===
   const startLiveSession = useCallback(async (sessionName = 'Live Practice Session') => {
@@ -218,7 +218,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
       cleanupSession();
       throw error;
     }
-  }, [piState.activeSession, piState.sessionStartTime, piState.availableRecordings, token]);
+  }, [piState.activeSession, piState.sessionStartTime, piState.availableRecordings, token, stopUnifiedPolling, cleanupSession]);
 
   const startRecording = useCallback(async () => {
     if (!piState.activeSession) {
@@ -292,6 +292,23 @@ const PiLiveSession = ({ onSessionComplete }) => {
       return false;
     }
   }, [piState.activeSession, token]);
+
+  // === POLLING MANAGEMENT (DEFINED EARLY) ===
+  const startUnifiedPolling = useCallback(() => {
+    if (pollingIntervalRef.current) return;
+    
+    console.log('🔄 Starting unified polling...');
+    const intervalId = setInterval(unifiedPolling, PI_CONFIG.POLLING.UNIFIED_INTERVAL);
+    pollingIntervalRef.current = intervalId;
+  }, [unifiedPolling]);
+
+  const stopUnifiedPolling = useCallback(() => {
+    if (pollingIntervalRef.current) {
+      console.log('🔄 Stopping unified polling...');
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+  }, []);
 
   // === RECORDING MANAGEMENT ===
   const fetchAvailableRecordings = useCallback(async () => {
@@ -396,23 +413,6 @@ const PiLiveSession = ({ onSessionComplete }) => {
       throw error;
     }
   }, [stopRecording, stopLiveSession, fetchAvailableRecordings, cleanupSession]);
-
-  // === POLLING MANAGEMENT ===
-  const startUnifiedPolling = useCallback(() => {
-    if (pollingIntervalRef.current) return;
-    
-    console.log('🔄 Starting unified polling...');
-    const intervalId = setInterval(unifiedPolling, PI_CONFIG.POLLING.UNIFIED_INTERVAL);
-    pollingIntervalRef.current = intervalId;
-  }, [unifiedPolling]);
-
-  const stopUnifiedPolling = useCallback(() => {
-    if (pollingIntervalRef.current) {
-      console.log('🔄 Stopping unified polling...');
-      clearInterval(pollingIntervalRef.current);
-      pollingIntervalRef.current = null;
-    }
-  }, []);
 
   // === COMPONENT LIFECYCLE ===
   useEffect(() => {
