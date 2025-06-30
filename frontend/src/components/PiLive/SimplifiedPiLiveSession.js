@@ -1,11 +1,15 @@
 // src/components/PiLive/PiVideoStream.js 
 // CLEANED VERSION - Uses centralized state, removed redundant polling
 
+// src/components/PiLive/SimplifiedPiLiveSession.js
+// FIXED VERSION - Uses correct Pi-Service backend
+
 import { useState, useCallback, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../auth/AuthContext';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://baduanjin-backend-docker.azurewebsites.net';
+// ✅ FIXED: Use Pi-Service backend for all Pi-Live endpoints
+const PI_SERVICE_URL = 'https://baduanjin-pi-service-g8aehuh0bghcc4be.southeastasia-01.azurewebsites.net';
 
 const usePiSession = () => {
   const [state, setState] = useState({
@@ -41,25 +45,26 @@ const usePiSession = () => {
     if (!state.activeSession) return;
 
     try {
-      // Single call to get all status (your endpoint ready)
-      const statusResponse = await axios.get(`${API_URL}/api/pi-live/status`, {
+      // ✅ FIXED: Use Pi-Service URL
+      const statusResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/status`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
       const status = statusResponse.data;
 
-      // Get current frame (your endpoint ready)
-      const frameResponse = await axios.get(`${API_URL}/api/pi-live/current-frame`, {
+      // ✅ FIXED: Use Pi-Service URL
+      const frameResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/current-frame`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
       const frameData = frameResponse.data;
 
-      // Get exercise feedback if tracking active (your endpoint ready)
+      // Get exercise feedback if tracking active
       let exerciseFeedback = null;
       if (status.exercise_tracking?.enabled || status.exercise_tracking?.current_exercise) {
         try {
-          const feedbackResponse = await axios.get(`${API_URL}/api/pi-live/baduanjin/feedback`, {
+          // ✅ FIXED: Use Pi-Service URL
+          const feedbackResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/baduanjin/feedback`, {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           if (feedbackResponse.data.feedback) {
@@ -109,10 +114,23 @@ const usePiSession = () => {
   // Load exercises once
   useEffect(() => {
     const loadExercises = async () => {
+      console.log('🔑 Loading exercises with token:', token ? 'EXISTS' : 'MISSING');
+      
+      if (!token) {
+        console.error('❌ No token available - user may not be authenticated');
+        return;
+      }
+      
       try {
-        const response = await axios.get(`${API_URL}/api/pi-live/baduanjin/exercises`, {
+        console.log('📡 Making request to:', `${PI_SERVICE_URL}/api/pi-live/baduanjin/exercises`);
+        
+        // ✅ FIXED: Use Pi-Service URL
+        const response = await axios.get(`${PI_SERVICE_URL}/api/pi-live/baduanjin/exercises`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
+        
+        console.log('✅ Exercise response:', response.data);
+        
         if (response.data.success) {
           setState(prev => ({
             ...prev,
@@ -120,7 +138,9 @@ const usePiSession = () => {
           }));
         }
       } catch (error) {
-        console.error('Failed to load exercises:', error);
+        console.error('❌ Failed to load exercises:', error);
+        console.error('❌ Error details:', error.response?.data);
+        console.error('❌ Status code:', error.response?.status);
       }
     };
 
@@ -130,8 +150,7 @@ const usePiSession = () => {
   return { state, setState, pollPiData };
 };
 
-// SIMPLIFIED VIDEO STREAM COMPONENT
-
+// SIMPLIFIED VIDEO STREAM COMPONENT (unchanged)
 const SimplifiedPiVideoStream = ({ piState, token }) => {
   const [streamError, setStreamError] = useState(null);
 
@@ -248,7 +267,7 @@ const SimplifiedPiVideoStream = ({ piState, token }) => {
           <div className="status-grid">
             <div className="status-item">
               <span className="status-label">Source:</span>
-              <span className="status-value success">🔗 Azure API</span>
+              <span className="status-value success">🔗 Pi Service</span>
             </div>
             <div className="status-item">
               <span className="status-label">Persons:</span>
@@ -287,14 +306,14 @@ const SimplifiedPiVideoStream = ({ piState, token }) => {
 };
 
 // SIMPLIFIED EXERCISE CONTROLS
-
 const SimplifiedExerciseControls = ({ piState, token }) => {
   const [loading, setLoading] = useState(false);
 
   const startExercise = async (exerciseId) => {
     setLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/api/pi-live/baduanjin/start/${exerciseId}`, {}, {
+      // ✅ FIXED: Use Pi-Service URL
+      const response = await axios.post(`${PI_SERVICE_URL}/api/pi-live/baduanjin/start/${exerciseId}`, {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -313,7 +332,8 @@ const SimplifiedExerciseControls = ({ piState, token }) => {
   const stopExercise = async () => {
     setLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/api/pi-live/baduanjin/stop`, {}, {
+      // ✅ FIXED: Use Pi-Service URL
+      const response = await axios.post(`${PI_SERVICE_URL}/api/pi-live/baduanjin/stop`, {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -399,7 +419,7 @@ const SimplifiedExerciseControls = ({ piState, token }) => {
                 </div>
                 
                 <div className="score-item">
-                  <span className="score-label">Progress:</span>
+                  <span className="status-label">Progress:</span>
                   <span className="score-value">
                     {piState.exerciseFeedback.completion_percentage?.toFixed(1) || 0}%
                   </span>
@@ -451,7 +471,6 @@ const SimplifiedExerciseControls = ({ piState, token }) => {
 };
 
 // SIMPLIFIED MAIN COMPONENT
-
 const SimplifiedPiLiveSession = ({ onSessionComplete }) => {
   const { state: piState, setState: setPiState } = usePiSession();
   const { token, user } = useAuth();
@@ -462,7 +481,8 @@ const SimplifiedPiLiveSession = ({ onSessionComplete }) => {
     setPiState(prev => ({ ...prev, loading: true }));
     
     try {
-      const response = await axios.post(`${API_URL}/api/pi-live/start-session`, 
+      // ✅ FIXED: Use Pi-Service URL
+      const response = await axios.post(`${PI_SERVICE_URL}/api/pi-live/start-session`, 
         { session_name: name },
         { headers: { 'Authorization': `Bearer ${token}` }}
       );
@@ -490,7 +510,8 @@ const SimplifiedPiLiveSession = ({ onSessionComplete }) => {
     setPiState(prev => ({ ...prev, loading: true }));
     
     try {
-      await axios.post(`${API_URL}/api/pi-live/stop-session/${piState.activeSession.session_id}`, {}, {
+      // ✅ FIXED: Use Pi-Service URL
+      await axios.post(`${PI_SERVICE_URL}/api/pi-live/stop-session/${piState.activeSession.session_id}`, {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -522,7 +543,8 @@ const SimplifiedPiLiveSession = ({ onSessionComplete }) => {
     const endpoint = piState.isRecording ? 'stop' : 'start';
     
     try {
-      await axios.post(`${API_URL}/api/pi-live/recording/${endpoint}/${piState.activeSession.session_id}`, {}, {
+      // ✅ FIXED: Use Pi-Service URL
+      await axios.post(`${PI_SERVICE_URL}/api/pi-live/recording/${endpoint}/${piState.activeSession.session_id}`, {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
