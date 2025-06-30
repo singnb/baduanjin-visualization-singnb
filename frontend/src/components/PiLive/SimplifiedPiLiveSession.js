@@ -601,7 +601,7 @@ const SimplifiedPiLiveSession = ({ onSessionComplete }) => {
               <button
                 className="btn start-session-btn"
                 onClick={() => startLiveSession(sessionName || 'Live Practice Session')}
-                disabled={!piState.isConnected || piState.loading}
+                disabled={piState.loading}  // ← Only disable when loading, not when disconnected
               >
                 {piState.loading ? 'Starting...' : '🚀 Start Live Session'}
               </button>
