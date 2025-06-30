@@ -8,16 +8,14 @@ import { PI_CONFIG, getPiUrl } from '../../config/piConfig';
 
 const PiControls = ({ 
   piState,
-  onStartSession, 
-  onStopSession,
-  onStartRecording,
-  onStopRecording,
-  onFetchRecordings,
+  onStartRecordingSession, 
+  onStopAndSave,
   onSessionComplete,
   user
 }) => {
-  // === LOCAL STATE ===
-  const [sessionName, setSessionName] = useState('');
+  // === SIMPLIFIED STATE ===
+  const [selectedExercise, setSelectedExercise] = useState('');
+  const [currentExercise, setCurrentExercise] = useState('');
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [sessionToSave, setSessionToSave] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -41,28 +39,12 @@ const PiControls = ({
     loading: false
   });
   
-  // Duration timers
-  const [sessionDuration, setSessionDuration] = useState(0);
+  // Duration timer
   const [recordingDuration, setRecordingDuration] = useState(0);
   
   const { token } = useAuth();
 
   // === DURATION TRACKING ===
-  useEffect(() => {
-    let interval;
-    if (piState.sessionStartTime) {
-      interval = setInterval(() => {
-        const duration = Math.floor((new Date() - piState.sessionStartTime) / 1000);
-        setSessionDuration(duration);
-      }, 1000);
-    } else {
-      setSessionDuration(0);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [piState.sessionStartTime]);
-
   useEffect(() => {
     let interval;
     if (piState.recordingStartTime) {
@@ -78,7 +60,12 @@ const PiControls = ({
     };
   }, [piState.recordingStartTime]);
 
-  // Auto-select latest recording
+  // Load exercises when component mounts
+  useEffect(() => {
+    loadExercises();
+  }, []);
+
+  // Auto-select latest recording for save
   useEffect(() => {
     if (piState.availableRecordings.length > 0 && !saveForm.selectedRecording) {
       const latest = piState.availableRecordings[0];
@@ -90,23 +77,16 @@ const PiControls = ({
     }
   }, [piState.availableRecordings, saveForm.selectedRecording]);
 
-  // Load exercises when component mounts
-  useEffect(() => {
-    if (piState.activeSession) {
-      loadExercises();
-    }
-  }, [piState.activeSession]);
-
   // Poll for feedback when tracking
   useEffect(() => {
     let feedbackInterval;
-    if (exerciseState.isTracking) {
-      feedbackInterval = setInterval(fetchExerciseFeedback, 2000); // Every 2 seconds
+    if (exerciseState.isTracking && piState.isRecording) {
+      feedbackInterval = setInterval(fetchExerciseFeedback, 2000);
     }
     return () => {
       if (feedbackInterval) clearInterval(feedbackInterval);
     };
-  }, [exerciseState.isTracking]);
+  }, [exerciseState.isTracking, piState.isRecording]);
 
   // === HELPER FUNCTIONS ===
   const formatDuration = (seconds) => {
@@ -115,28 +95,46 @@ const PiControls = ({
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const formatFileSize = (bytes) => {
-    return (bytes / 1024 / 1024).toFixed(2) + ' MB';
-  };
-
-  // === SESSION CONTROLS ===
-  const handleStartSession = async () => {
-    const name = sessionName.trim() || 'Live Practice Session';
-    await onStartSession(name);
-    setSessionName('');
-  };
-
-  const handleStopSession = async () => {
+  // === SIMPLIFIED MAIN ACTIONS ===
+  const handleStartRecordingSession = async () => {
     try {
-      const sessionData = await onStopSession();
+      // Auto-generate session name
+      const sessionName = `Recording ${new Date().toLocaleString()}`;
+      
+      // Call the parent function that handles session + recording
+      await onStartRecordingSession(sessionName, selectedExercise);
+      
+      // If exercise was selected, start tracking it
+      if (selectedExercise) {
+        await startExerciseTracking(parseInt(selectedExercise));
+      }
+      
+    } catch (error) {
+      console.error('Error starting recording session:', error);
+      alert('Failed to start recording. Please try again.');
+    }
+  };
+
+  const handleStopAndSave = async () => {
+    try {
+      // Stop exercise tracking first if active
+      if (exerciseState.isTracking) {
+        await stopExerciseTracking();
+      }
+      
+      // Call parent function that handles stop recording + session
+      const sessionData = await onStopAndSave();
+      
       if (sessionData) {
-        await onFetchRecordings();
+        // Directly show save dialog
         setSessionToSave(sessionData);
         setShowSaveDialog(true);
         setSaveForm(prev => ({
           ...prev,
-          title: sessionData.session_name || 'Live Session',
-          description: '',
+          title: `Recording ${new Date().toLocaleDateString()}`,
+          description: exerciseState.currentExercise ? 
+            `Baduanjin practice - ${exerciseState.currentExercise.exercise_name}` : 
+            'Baduanjin practice session',
           brocadeType: 'FIRST',
           transferVideo: piState.availableRecordings.length > 0
         }));
@@ -144,7 +142,102 @@ const PiControls = ({
       }
     } catch (error) {
       console.error('Error stopping session:', error);
-      alert('Error stopping session. Please try again.');
+      alert('Error stopping recording. Please try again.');
+    }
+  };
+
+  // === EXERCISE MANAGEMENT ===
+  const loadExercises = async () => {
+    try {
+      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/baduanjin/exercises`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.data.success) {
+        setExerciseState(prev => ({ ...prev, exercises: response.data.exercises }));
+      }
+    } catch (error) {
+      console.error('Error loading exercises:', error);
+    }
+  };
+
+  const startExerciseTracking = async (exerciseId) => {
+    if (!exerciseId) return;
+    
+    setExerciseState(prev => ({ ...prev, loading: true }));
+    
+    try {
+      const response = await axios.post(`${getPiUrl('api')}/api/pi-live/baduanjin/start/${exerciseId}`, {}, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.data.success) {
+        setExerciseState(prev => ({
+          ...prev,
+          isTracking: true,
+          currentExercise: response.data.exercise_info,
+          loading: false
+        }));
+        setCurrentExercise(exerciseId.toString());
+        console.log('Exercise tracking started:', response.data.exercise_info.exercise_name);
+      }
+    } catch (error) {
+      console.error('Error starting exercise:', error);
+      setExerciseState(prev => ({ ...prev, loading: false }));
+    }
+  };
+
+  const stopExerciseTracking = async () => {
+    if (!exerciseState.isTracking) return;
+    
+    try {
+      const response = await axios.post(`${getPiUrl('api')}/api/pi-live/baduanjin/stop`, {}, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.data.success) {
+        setExerciseState(prev => ({
+          ...prev,
+          isTracking: false,
+          currentExercise: null,
+          feedback: null,
+          loading: false
+        }));
+        setCurrentExercise('');
+        console.log('Exercise tracking stopped');
+      }
+    } catch (error) {
+      console.error('Error stopping exercise:', error);
+    }
+  };
+
+  const changeExerciseDuringRecording = async (exerciseId) => {
+    // Stop current tracking
+    if (exerciseState.isTracking) {
+      await stopExerciseTracking();
+    }
+    
+    // Start new exercise if selected
+    if (exerciseId) {
+      await startExerciseTracking(parseInt(exerciseId));
+    }
+    
+    setCurrentExercise(exerciseId);
+  };
+
+  const fetchExerciseFeedback = async () => {
+    if (!exerciseState.isTracking) return;
+    
+    try {
+      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/baduanjin/feedback`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.data.feedback) {
+        setExerciseState(prev => ({ ...prev, feedback: response.data.feedback }));
+      }
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
     }
   };
 
@@ -225,20 +318,20 @@ const PiControls = ({
       }
 
       const message = transferSuccess 
-        ? 'Live session and video saved successfully!'
-        : 'Live session saved successfully (without video file)';
+        ? 'Recording saved successfully!'
+        : 'Recording saved successfully (without video file)';
       alert(message);
 
     } catch (error) {
       console.error('Save error:', error);
-      setSaveError(error.response?.data?.detail || 'Error saving session');
+      setSaveError(error.response?.data?.detail || 'Error saving recording');
     } finally {
       setSaving(false);
     }
   };
 
   const handleDiscardSession = async () => {
-    if (window.confirm('Are you sure you want to discard this session? This cannot be undone.')) {
+    if (window.confirm('Are you sure you want to discard this recording? This cannot be undone.')) {
       try {
         if (saveForm.selectedRecording) {
           await axios.delete(`${getPiUrl('api')}/api/pi-live/recordings/${saveForm.selectedRecording}`, {
@@ -255,313 +348,243 @@ const PiControls = ({
 
       } catch (error) {
         console.error('Error discarding session:', error);
-        alert('Error discarding session. Please try again.');
+        alert('Error discarding recording. Please try again.');
       }
-    }
-  };
-
-  // Exercise functions
-  const loadExercises = async () => {
-    try {
-      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/baduanjin/exercises`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      if (response.data.success) {
-        setExerciseState(prev => ({ ...prev, exercises: response.data.exercises }));
-      }
-    } catch (error) {
-      console.error('Error loading exercises:', error);
-    }
-  };
-
-
-  const startExerciseTracking = async (exerciseId) => {
-    setExerciseState(prev => ({ ...prev, loading: true }));
-    
-    try {
-      const response = await axios.post(`${getPiUrl('api')}/api/pi-live/baduanjin/start/${exerciseId}`, {}, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      if (response.data.success) {
-        setExerciseState(prev => ({
-          ...prev,
-          isTracking: true,
-          currentExercise: response.data.exercise_info,
-          loading: false
-        }));
-        console.log('Exercise tracking started:', response.data.exercise_info.exercise_name);
-      } else {
-        throw new Error(response.data.error || 'Failed to start exercise tracking');
-      }
-    } catch (error) {
-      console.error('Error starting exercise:', error);
-      alert(`Failed to start exercise tracking: ${error.message}`);
-      setExerciseState(prev => ({ ...prev, loading: false }));
-    }
-  };
-
-  const stopExerciseTracking = async () => {
-    setExerciseState(prev => ({ ...prev, loading: true }));
-    
-    try {
-      const response = await axios.post(`${getPiUrl('api')}/api/pi-live/baduanjin/stop`, {}, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      if (response.data.success) {
-        setExerciseState(prev => ({
-          ...prev,
-          isTracking: false,
-          currentExercise: null,
-          feedback: null,
-          loading: false
-        }));
-        console.log('Exercise tracking stopped');
-        
-        // Show summary if available
-        if (response.data.summary) {
-          alert(`Exercise completed!\nFinal Score: ${response.data.summary.final_form_score || 'N/A'}`);
-        }
-      } else {
-        throw new Error(response.data.error || 'Failed to stop exercise tracking');
-      }
-    } catch (error) {
-      console.error('Error stopping exercise:', error);
-      setExerciseState(prev => ({ ...prev, loading: false }));
-    }
-  };
-
-  const fetchExerciseFeedback = async () => {
-    if (!exerciseState.isTracking) return;
-    
-    try {
-      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/baduanjin/feedback`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      if (response.data.feedback) {
-        setExerciseState(prev => ({ ...prev, feedback: response.data.feedback }));
-      }
-    } catch (error) {
-      console.error('Error fetching feedback:', error);
     }
   };
 
   return (
-    <div className="pi-controls">
-      <h3>🎮 Session Controls</h3>
+    <div className="pi-controls simplified">
+      <h3>🎥 Record Your Practice</h3>
       
-      {/* WORKFLOW STATUS */}
-      <div className="workflow-status">
-        <div className="workflow-steps">
-          <div className={`workflow-step ${!piState.activeSession ? 'current' : 'completed'}`}>
-            <span className="step-number">1</span>
-            <span className="step-text">Start Session</span>
-          </div>
-          <div className={`workflow-step ${piState.activeSession && !piState.isRecording ? 'current' : piState.isRecording ? 'completed' : ''}`}>
-            <span className="step-number">2</span>
-            <span className="step-text">Record (Optional)</span>
-          </div>
-          <div className={`workflow-step ${showSaveDialog ? 'current' : ''}`}>
-            <span className="step-number">3</span>
-            <span className="step-text">Save</span>
-          </div>
-        </div>
-      </div>
-      
-      {!piState.activeSession ? (
-        // Start session form
-        <div className="start-session-form">
-          <div className="form-group">
-            <label htmlFor="sessionName">Session Name:</label>
-            <input
-              id="sessionName"
-              type="text"
-              value={sessionName}
-              onChange={(e) => setSessionName(e.target.value)}
-              placeholder="Enter session name (optional)..."
-              disabled={piState.loading}
-            />
-          </div>
-          
-          <button
-            className="btn start-session-btn"
-            onClick={handleStartSession}
-            disabled={!piState.isConnected || piState.loading}
-          >
-            {piState.loading ? 'Starting...' : '🚀 Start Live Session'}
-          </button>
-          
-          {!piState.isConnected && !piState.loading && (
-            <div className="connection-warning">
-              <p>⚠️ Pi camera not connected. Please check the connection and refresh.</p>
-            </div>
-          )}
-        </div>
-      ) : (
-        // Active session controls
-        <div className="active-session-controls">
-          <div className="session-info">
-            <h4>📡 Active Session</h4>
-            <div className="session-details">
-              <p><strong>Name:</strong> {piState.activeSession.session_name || 'Live Session'}</p>
-              <p><strong>Duration:</strong> {formatDuration(sessionDuration)}</p>
-              <p><strong>Status:</strong> <span className="status-live">🔴 LIVE</span></p>
-            </div>
-          </div>
-          
-          {/* RECORDING SECTION */}
-          <div className="recording-section">
-            <h4>🎥 Recording (Optional)</h4>
-            
-            <div className="recording-status">
-              {piState.isRecording ? (
-                <div className="recording-active">
-                  <span className="recording-indicator">🔴 RECORDING</span>
-                  <span className="recording-duration">{formatDuration(recordingDuration)}</span>
-                </div>
-              ) : (
-                <div className="recording-inactive">
-                  <span className="recording-indicator">⚪ Not Recording</span>
-                </div>
-              )}
-            </div>
-            
-            <div className="recording-controls">
-              {!piState.isRecording ? (
-                <button
-                  className="btn start-recording-btn"
-                  onClick={onStartRecording}
-                  disabled={piState.loading}
-                >
-                  🔴 Start Recording
-                </button>
-              ) : (
-                <button
-                  className="btn stop-recording-btn"
-                  onClick={onStopRecording}
-                  disabled={piState.loading}
-                >
-                  ⏹️ Stop Recording
-                </button>
-              )}
-            </div>
-            
-            {piState.availableRecordings.length > 0 && (
-              <div className="recordings-available">
-                <p>📹 {piState.availableRecordings.length} recording(s) available</p>
-              </div>
-            )}
-          </div>
-          
-          <div className="session-actions">
-            <button
-              className="btn stop-session-btn"
-              onClick={handleStopSession}
-              disabled={piState.loading || showSaveDialog}
-            >
-              {piState.loading ? 'Stopping...' : '⏹️ Stop Session'}
-            </button>
-          </div>
-      
-          {/* Exercise Tracking Section */}
-          <div className="exercise-section">
-            <h4>🥋 Baduanjin Exercise Tracking</h4>
-            
-            {!exerciseState.isTracking ? (
-              <div className="exercise-selection">
-                <p>Select an exercise to track your form:</p>
-                <div className="exercise-buttons">
-                  {exerciseState.exercises.slice(0, 4).map(exercise => (
-                    <button
-                      key={exercise.id}
-                      className="btn exercise-btn"
-                      onClick={() => startExerciseTracking(exercise.id)}
-                      disabled={exerciseState.loading}
-                      title={exercise.description}
-                    >
-                      {exercise.id}. {exercise.name.split('(')[0].trim()}
-                    </button>
-                  ))}
-                </div>
-                <details>
-                  <summary>More exercises ({exerciseState.exercises.length - 4} more)</summary>
-                  <div className="exercise-buttons">
-                    {exerciseState.exercises.slice(4).map(exercise => (
-                      <button
-                        key={exercise.id}
-                        className="btn exercise-btn"
-                        onClick={() => startExerciseTracking(exercise.id)}
-                        disabled={exerciseState.loading}
-                        title={exercise.description}
-                      >
-                        {exercise.id}. {exercise.name.split('(')[0].trim()}
-                      </button>
-                    ))}
-                  </div>
-                </details>
+      {!piState.isRecording ? (
+        // === START RECORDING SECTION ===
+        <div className="start-recording-section">
+          <div className="connection-status">
+            {piState.isConnected ? (
+              <div className="status-good">
+                ✅ Camera Ready
               </div>
             ) : (
-              <div className="exercise-active">
-                <div className="current-exercise">
-                  <h5>🎯 Tracking: {exerciseState.currentExercise?.exercise_name}</h5>
-                  <p>{exerciseState.currentExercise?.description}</p>
-                </div>
-                
-                {exerciseState.feedback && (
-                  <div className="live-feedback">
-                    <div className="feedback-scores">
-                      <div className="score-item">
-                        <span className="score-label">Form Score:</span>
-                        <span className={`score-value ${exerciseState.feedback.form_score > 80 ? 'excellent' : exerciseState.feedback.form_score > 60 ? 'good' : 'needs-work'}`}>
-                          {exerciseState.feedback.form_score?.toFixed(1) || 0}/100
-                        </span>
-                      </div>
-                      <div className="score-item">
-                        <span className="score-label">Progress:</span>
-                        <span className="score-value">
-                          {exerciseState.feedback.completion_percentage?.toFixed(1) || 0}%
-                        </span>
-                      </div>
-                      <div className="score-item">
-                        <span className="score-label">Phase:</span>
-                        <span className="score-value">
-                          {exerciseState.feedback.current_phase || 'Unknown'}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {exerciseState.feedback.feedback_messages && exerciseState.feedback.feedback_messages.length > 0 && (
-                      <div className="feedback-messages">
-                        <h6>💡 Tips:</h6>
-                        {exerciseState.feedback.feedback_messages.slice(0, 2).map((msg, idx) => (
-                          <p key={idx} className="feedback-message">• {msg}</p>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {exerciseState.feedback.corrections && exerciseState.feedback.corrections.length > 0 && (
-                      <div className="feedback-corrections">
-                        <h6>⚠️ Corrections:</h6>
-                        {exerciseState.feedback.corrections.slice(0, 2).map((correction, idx) => (
-                          <p key={idx} className="feedback-correction">• {correction}</p>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-                
-                <button
-                  className="btn stop-exercise-btn"
-                  onClick={stopExerciseTracking}
-                  disabled={exerciseState.loading}
-                >
-                  {exerciseState.loading ? 'Stopping...' : '⏹️ Stop Exercise Tracking'}
-                </button>
+              <div className="status-bad">
+                ❌ Camera Not Connected
               </div>
             )}
+          </div>
+
+          {/* Exercise Selection (Optional) */}
+          <div className="exercise-selector">
+            <label htmlFor="exerciseSelect">📚 Exercise Tracking (Optional):</label>
+            <select 
+              id="exerciseSelect"
+              value={selectedExercise} 
+              onChange={(e) => setSelectedExercise(e.target.value)}
+              disabled={piState.loading}
+            >
+              <option value="">No specific exercise tracking</option>
+              {exerciseState.exercises.map(exercise => (
+                <option key={exercise.id} value={exercise.id}>
+                  {exercise.id}. {exercise.name.split('(')[0].trim()}
+                </option>
+              ))}
+            </select>
+            {selectedExercise && (
+              <p className="exercise-description">
+                {exerciseState.exercises.find(e => e.id === parseInt(selectedExercise))?.description}
+              </p>
+            )}
+          </div>
+          
+          {/* Main Start Button */}
+          <button
+            className="btn-primary large start-recording-btn"
+            onClick={handleStartRecordingSession}
+            disabled={!piState.isConnected || piState.loading}
+          >
+            {piState.loading ? (
+              <>⏳ Starting...</>
+            ) : (
+              <>🔴 Start Recording</>
+            )}
+          </button>
+          
+          <p className="help-text">
+            This will automatically start the camera and begin recording
+          </p>
+        </div>
+      ) : (
+        // === RECORDING ACTIVE SECTION ===
+        <div className="recording-active-section">
+          <div className="recording-status">
+            <div className="recording-indicator">
+              <span className="recording-dot">🔴</span>
+              <span className="recording-text">RECORDING</span>
+              <span className="recording-duration">{formatDuration(recordingDuration)}</span>
+            </div>
+          </div>
+
+          {/* Exercise Control During Recording */}
+          <div className="live-exercise-controls">
+            <label htmlFor="currentExerciseSelect">📚 Current Exercise:</label>
+            <select 
+              id="currentExerciseSelect"
+              value={currentExercise} 
+              onChange={(e) => changeExerciseDuringRecording(e.target.value)}
+              disabled={exerciseState.loading}
+            >
+              <option value="">No tracking</option>
+              {exerciseState.exercises.map(exercise => (
+                <option key={exercise.id} value={exercise.id}>
+                  {exercise.id}. {exercise.name.split('(')[0].trim()}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Live Exercise Feedback */}
+          {exerciseState.isTracking && exerciseState.feedback && (
+            <div className="live-feedback-compact">
+              <div className="feedback-header">
+                <h5>🎯 {exerciseState.currentExercise?.exercise_name}</h5>
+              </div>
+              
+              <div className="feedback-scores-grid">
+                <div className="score-item">
+                  <span className="score-label">Form Score:</span>
+                  <span className={`score-value ${exerciseState.feedback.form_score > 80 ? 'excellent' : exerciseState.feedback.form_score > 60 ? 'good' : 'needs-work'}`}>
+                    {exerciseState.feedback.form_score?.toFixed(1) || 0}/100
+                  </span>
+                </div>
+                <div className="score-item">
+                  <span className="score-label">Progress:</span>
+                  <span className="score-value">
+                    {exerciseState.feedback.completion_percentage?.toFixed(1) || 0}%
+                  </span>
+                </div>
+                <div className="score-item">
+                  <span className="score-label">Phase:</span>
+                  <span className="score-value">
+                    {exerciseState.feedback.current_phase || 'Unknown'}
+                  </span>
+                </div>
+              </div>
+              
+              {exerciseState.feedback.feedback_messages && exerciseState.feedback.feedback_messages.length > 0 && (
+                <div className="feedback-tip">
+                  💡 {exerciseState.feedback.feedback_messages[0]}
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* Main Stop Button */}
+          <button
+            className="btn-danger large stop-recording-btn"
+            onClick={handleStopAndSave}
+            disabled={piState.loading}
+          >
+            {piState.loading ? (
+              <>⏳ Stopping...</>
+            ) : (
+              <>⏹️ Stop & Save Recording</>
+            )}
+          </button>
+          
+          <p className="help-text">
+            Recording will be automatically saved after stopping
+          </p>
+        </div>
+      )}
+
+      {/* === SAVE DIALOG === */}
+      {showSaveDialog && (
+        <div className="save-dialog-overlay">
+          <div className="save-dialog">
+            <h3>💾 Save Your Recording</h3>
+            
+            {saveError && (
+              <div className="save-error">
+                ❌ {saveError}
+              </div>
+            )}
+            
+            <div className="save-form">
+              <div className="form-group">
+                <label htmlFor="saveTitle">Title *</label>
+                <input
+                  id="saveTitle"
+                  type="text"
+                  value={saveForm.title}
+                  onChange={(e) => setSaveForm(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="Enter recording title..."
+                  disabled={saving}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="saveDescription">Description</label>
+                <textarea
+                  id="saveDescription"
+                  value={saveForm.description}
+                  onChange={(e) => setSaveForm(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Optional description..."
+                  disabled={saving}
+                  rows="3"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="saveBrocade">Brocade Type</label>
+                <select
+                  id="saveBrocade"
+                  value={saveForm.brocadeType}
+                  onChange={(e) => setSaveForm(prev => ({ ...prev, brocadeType: e.target.value }))}
+                  disabled={saving}
+                >
+                  <option value="FIRST">First Brocade</option>
+                  <option value="SECOND">Second Brocade</option>
+                  <option value="THIRD">Third Brocade</option>
+                  <option value="FOURTH">Fourth Brocade</option>
+                  <option value="FIFTH">Fifth Brocade</option>
+                  <option value="SIXTH">Sixth Brocade</option>
+                  <option value="SEVENTH">Seventh Brocade</option>
+                  <option value="EIGHTH">Eighth Brocade</option>
+                </select>
+              </div>
+              
+              {piState.availableRecordings.length > 0 && (
+                <div className="form-group">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={saveForm.transferVideo}
+                      onChange={(e) => setSaveForm(prev => ({ ...prev, transferVideo: e.target.checked }))}
+                      disabled={saving}
+                    />
+                    Save video file ({piState.availableRecordings[0]?.size ? 
+                      `${(piState.availableRecordings[0].size / 1024 / 1024).toFixed(1)} MB` : 
+                      'Unknown size'})
+                  </label>
+                </div>
+              )}
+            </div>
+            
+            <div className="save-actions">
+              <button
+                className="btn-secondary"
+                onClick={handleDiscardSession}
+                disabled={saving}
+              >
+                🗑️ Discard
+              </button>
+              <button
+                className="btn-primary"
+                onClick={handleSaveSession}
+                disabled={saving || !saveForm.title.trim()}
+              >
+                {saving ? '⏳ Saving...' : '💾 Save Recording'}
+              </button>
+            </div>
           </div>
         </div>
       )}
