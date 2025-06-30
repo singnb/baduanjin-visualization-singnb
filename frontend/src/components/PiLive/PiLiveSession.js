@@ -364,16 +364,33 @@ const PiLiveSession = ({ onSessionComplete }) => {
         throw new Error('Failed to start session');
       }
       
-      // Step 3: Immediately start recording
-      const recordingStarted = await startRecording();
-      if (!recordingStarted) {
+      // Step 3: Start recording using the session object (not state)
+      console.log('🔴 Starting recording for session:', session.session_id);
+      
+      const response = await axios.post(
+        `${getPiUrl('api')}/api/pi-live/recording/start/${session.session_id}`,
+        {},
+        { 
+          headers: { 'Authorization': `Bearer ${token}` },
+          timeout: PI_CONFIG.TIMEOUTS.API_REQUEST
+        }
+      );
+      
+      if (!response.data.success) {
         // If recording fails, cleanup session
         await stopLiveSession();
-        throw new Error('Failed to start recording');
+        throw new Error(response.data.message || 'Failed to start recording');
       }
       
+      // Update state to reflect recording started
+      setPiState(prev => ({
+        ...prev,
+        isRecording: true,
+        recordingStartTime: new Date(),
+        loading: false
+      }));
+      
       console.log('✅ Recording session started successfully');
-      setPiState(prev => ({ ...prev, loading: false }));
       
     } catch (error) {
       console.error('❌ Error starting recording session:', error);
@@ -385,7 +402,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
       cleanupSession();
       throw error;
     }
-  }, [checkPiStatus, startLiveSession, startRecording, stopLiveSession, piState.isConnected, cleanupSession]);
+  }, [checkPiStatus, startLiveSession, stopLiveSession, cleanupSession, token]);
 
   const stopAndSave = useCallback(async () => {
     setPiState(prev => ({ ...prev, loading: true }));
