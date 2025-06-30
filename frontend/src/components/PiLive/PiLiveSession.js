@@ -94,7 +94,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
         loading: false
       }));
     }
-  }, [token, piState.activeSession]);
+  }, [token]); // Removed piState.activeSession dependency to break circular reference
 
   // === PI STATUS CHECK ===
   const checkPiStatus = useCallback(async () => {
@@ -255,7 +255,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
       setPiState(prev => ({ ...prev, connectionError: 'Failed to start recording: ' + error.message }));
       return false;
     }
-  }, [piState.activeSession, token]);
+  }, [piState.activeSession, token, fetchAvailableRecordings]);
 
   const stopRecording = useCallback(async () => {
     if (!piState.activeSession) return false;
