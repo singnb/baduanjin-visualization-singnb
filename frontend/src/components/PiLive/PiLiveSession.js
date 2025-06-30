@@ -5,10 +5,10 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../auth/AuthContext';
 import { PI_CONFIG, getPiUrl, isDirectPiAvailable } from '../../config/piConfig';
-// import PiStatusPanel from './PiStatusPanel';
-// import PiVideoStream from './PiVideoStream';
-// import PiControls from './PiControls';
-// import PiPoseData from './PiPoseData';
+import PiStatusPanel from './PiStatusPanel';
+import PiVideoStream from './PiVideoStream';
+import PiControls from './PiControls';
+import PiPoseData from './PiPoseData';
 import SimplifiedPiLiveSession from './SimplifiedPiLiveSession';
 import './PiLive.css';
 
@@ -394,7 +394,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
         </div>
       )}
       
-      {/* <div className="pi-live-content">
+      <div className="pi-live-content">
         <div className="pi-stream-section">
           <PiVideoStream 
             // Pass consolidated state
@@ -429,7 +429,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
             activeSession={piState.activeSession}
           />
         </div>
-      </div> */}
+      </div>
       
       {piState.loading && (
         <div className="loading-overlay">
