@@ -5,6 +5,8 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../auth/AuthContext';
 
+const API_URL = process.env.REACT_APP_API_URL || 'https://baduanjin-backend-docker.azurewebsites.net';
+
 const usePiSession = () => {
   const [state, setState] = useState({
     // Session state
@@ -40,14 +42,14 @@ const usePiSession = () => {
 
     try {
       // Single call to get all status (your endpoint ready)
-      const statusResponse = await axios.get('/api/pi-live/status', {
+      const statusResponse = await axios.get(`${API_URL}/api/pi-live/status`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
       const status = statusResponse.data;
 
       // Get current frame (your endpoint ready)
-      const frameResponse = await axios.get('/api/pi-live/current-frame', {
+      const frameResponse = await axios.get(`${API_URL}/api/pi-live/current-frame`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -57,7 +59,7 @@ const usePiSession = () => {
       let exerciseFeedback = null;
       if (status.exercise_tracking?.enabled || status.exercise_tracking?.current_exercise) {
         try {
-          const feedbackResponse = await axios.get('/api/pi-live/baduanjin/feedback', {
+          const feedbackResponse = await axios.get(`${API_URL}/api/pi-live/baduanjin/feedback`, {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           if (feedbackResponse.data.feedback) {
@@ -108,7 +110,7 @@ const usePiSession = () => {
   useEffect(() => {
     const loadExercises = async () => {
       try {
-        const response = await axios.get('/api/pi-live/baduanjin/exercises', {
+        const response = await axios.get(`${API_URL}/api/pi-live/baduanjin/exercises`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (response.data.success) {
@@ -292,7 +294,7 @@ const SimplifiedExerciseControls = ({ piState, token }) => {
   const startExercise = async (exerciseId) => {
     setLoading(true);
     try {
-      const response = await axios.post(`/api/pi-live/baduanjin/start/${exerciseId}`, {}, {
+      const response = await axios.post(`${API_URL}/api/pi-live/baduanjin/start/${exerciseId}`, {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -311,7 +313,7 @@ const SimplifiedExerciseControls = ({ piState, token }) => {
   const stopExercise = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('/api/pi-live/baduanjin/stop', {}, {
+      const response = await axios.post(`${API_URL}/api/pi-live/baduanjin/stop`, {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -460,7 +462,7 @@ const SimplifiedPiLiveSession = ({ onSessionComplete }) => {
     setPiState(prev => ({ ...prev, loading: true }));
     
     try {
-      const response = await axios.post('/api/pi-live/start-session', 
+      const response = await axios.post(`${API_URL}/api/pi-live/start-session`, 
         { session_name: name },
         { headers: { 'Authorization': `Bearer ${token}` }}
       );
@@ -488,7 +490,7 @@ const SimplifiedPiLiveSession = ({ onSessionComplete }) => {
     setPiState(prev => ({ ...prev, loading: true }));
     
     try {
-      await axios.post(`/api/pi-live/stop-session/${piState.activeSession.session_id}`, {}, {
+      await axios.post(`${API_URL}/api/pi-live/stop-session/${piState.activeSession.session_id}`, {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -520,7 +522,7 @@ const SimplifiedPiLiveSession = ({ onSessionComplete }) => {
     const endpoint = piState.isRecording ? 'stop' : 'start';
     
     try {
-      await axios.post(`/api/pi-live/recording/${endpoint}/${piState.activeSession.session_id}`, {}, {
+      await axios.post(`${API_URL}/api/pi-live/recording/${endpoint}/${piState.activeSession.session_id}`, {}, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
