@@ -1,159 +1,224 @@
 // src/components/PiLive/PiVideoStream.js 
 // CLEANED VERSION - Uses centralized state, removed redundant polling
 
-// src/components/PiLive/SimplifiedPiLiveSession.js
-// FIXED VERSION - Uses correct Pi-Service backend
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { PI_CONFIG, getPiUrl, isDirectPiAvailable } from '../../config/piConfig';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { useAuth } from '../../auth/AuthContext';
+const PiVideoStream = ({ piState, token }) => {
+  const [streamImage, setStreamImage] = useState(null);
+  const [frameStats, setFrameStats] = useState({ fps: 0, latency: 0, persons: 0 });
+  const [streamError, setStreamError] = useState(null);
+  const framePollingRef = useRef(null);
+  const frameBuffer = useRef([]);
+  const lastFrameTime = useRef(0);
 
-// ✅ FIXED: Use Pi-Service backend for all Pi-Live endpoints
-const PI_SERVICE_URL = 'https://baduanjin-pi-service-g8aehuh0bghcc4be.southeastasia-01.azurewebsites.net';
-
-const usePiSession = () => {
-  const [state, setState] = useState({
-    // Session state
-    activeSession: null,
-    sessionStartTime: null,
-    
-    // Connection state  
-    isConnected: false,
-    connectionError: null,
-    loading: false,
-    
-    // Recording state
-    isRecording: false,
-    recordingStartTime: null,
-    availableRecordings: [],
-    
-    // Exercise state (NEW - uses your Pi endpoints)
-    currentExercise: null,
-    exerciseFeedback: null,
-    availableExercises: [],
-    
-    // Video state
-    currentFrame: null,
-    poseData: null
-  });
-
-  const { token } = useAuth();
-  const pollingInterval = useRef(null);
-
-  // SINGLE UNIFIED POLLING (replaces multiple intervals)
-  const pollPiData = useCallback(async () => {
-    if (!state.activeSession) return;
+  // === ENHANCED FRAME FETCHING WITH BETTER ERROR HANDLING ===
+  const fetchVideoFrame = useCallback(async () => {
+    // Only fetch frames if session is active
+    if (!piState.activeSession) {
+      return;
+    }
 
     try {
-      // ✅ FIXED: Use Pi-Service URL
-      const statusResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/status`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      setStreamError(null);
+      
+      // Try direct Pi connection first
+      if (isDirectPiAvailable()) {
+        const directPiUrl = getPiUrl('video_stream');
+        console.log('🎥 Fetching frame from direct Pi:', directPiUrl);
+        
+        const response = await fetch(`${directPiUrl}/api/current_frame`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true',
+            'Origin': window.location.origin
+          },
+          mode: 'cors',
+          signal: AbortSignal.timeout(PI_CONFIG.TIMEOUTS.VIDEO_STREAM)
+        });
 
-      const status = statusResponse.data;
+        if (!response.ok) {
+          throw new Error(`Direct Pi HTTP ${response.status}: ${response.statusText}`);
+        }
 
-      // ✅ FIXED: Use Pi-Service URL
-      const frameResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/current-frame`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      const frameData = frameResponse.data;
-
-      // Get exercise feedback if tracking active
-      let exerciseFeedback = null;
-      if (status.exercise_tracking?.enabled || status.exercise_tracking?.current_exercise) {
-        try {
-          // ✅ FIXED: Use Pi-Service URL
-          const feedbackResponse = await axios.get(`${PI_SERVICE_URL}/api/pi-live/baduanjin/feedback`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
-          if (feedbackResponse.data.feedback) {
-            exerciseFeedback = feedbackResponse.data.feedback;
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const textContent = await response.text();
+          if (textContent.includes('ngrok')) {
+            throw new Error('Ngrok authentication required');
           }
-        } catch (feedbackError) {
-          console.warn('Exercise feedback fetch failed:', feedbackError);
+          throw new Error('Invalid response format from Pi');
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.image) {
+          console.log('✅ Frame received from direct Pi');
+          handleFrameUpdate({
+            image: data.image,
+            timestamp: data.timestamp || Date.now(),
+            stats: data.stats || {},
+            poseData: data.pose_data || [],
+            isRecording: data.is_recording || false
+          });
+          return;
+        } else if (data.error) {
+          throw new Error(`Pi server error: ${data.error}`);
+        }
+      }
+      
+      // Fallback: Try getting frame through Azure Pi Service
+      console.log('🎥 Trying frame fetch through Azure Pi Service...');
+      const azureResponse = await fetch(`${getPiUrl('api')}/api/pi-live/current-frame`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        },
+        timeout: PI_CONFIG.TIMEOUTS.API_REQUEST
+      });
+
+      if (azureResponse.ok) {
+        const azureData = await azureResponse.json();
+        if (azureData.success && azureData.image) {
+          console.log('✅ Frame received through Azure Pi Service');
+          handleFrameUpdate({
+            image: azureData.image,
+            timestamp: azureData.timestamp || Date.now(),
+            stats: azureData.stats || {},
+            poseData: azureData.pose_data || [],
+            isRecording: azureData.is_recording || false
+          });
+          return;
         }
       }
 
-      // Update all state at once
-      setState(prev => ({
-        ...prev,
-        isConnected: status.pi_connected,
-        isRecording: status.is_recording,
-        currentExercise: status.exercise_tracking?.current_exercise,
-        exerciseFeedback: exerciseFeedback,
-        currentFrame: frameData.success ? frameData.image : null,
-        poseData: frameData.pose_data || null,
-        connectionError: null
-      }));
+      // If both methods fail, show appropriate error
+      throw new Error('No video stream available from Pi');
 
     } catch (error) {
-      setState(prev => ({
-        ...prev,
-        isConnected: false,
-        connectionError: error.message,
-        currentFrame: null,
-        exerciseFeedback: null
-      }));
+      // Only log significant errors to avoid spam
+      if (!error.message.includes('timeout') && !error.message.includes('AbortError')) {
+        console.warn('⚠️ Frame fetch failed:', error.message);
+        setStreamError(error.message);
+      }
+      
+      // Clear stream image if persistent errors
+      if (streamImage && error.message.includes('authentication')) {
+        setStreamImage(null);
+      }
     }
-  }, [state.activeSession, token]);
+  }, [piState.activeSession, token, streamImage]);
 
-  // Start/stop polling
+  // === FRAME PROCESSING (SAME AS BEFORE) ===
+  const handleFrameUpdate = useCallback((frameData) => {
+    const now = Date.now();
+    const latency = now - frameData.timestamp;
+
+    // Drop old frames to prevent buffering
+    if (latency > 2000) {
+      console.warn('🗑️ Dropping old frame, latency:', latency + 'ms');
+      return;
+    }
+
+    // Limit buffer size
+    if (frameBuffer.current.length > 2) {
+      frameBuffer.current = frameBuffer.current.slice(-1);
+    }
+
+    frameBuffer.current.push({ ...frameData, latency });
+    processNextFrame();
+  }, []);
+
+  const processNextFrame = useCallback(() => {
+    if (frameBuffer.current.length === 0) return;
+
+    const frame = frameBuffer.current.shift();
+    const now = Date.now();
+
+    // Update image immediately
+    setStreamImage(frame.image);
+    setStreamError(null); // Clear error when frame received
+
+    // Update stats less frequently
+    if (now - lastFrameTime.current > 1000) {
+      setFrameStats({
+        fps: frame.stats.current_fps || 0,
+        latency: frame.latency,
+        persons: frame.stats.persons_detected || 0
+      });
+      lastFrameTime.current = now;
+    }
+  }, []);
+
+  // === ENHANCED FRAME POLLING LIFECYCLE ===
   useEffect(() => {
-    if (state.activeSession) {
-      pollingInterval.current = setInterval(pollPiData, 200); // 5 FPS polling
+    console.log('🎥 Video stream effect triggered:', {
+      activeSession: !!piState.activeSession,
+      isConnected: piState.isConnected,
+      sessionId: piState.activeSession?.session_id
+    });
+
+    if (piState.activeSession && piState.isConnected) {
+      console.log('🎥 Starting video frame polling...');
+      
+      // Start immediate fetch
+      fetchVideoFrame();
+      
+      // Start interval polling
+      framePollingRef.current = setInterval(fetchVideoFrame, PI_CONFIG.POLLING.FRAME_INTERVAL);
+      
       return () => {
-        if (pollingInterval.current) {
-          clearInterval(pollingInterval.current);
-          pollingInterval.current = null;
+        if (framePollingRef.current) {
+          console.log('🎥 Stopping video frame polling...');
+          clearInterval(framePollingRef.current);
+          framePollingRef.current = null;
         }
+        frameBuffer.current = [];
       };
+    } else {
+      // Clear when no session or disconnected
+      console.log('🎥 Clearing video stream - no active session or not connected');
+      setStreamImage(null);
+      setStreamError(null);
+      frameBuffer.current = [];
     }
-  }, [state.activeSession, pollPiData]);
+  }, [piState.activeSession, piState.isConnected, fetchVideoFrame]);
 
-  // Load exercises once
-  useEffect(() => {
-    const loadExercises = async () => {
-      console.log('🔑 Loading exercises with token:', token ? 'EXISTS' : 'MISSING');
+  // === NGROK AUTHENTICATION HELPER ===
+  const authenticateNgrok = useCallback(() => {
+    const directPiUrl = getPiUrl('video_stream');
+    if (directPiUrl) {
+      console.log('🌐 Opening ngrok URL for authentication:', directPiUrl);
+      window.open(directPiUrl, '_blank');
       
-      if (!token) {
-        console.error('❌ No token available - user may not be authenticated');
-        return;
-      }
-      
-      try {
-        console.log('📡 Making request to:', `${PI_SERVICE_URL}/api/pi-live/baduanjin/exercises`);
-        
-        // ✅ FIXED: Use Pi-Service URL
-        const response = await axios.get(`${PI_SERVICE_URL}/api/pi-live/baduanjin/exercises`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        console.log('✅ Exercise response:', response.data);
-        
-        if (response.data.success) {
-          setState(prev => ({
-            ...prev,
-            availableExercises: response.data.exercises
-          }));
-        }
-      } catch (error) {
-        console.error('❌ Failed to load exercises:', error);
-        console.error('❌ Error details:', error.response?.data);
-        console.error('❌ Status code:', error.response?.status);
-      }
-    };
+      alert(`
+Opening ngrok URL for authentication.
 
-    loadExercises();
-  }, [token]);
+Steps:
+1. Click "Visit Site" if prompted
+2. Wait for the page to load completely
+3. Close the tab and click "Retry" below
 
-  return { state, setState, pollPiData };
-};
+URL: ${directPiUrl}
+      `);
+    }
+  }, []);
 
-// SIMPLIFIED VIDEO STREAM COMPONENT (unchanged)
-const SimplifiedPiVideoStream = ({ piState, token }) => {
-  const [streamError, setStreamError] = useState(null);
+  const retryConnection = useCallback(() => {
+    console.log('🔄 Retrying video connection...');
+    setStreamError(null);
+    setStreamImage(null);
+    frameBuffer.current = [];
+    
+    // Force immediate frame fetch
+    if (piState.activeSession && piState.isConnected) {
+      fetchVideoFrame();
+    }
+  }, [piState.activeSession, piState.isConnected, fetchVideoFrame]);
 
+  // === ENHANCED RENDER LOGIC ===
   const renderStreamContent = () => {
     // No session
     if (!piState.activeSession) {
@@ -161,11 +226,14 @@ const SimplifiedPiVideoStream = ({ piState, token }) => {
         <div className="stream-placeholder">
           <div className="placeholder-icon">📹</div>
           <p>Start a live session to view camera feed</p>
+          <p style={{ fontSize: '14px', color: '#6c757d' }}>
+            Camera will start automatically when session begins
+          </p>
         </div>
       );
     }
 
-    // Not connected
+    // Pi not connected
     if (!piState.isConnected) {
       return (
         <div className="stream-placeholder">
@@ -184,32 +252,90 @@ const SimplifiedPiVideoStream = ({ piState, token }) => {
         <div className="stream-placeholder">
           <div className="placeholder-icon">⚠️</div>
           <p>Pi Connection Error</p>
-          <p style={{ fontSize: '14px', color: '#dc3545' }}>
+          <p style={{ fontSize: '14px', color: '#dc3545', marginBottom: '15px' }}>
             {piState.connectionError}
           </p>
+          <button 
+            className="retry-btn"
+            onClick={retryConnection}
+          >
+            🔄 Retry Connection
+          </button>
         </div>
       );
     }
 
-    // Video stream active
-    if (piState.currentFrame) {
+    // Stream error (different from connection error)
+    if (streamError && !streamImage) {
+      return (
+        <div className="stream-placeholder">
+          <div className="placeholder-icon">📡</div>
+          <p>Video Stream Error</p>
+          <p style={{ fontSize: '14px', color: '#dc3545', marginBottom: '15px' }}>
+            {streamError}
+          </p>
+          <div className="error-actions">
+            <button 
+              className="retry-btn"
+              onClick={retryConnection}
+            >
+              🔄 Retry Video Stream
+            </button>
+            
+            {streamError.includes('ngrok') && (
+              <button 
+                className="auth-btn"
+                onClick={authenticateNgrok}
+                style={{ 
+                  backgroundColor: '#007bff', 
+                  color: 'white', 
+                  border: 'none', 
+                  padding: '8px 12px', 
+                  borderRadius: '4px',
+                  marginLeft: '10px'
+                }}
+              >
+                🌐 Authenticate Ngrok
+              </button>
+            )}
+          </div>
+          
+          <div className="debug-info" style={{ marginTop: '15px', fontSize: '12px', color: '#6c757d' }}>
+            <details>
+              <summary>Debug Info</summary>
+              <p>Direct Pi URL: {isDirectPiAvailable() ? getPiUrl('video_stream') : 'Not configured'}</p>
+              <p>Azure Pi Service: {getPiUrl('api')}</p>
+              <p>Session ID: {piState.activeSession?.session_id}</p>
+            </details>
+          </div>
+        </div>
+      );
+    }
+
+    // Successfully showing video
+    if (streamImage) {
       return (
         <div className="stream-content">
           <img 
-            src={`data:image/jpeg;base64,${piState.currentFrame}`}
-            alt="Live Baduanjin analysis"
+            src={`data:image/jpeg;base64,${streamImage}`}
+            alt="Live pose detection"
             className="live-stream"
             style={{ 
+              display: 'block',
               width: '100%',
               height: 'auto',
               maxHeight: '500px',
               objectFit: 'contain',
               border: piState.isRecording ? '3px solid #dc3545' : '1px solid #dee2e6',
-              borderRadius: '8px'
+              borderRadius: '8px',
+              boxShadow: piState.isRecording ? '0 0 20px rgba(220, 53, 69, 0.3)' : 'none'
+            }}
+            onError={() => {
+              console.error('❌ Image load error');
+              setStreamImage(null);
+              setStreamError('Failed to load video frame');
             }}
           />
-          
-          {/* Recording indicator */}
           {piState.isRecording && (
             <div className="recording-overlay" style={{
               position: 'absolute',
@@ -224,17 +350,35 @@ const SimplifiedPiVideoStream = ({ piState, token }) => {
               🔴 RECORDING
             </div>
           )}
-
-          {/* Note: Exercise feedback overlay is already baked into Pi video frame */}
         </div>
       );
     }
 
-    // Loading
+    // Loading state
     return (
       <div className="stream-loading">
         <div className="loading-spinner"></div>
         <p>Starting camera feed...</p>
+        <p style={{ fontSize: '14px', color: '#6c757d' }}>
+          {isDirectPiAvailable() ? 
+            `Connecting to: ${getPiUrl('video_stream')}` :
+            'Using Azure Pi Service for video'
+          }
+        </p>
+        <button 
+          onClick={retryConnection}
+          style={{
+            marginTop: '10px',
+            padding: '5px 10px',
+            background: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          🔄 Force Retry
+        </button>
       </div>
     );
   };
@@ -248,8 +392,10 @@ const SimplifiedPiVideoStream = ({ piState, token }) => {
             <span className="session-id">
               Session: {piState.activeSession.session_id?.substring(0, 8) || 'Unknown'}
             </span>
-            {piState.isConnected && piState.currentFrame ? (
+            {piState.isConnected && streamImage && !streamError ? (
               <span className="live-indicator" style={{ color: '#28a745' }}>🔴 LIVE</span>
+            ) : piState.isConnected && piState.activeSession ? (
+              <span className="connecting-indicator" style={{ color: '#ffc107' }}>🔄 CONNECTING</span>
             ) : (
               <span className="offline-indicator" style={{ color: '#dc3545' }}>❌ OFFLINE</span>
             )}
@@ -261,17 +407,29 @@ const SimplifiedPiVideoStream = ({ piState, token }) => {
         {renderStreamContent()}
       </div>
 
-      {/* Stream stats - Enhanced for exercise tracking */}
-      {piState.activeSession && piState.isConnected && piState.currentFrame && (
+      {/* Enhanced stream status */}
+      {piState.activeSession && piState.isConnected && streamImage && !streamError && (
         <div className="stream-status">
           <div className="status-grid">
             <div className="status-item">
               <span className="status-label">Source:</span>
-              <span className="status-value success">🔗 Pi Service</span>
+              <span className="status-value success">
+                {isDirectPiAvailable() ? '📡 Direct Pi' : '🔗 Azure API'}
+              </span>
+            </div>
+            <div className="status-item">
+              <span className="status-label">FPS:</span>
+              <span className="status-value">{frameStats.fps || 0}</span>
+            </div>
+            <div className="status-item">
+              <span className="status-label">Latency:</span>
+              <span className={`status-value ${frameStats.latency > 500 ? 'warning' : 'success'}`}>
+                {frameStats.latency || 0}ms
+              </span>
             </div>
             <div className="status-item">
               <span className="status-label">Persons:</span>
-              <span className="status-value">{piState.poseData?.length || 0}</span>
+              <span className="status-value">{frameStats.persons || 0}</span>
             </div>
             <div className="status-item">
               <span className="status-label">Recording:</span>
@@ -279,366 +437,11 @@ const SimplifiedPiVideoStream = ({ piState, token }) => {
                 {piState.isRecording ? '🔴 Active' : '⚪ Stopped'}
               </span>
             </div>
-            {piState.currentExercise && (
-              <div className="status-item">
-                <span className="status-label">Exercise:</span>
-                <span className="status-value success">
-                  🎯 {piState.currentExercise.name?.split('(')[0]?.trim() || 'Active'}
-                </span>
-              </div>
-            )}
           </div>
-          
-          {/* Exercise feedback summary (Pi already overlays detailed feedback on video) */}
-          {piState.exerciseFeedback && (
-            <div className="exercise-summary">
-              <div className="feedback-row">
-                <span>Form: {piState.exerciseFeedback.form_score?.toFixed(1) || 0}/100</span>
-                <span>Progress: {piState.exerciseFeedback.completion_percentage?.toFixed(1) || 0}%</span>
-                <span>Phase: {piState.exerciseFeedback.current_phase || 'Unknown'}</span>
-              </div>
-            </div>
-          )}
         </div>
       )}
     </div>
   );
 };
 
-// SIMPLIFIED EXERCISE CONTROLS
-const SimplifiedExerciseControls = ({ piState, token }) => {
-  const [loading, setLoading] = useState(false);
-
-  const startExercise = async (exerciseId) => {
-    setLoading(true);
-    try {
-      // ✅ FIXED: Use Pi-Service URL
-      const response = await axios.post(`${PI_SERVICE_URL}/api/pi-live/baduanjin/start/${exerciseId}`, {}, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (response.data.success) {
-        alert(`Started tracking: ${response.data.exercise_info.exercise_name}`);
-      } else {
-        alert(`Failed to start exercise: ${response.data.error}`);
-      }
-    } catch (error) {
-      alert(`Error starting exercise: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const stopExercise = async () => {
-    setLoading(true);
-    try {
-      // ✅ FIXED: Use Pi-Service URL
-      const response = await axios.post(`${PI_SERVICE_URL}/api/pi-live/baduanjin/stop`, {}, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (response.data.success) {
-        const summary = response.data.summary;
-        alert(`Exercise completed!\nFinal Score: ${summary?.final_form_score || 'N/A'}`);
-      }
-    } catch (error) {
-      alert(`Error stopping exercise: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (!piState.activeSession) {
-    return (
-      <div className="exercise-controls">
-        <h3>🥋 Baduanjin Exercise Tracking</h3>
-        <p>Start a session first to enable exercise tracking</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="exercise-controls">
-      <h3>🥋 Baduanjin Exercise Tracking</h3>
-      
-      {!piState.currentExercise ? (
-        <div className="exercise-selection">
-          <p>Select an exercise to track your form:</p>
-          <div className="exercise-buttons">
-            {piState.availableExercises.slice(0, 4).map(exercise => (
-              <button
-                key={exercise.id}
-                className="btn exercise-btn"
-                onClick={() => startExercise(exercise.id)}
-                disabled={loading}
-                title={exercise.description}
-              >
-                {exercise.id}. {exercise.name.split('(')[0].trim()}
-              </button>
-            ))}
-          </div>
-          
-          {piState.availableExercises.length > 4 && (
-            <details>
-              <summary>More exercises ({piState.availableExercises.length - 4} more)</summary>
-              <div className="exercise-buttons">
-                {piState.availableExercises.slice(4).map(exercise => (
-                  <button
-                    key={exercise.id}
-                    className="btn exercise-btn"
-                    onClick={() => startExercise(exercise.id)}
-                    disabled={loading}
-                    title={exercise.description}
-                  >
-                    {exercise.id}. {exercise.name.split('(')[0].trim()}
-                  </button>
-                ))}
-              </div>
-            </details>
-          )}
-        </div>
-      ) : (
-        <div className="exercise-active">
-          <div className="current-exercise">
-            <h5>🎯 Tracking: {piState.currentExercise.name}</h5>
-            <p>{piState.currentExercise.description}</p>
-          </div>
-          
-          {/* Real-time feedback display */}
-          {piState.exerciseFeedback && (
-            <div className="live-feedback">
-              <div className="feedback-scores">
-                <div className="score-item">
-                  <span className="score-label">Form Score:</span>
-                  <span className={`score-value ${
-                    piState.exerciseFeedback.form_score > 80 ? 'excellent' : 
-                    piState.exerciseFeedback.form_score > 60 ? 'good' : 'needs-work'
-                  }`}>
-                    {piState.exerciseFeedback.form_score?.toFixed(1) || 0}/100
-                  </span>
-                </div>
-                
-                <div className="score-item">
-                  <span className="status-label">Progress:</span>
-                  <span className="score-value">
-                    {piState.exerciseFeedback.completion_percentage?.toFixed(1) || 0}%
-                  </span>
-                </div>
-                
-                <div className="score-item">
-                  <span className="score-label">Phase:</span>
-                  <span className="score-value">
-                    {piState.exerciseFeedback.current_phase || 'Unknown'}
-                  </span>
-                </div>
-              </div>
-              
-              {/* Feedback messages */}
-              {piState.exerciseFeedback.feedback_messages && 
-               piState.exerciseFeedback.feedback_messages.length > 0 && (
-                <div className="feedback-messages">
-                  <h6>💡 Tips:</h6>
-                  {piState.exerciseFeedback.feedback_messages.slice(0, 2).map((msg, idx) => (
-                    <p key={idx} className="feedback-message">• {msg}</p>
-                  ))}
-                </div>
-              )}
-              
-              {/* Corrections */}
-              {piState.exerciseFeedback.corrections && 
-               piState.exerciseFeedback.corrections.length > 0 && (
-                <div className="feedback-corrections">
-                  <h6>⚠️ Corrections:</h6>
-                  {piState.exerciseFeedback.corrections.slice(0, 2).map((correction, idx) => (
-                    <p key={idx} className="feedback-correction">• {correction}</p>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-          
-          <button
-            className="btn stop-exercise-btn"
-            onClick={stopExercise}
-            disabled={loading}
-          >
-            {loading ? 'Stopping...' : '⏹️ Stop Exercise Tracking'}
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-// SIMPLIFIED MAIN COMPONENT
-const SimplifiedPiLiveSession = ({ onSessionComplete }) => {
-  const { state: piState, setState: setPiState } = usePiSession();
-  const { token, user } = useAuth();
-  const [sessionName, setSessionName] = useState('');
-
-  // Session management (simplified)
-  const startLiveSession = async (name = 'Live Practice Session') => {
-    setPiState(prev => ({ ...prev, loading: true }));
-    
-    try {
-      // ✅ FIXED: Use Pi-Service URL
-      const response = await axios.post(`${PI_SERVICE_URL}/api/pi-live/start-session`, 
-        { session_name: name },
-        { headers: { 'Authorization': `Bearer ${token}` }}
-      );
-      
-      if (response.data.success) {
-        setPiState(prev => ({
-          ...prev,
-          activeSession: response.data,
-          sessionStartTime: new Date(),
-          loading: false
-        }));
-      }
-    } catch (error) {
-      setPiState(prev => ({
-        ...prev,
-        loading: false,
-        connectionError: error.message
-      }));
-    }
-  };
-
-  const stopLiveSession = async () => {
-    if (!piState.activeSession) return;
-    
-    setPiState(prev => ({ ...prev, loading: true }));
-    
-    try {
-      // ✅ FIXED: Use Pi-Service URL
-      await axios.post(`${PI_SERVICE_URL}/api/pi-live/stop-session/${piState.activeSession.session_id}`, {}, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      // Reset state
-      setPiState(prev => ({
-        ...prev,
-        activeSession: null,
-        sessionStartTime: null,
-        currentExercise: null,
-        exerciseFeedback: null,
-        loading: false
-      }));
-      
-      if (onSessionComplete) onSessionComplete();
-      
-    } catch (error) {
-      setPiState(prev => ({
-        ...prev,
-        loading: false,
-        connectionError: error.message
-      }));
-    }
-  };
-
-  // Recording management (simplified)
-  const toggleRecording = async () => {
-    if (!piState.activeSession) return;
-    
-    const endpoint = piState.isRecording ? 'stop' : 'start';
-    
-    try {
-      // ✅ FIXED: Use Pi-Service URL
-      await axios.post(`${PI_SERVICE_URL}/api/pi-live/recording/${endpoint}/${piState.activeSession.session_id}`, {}, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      
-      setPiState(prev => ({
-        ...prev,
-        isRecording: !prev.isRecording,
-        recordingStartTime: !prev.isRecording ? new Date() : null
-      }));
-      
-    } catch (error) {
-      alert(`Failed to ${endpoint} recording: ${error.message}`);
-    }
-  };
-
-  return (
-    <div className="pi-live-container">
-      <div className="pi-live-header">
-        <h2>🥋 Real-time Baduanjin Analysis</h2>
-        
-        {/* Connection status */}
-        <div className="status-panel">
-          <span className={`status-dot ${piState.isConnected ? 'green' : 'red'}`}></span>
-          <span>Pi Camera: {piState.isConnected ? 'Connected' : 'Disconnected'}</span>
-        </div>
-      </div>
-      
-      {piState.connectionError && (
-        <div className="error-banner">
-          <p>⚠️ {piState.connectionError}</p>
-          <button onClick={() => setPiState(prev => ({ ...prev, connectionError: null }))}>
-            Dismiss
-          </button>
-        </div>
-      )}
-      
-      <div className="pi-live-content">
-        {/* Video stream */}
-        <div className="pi-stream-section">
-          <SimplifiedPiVideoStream piState={piState} token={token} />
-        </div>
-        
-        {/* Controls */}
-        <div className="pi-controls-section">
-          {!piState.activeSession ? (
-            <div className="start-session-form">
-              <h3>🎮 Session Controls</h3>
-              <input
-                type="text"
-                value={sessionName}
-                onChange={(e) => setSessionName(e.target.value)}
-                placeholder="Enter session name (optional)..."
-                disabled={piState.loading}
-              />
-              <button
-                className="btn start-session-btn"
-                onClick={() => startLiveSession(sessionName || 'Live Practice Session')}
-                disabled={piState.loading}  // ← Only disable when loading, not when disconnected
-              >
-                {piState.loading ? 'Starting...' : '🚀 Start Live Session'}
-              </button>
-            </div>
-          ) : (
-            <div className="active-session-controls">
-              <h3>📡 Active Session</h3>
-              <p><strong>Name:</strong> {piState.activeSession.session_name}</p>
-              
-              {/* Recording controls */}
-              <div className="recording-section">
-                <h4>🎥 Recording</h4>
-                <button
-                  className={`btn ${piState.isRecording ? 'stop-recording-btn' : 'start-recording-btn'}`}
-                  onClick={toggleRecording}
-                  disabled={piState.loading}
-                >
-                  {piState.isRecording ? '⏹️ Stop Recording' : '🔴 Start Recording'}
-                </button>
-              </div>
-              
-              <button
-                className="btn stop-session-btn"
-                onClick={stopLiveSession}
-                disabled={piState.loading}
-              >
-                {piState.loading ? 'Stopping...' : '⏹️ Stop Session'}
-              </button>
-            </div>
-          )}
-          
-          {/* Exercise controls */}
-          <SimplifiedExerciseControls piState={piState} token={token} />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default SimplifiedPiLiveSession;
+export default PiVideoStream;
