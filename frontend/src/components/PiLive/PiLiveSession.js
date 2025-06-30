@@ -293,6 +293,42 @@ const PiLiveSession = ({ onSessionComplete }) => {
     }
   }, [piState.activeSession, token]);
 
+  // === RECORDING MANAGEMENT ===
+  const fetchAvailableRecordings = useCallback(async () => {
+    try {
+      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/recordings`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        timeout: PI_CONFIG.TIMEOUTS.API_REQUEST
+      });
+      
+      if (response.data.success) {
+        const recordings = response.data.recordings || [];
+        setPiState(prev => ({ ...prev, availableRecordings: recordings }));
+        console.log('📹 Available recordings updated:', recordings.length);
+        return recordings;
+      }
+    } catch (error) {
+      console.warn('⚠️ Failed to fetch recordings:', error);
+      return [];
+    }
+  }, [token]);
+
+  const cleanupSession = useCallback(() => {
+    console.log('🧹 Cleaning up session...');
+    stopUnifiedPolling();
+    
+    setPiState(prev => ({
+      ...prev,
+      activeSession: null,
+      sessionStartTime: null,
+      poseData: null,
+      isRecording: false,
+      recordingStartTime: null,
+      availableRecordings: [],
+      currentFrame: null
+    }));
+  }, [stopUnifiedPolling]);
+
   // === NEW SIMPLIFIED FUNCTIONS ===
   const startRecordingSession = useCallback(async (sessionName, selectedExercise = null) => {
     setPiState(prev => ({ ...prev, loading: true, connectionError: null }));
@@ -331,7 +367,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
       cleanupSession();
       throw error;
     }
-  }, [checkPiStatus, startLiveSession, startRecording, stopLiveSession, piState.isConnected]);
+  }, [checkPiStatus, startLiveSession, startRecording, stopLiveSession, piState.isConnected, cleanupSession]);
 
   const stopAndSave = useCallback(async () => {
     setPiState(prev => ({ ...prev, loading: true }));
@@ -359,43 +395,7 @@ const PiLiveSession = ({ onSessionComplete }) => {
       cleanupSession();
       throw error;
     }
-  }, [stopRecording, stopLiveSession, fetchAvailableRecordings]);
-
-  const cleanupSession = useCallback(() => {
-    console.log('🧹 Cleaning up session...');
-    stopUnifiedPolling();
-    
-    setPiState(prev => ({
-      ...prev,
-      activeSession: null,
-      sessionStartTime: null,
-      poseData: null,
-      isRecording: false,
-      recordingStartTime: null,
-      availableRecordings: [],
-      currentFrame: null
-    }));
-  }, []);
-
-  // === RECORDING MANAGEMENT ===
-  const fetchAvailableRecordings = useCallback(async () => {
-    try {
-      const response = await axios.get(`${getPiUrl('api')}/api/pi-live/recordings`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-        timeout: PI_CONFIG.TIMEOUTS.API_REQUEST
-      });
-      
-      if (response.data.success) {
-        const recordings = response.data.recordings || [];
-        setPiState(prev => ({ ...prev, availableRecordings: recordings }));
-        console.log('📹 Available recordings updated:', recordings.length);
-        return recordings;
-      }
-    } catch (error) {
-      console.warn('⚠️ Failed to fetch recordings:', error);
-      return [];
-    }
-  }, [token]);
+  }, [stopRecording, stopLiveSession, fetchAvailableRecordings, cleanupSession]);
 
   // === POLLING MANAGEMENT ===
   const startUnifiedPolling = useCallback(() => {
