@@ -9,7 +9,7 @@ import PiStatusPanel from './PiStatusPanel';
 import PiVideoStream from './PiVideoStream';
 import PiControls from './PiControls';
 import PiPoseData from './PiPoseData';
-import SimplifiedPiLiveSession from './SimplifiedPiLiveSession';
+import SimplifiedPiLiveSession from './PiVideoStream';
 import './PiLive.css';
 
 const PiLiveSession = ({ onSessionComplete }) => {
