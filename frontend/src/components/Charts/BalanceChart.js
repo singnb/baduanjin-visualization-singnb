@@ -12,6 +12,7 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
   const [displayMode, setDisplayMode] = useState('both');
   const [showBodyPosition, setShowBodyPosition] = useState(true);
   const [selectedPose, setSelectedPose] = useState(null);
+  const [dataStructureInfo, setDataStructureInfo] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +23,13 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
         
         const learnerResult = await loadLearnerData('balance');
         setLearnerData(learnerResult);
+        
+        // Debug: Log data structure info in development
+        if (process.env.NODE_ENV === 'development') {
+          const info = analyzeDataStructure(masterResult, learnerResult);
+          setDataStructureInfo(info);
+          console.log('📊 Balance Data Structure Analysis:', info);
+        }
         
         setLoading(false);
       } catch (err) {
@@ -34,6 +42,48 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
     fetchData();
   }, []);
 
+  // IMPROVED: Analyze data structure to understand what's available
+  const analyzeDataStructure = (masterData, learnerData) => {
+    const analysis = {
+      master: {},
+      learner: {},
+      recommendations: []
+    };
+
+    // Analyze master data
+    if (masterData) {
+      analysis.master = {
+        hasBalanceMetrics: !!masterData.balanceMetrics,
+        balanceMetricsKeys: masterData.balanceMetrics ? Object.keys(masterData.balanceMetrics) : [],
+        hasOverallStability: typeof masterData.overallStability === 'number',
+        hasComTrajectory: !!(masterData.comTrajectory && masterData.comTrajectory.x && masterData.comTrajectory.y),
+        rootKeys: Object.keys(masterData)
+      };
+    }
+
+    // Analyze learner data
+    if (learnerData) {
+      analysis.learner = {
+        hasBalanceMetrics: !!learnerData.balanceMetrics,
+        balanceMetricsKeys: learnerData.balanceMetrics ? Object.keys(learnerData.balanceMetrics) : [],
+        hasOverallStability: typeof learnerData.overallStability === 'number',
+        hasComTrajectory: !!(learnerData.comTrajectory && learnerData.comTrajectory.x && learnerData.comTrajectory.y),
+        hasKeyPoseBalance: !!(learnerData.keyPoseBalance && Array.isArray(learnerData.keyPoseBalance)),
+        rootKeys: Object.keys(learnerData)
+      };
+    }
+
+    // Generate recommendations
+    if (!analysis.master.hasBalanceMetrics && !analysis.learner.hasBalanceMetrics) {
+      analysis.recommendations.push('Consider adding balanceMetrics object with com_stability_x and com_stability_y properties');
+    }
+    if (!analysis.master.hasOverallStability && !analysis.learner.hasOverallStability) {
+      analysis.recommendations.push('Consider adding overallStability numeric property');
+    }
+
+    return analysis;
+  };
+
   // Helper function to safely get numeric values with fallbacks
   const getNumericValue = (value, fallback = 0) => {
     if (typeof value === 'number' && !isNaN(value)) {
@@ -42,30 +92,141 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
     return fallback;
   };
 
-  // Helper function to safely get balance metrics
+  // IMPROVED: Helper function to safely get balance metrics with better fallback logic
   const getBalanceMetrics = (data, metricName, fallback = 0) => {
     try {
+      // First check: standard balanceMetrics object
       if (data && data.balanceMetrics && typeof data.balanceMetrics[metricName] === 'number') {
         return data.balanceMetrics[metricName];
       }
-      console.warn(`Balance metric '${metricName}' not found or invalid, using fallback value: ${fallback}`);
+
+      // Second check: maybe the metric is directly on the data object
+      if (data && typeof data[metricName] === 'number') {
+        return data[metricName];
+      }
+
+      // Third check: try alternative naming conventions
+      const alternativeNames = {
+        'com_stability_x': ['comStabilityX', 'stability_x', 'stabilityX', 'com_x_stability'],
+        'com_stability_y': ['comStabilityY', 'stability_y', 'stabilityY', 'com_y_stability']
+      };
+
+      if (alternativeNames[metricName]) {
+        for (const altName of alternativeNames[metricName]) {
+          if (data && data.balanceMetrics && typeof data.balanceMetrics[altName] === 'number') {
+            return data.balanceMetrics[altName];
+          }
+          if (data && typeof data[altName] === 'number') {
+            return data[altName];
+          }
+        }
+      }
+
+      // Fourth check: calculate from trajectory data if available
+      if (metricName.includes('stability') && data && data.comTrajectory) {
+        const calculatedStability = calculateStabilityFromTrajectory(data.comTrajectory, metricName);
+        if (calculatedStability !== null) {
+          return calculatedStability;
+        }
+      }
+
+      // Only warn in development mode to reduce console noise
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`⚠️ Balance metric '${metricName}' not found, using fallback: ${fallback}`);
+      }
+      
       return fallback;
     } catch (error) {
-      console.warn(`Error accessing balance metric '${metricName}':`, error);
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`❌ Error accessing balance metric '${metricName}':`, error);
+      }
       return fallback;
     }
   };
 
-  // Helper function to safely get stability score
+  // NEW: Calculate stability from trajectory data as fallback
+  const calculateStabilityFromTrajectory = (trajectory, metricName) => {
+    try {
+      if (!trajectory || !Array.isArray(trajectory.x) || !Array.isArray(trajectory.y)) {
+        return null;
+      }
+
+      if (metricName.includes('x')) {
+        // Calculate X-axis stability (lower variance = more stable)
+        const xValues = trajectory.x.filter(val => typeof val === 'number' && !isNaN(val));
+        if (xValues.length === 0) return null;
+        
+        const mean = xValues.reduce((sum, val) => sum + val, 0) / xValues.length;
+        const variance = xValues.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / xValues.length;
+        return Math.max(0, 1 - Math.sqrt(variance)); // Convert to stability score (0-1)
+      }
+
+      if (metricName.includes('y')) {
+        // Calculate Y-axis stability
+        const yValues = trajectory.y.filter(val => typeof val === 'number' && !isNaN(val));
+        if (yValues.length === 0) return null;
+        
+        const mean = yValues.reduce((sum, val) => sum + val, 0) / yValues.length;
+        const variance = yValues.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / yValues.length;
+        return Math.max(0, 1 - Math.sqrt(variance)); // Convert to stability score (0-1)
+      }
+
+      return null;
+    } catch (error) {
+      console.warn('Error calculating stability from trajectory:', error);
+      return null;
+    }
+  };
+
+  // IMPROVED: Helper function to safely get stability score with better fallback
   const getStabilityScore = (data, fallback = 0) => {
     try {
+      // First check: standard overallStability property
       if (data && typeof data.overallStability === 'number') {
         return Math.round(data.overallStability * 100);
       }
-      console.warn('Overall stability not found, using fallback value:', fallback);
+
+      // Second check: alternative naming conventions
+      const alternativeNames = ['overall_stability', 'stabilityScore', 'stability_score', 'totalStability'];
+      for (const altName of alternativeNames) {
+        if (data && typeof data[altName] === 'number') {
+          const score = data[altName];
+          // If it's already a percentage (0-100), use as is, otherwise convert
+          return Math.round(score > 1 ? score : score * 100);
+        }
+      }
+
+      // Third check: calculate from balance metrics if available
+      if (data && data.balanceMetrics) {
+        const stabilityX = getBalanceMetrics(data, 'com_stability_x', null);
+        const stabilityY = getBalanceMetrics(data, 'com_stability_y', null);
+        
+        if (stabilityX !== null && stabilityY !== null) {
+          // Average the X and Y stability scores
+          const avgStability = (stabilityX + stabilityY) / 2;
+          return Math.round(avgStability * 100);
+        }
+      }
+
+      // Fourth check: calculate from trajectory data
+      if (data && data.comTrajectory) {
+        const xStability = calculateStabilityFromTrajectory(data.comTrajectory, 'stability_x');
+        const yStability = calculateStabilityFromTrajectory(data.comTrajectory, 'stability_y');
+        
+        if (xStability !== null && yStability !== null) {
+          const avgStability = (xStability + yStability) / 2;
+          return Math.round(avgStability * 100);
+        }
+      }
+
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('⚠️ Overall stability not found, using fallback:', fallback);
+      }
       return fallback;
     } catch (error) {
-      console.warn('Error calculating stability score:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('❌ Error calculating stability score:', error);
+      }
       return fallback;
     }
   };
@@ -94,15 +255,15 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
     );
   }
 
-  // Calculate stability scores with error handling
-  const masterStabilityScore = getStabilityScore(masterData, 0);
-  const learnerStabilityScore = getStabilityScore(learnerData, 0);
+  // Calculate stability scores with improved error handling
+  const masterStabilityScore = getStabilityScore(masterData, 50); // Default to 50% if no data
+  const learnerStabilityScore = getStabilityScore(learnerData, 50);
 
-  // Get balance metrics with error handling
-  const masterStabilityX = getBalanceMetrics(masterData, 'com_stability_x', 0);
-  const masterStabilityY = getBalanceMetrics(masterData, 'com_stability_y', 0);
-  const learnerStabilityX = getBalanceMetrics(learnerData, 'com_stability_x', 0);
-  const learnerStabilityY = getBalanceMetrics(learnerData, 'com_stability_y', 0);
+  // Get balance metrics with improved error handling
+  const masterStabilityX = getBalanceMetrics(masterData, 'com_stability_x', 0.5);
+  const masterStabilityY = getBalanceMetrics(masterData, 'com_stability_y', 0.5);
+  const learnerStabilityX = getBalanceMetrics(learnerData, 'com_stability_x', 0.5);
+  const learnerStabilityY = getBalanceMetrics(learnerData, 'com_stability_y', 0.5);
 
   // Render the trajectory plot
   const renderTrajectoryPlot = () => {
@@ -281,9 +442,9 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
   // Render the circular gauge for stability score with proper error handling
   const renderStabilityGauge = (score, title, xValue, yValue, color) => {
     // Ensure we have valid numeric values
-    const safeScore = getNumericValue(score, 0);
-    const safeXValue = getNumericValue(xValue, 0);
-    const safeYValue = getNumericValue(yValue, 0);
+    const safeScore = getNumericValue(score, 50);
+    const safeXValue = getNumericValue(xValue, 0.5);
+    const safeYValue = getNumericValue(yValue, 0.5);
     
     return (
       <div className="stability-gauge">
@@ -452,6 +613,58 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
       </div>
       
       {renderKeyPoses()}
+
+      {/* Data Structure Debug Info (Development Only) */}
+      {process.env.NODE_ENV === 'development' && dataStructureInfo && (
+        <div className="debug-section" style={{ 
+          marginTop: '20px', 
+          padding: '15px', 
+          background: '#f8f9fa', 
+          borderRadius: '4px',
+          fontSize: '12px',
+          border: '1px solid #dee2e6'
+        }}>
+          <h4>🔍 Data Structure Analysis (Development Mode)</h4>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginTop: '10px' }}>
+            <div>
+              <h5>Master Data:</h5>
+              <ul style={{ fontSize: '11px', listStyle: 'none', padding: 0 }}>
+                <li>✓ Balance Metrics: {dataStructureInfo.master.hasBalanceMetrics ? 'Yes' : 'No'}</li>
+                <li>✓ Overall Stability: {dataStructureInfo.master.hasOverallStability ? 'Yes' : 'No'}</li>
+                <li>✓ COM Trajectory: {dataStructureInfo.master.hasComTrajectory ? 'Yes' : 'No'}</li>
+                {dataStructureInfo.master.balanceMetricsKeys.length > 0 && (
+                  <li>Keys: {dataStructureInfo.master.balanceMetricsKeys.join(', ')}</li>
+                )}
+              </ul>
+            </div>
+            
+            <div>
+              <h5>Learner Data:</h5>
+              <ul style={{ fontSize: '11px', listStyle: 'none', padding: 0 }}>
+                <li>✓ Balance Metrics: {dataStructureInfo.learner.hasBalanceMetrics ? 'Yes' : 'No'}</li>
+                <li>✓ Overall Stability: {dataStructureInfo.learner.hasOverallStability ? 'Yes' : 'No'}</li>
+                <li>✓ COM Trajectory: {dataStructureInfo.learner.hasComTrajectory ? 'Yes' : 'No'}</li>
+                <li>✓ Key Pose Balance: {dataStructureInfo.learner.hasKeyPoseBalance ? 'Yes' : 'No'}</li>
+                {dataStructureInfo.learner.balanceMetricsKeys.length > 0 && (
+                  <li>Keys: {dataStructureInfo.learner.balanceMetricsKeys.join(', ')}</li>
+                )}
+              </ul>
+            </div>
+          </div>
+          
+          {dataStructureInfo.recommendations.length > 0 && (
+            <div style={{ marginTop: '10px' }}>
+              <h5>💡 Recommendations:</h5>
+              <ul style={{ fontSize: '11px' }}>
+                {dataStructureInfo.recommendations.map((rec, index) => (
+                  <li key={index}>{rec}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
