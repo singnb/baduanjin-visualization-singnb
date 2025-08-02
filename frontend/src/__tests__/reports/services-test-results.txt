@@ -1,0 +1,45 @@
+
+> baduanjin-visualization@0.1.0 test:services
+> react-scripts test dataloader.test.js --watchAll=false
+
+PASS src/__tests__/services/dataLoader.test.js
+  dataLoader Service
+    Authentication Header
+      √ should include Authorization header when token exists (1 ms)
+      √ should not include Authorization header when no token exists
+    loadMasterData
+      √ should load master data in comparison view (1 ms)
+      √ should return mock data when not in comparison view
+      √ should handle API errors and return mock data
+      √ should map different analysis types correctly
+    loadLearnerData
+      √ should load learner data in comparison view
+      √ should return mock data when not in comparison view (1 ms)
+      √ should handle API errors and return mock data
+    loadAnalysisData
+      √ should load analysis data successfully
+      √ should return mock data when analysis type not found in response
+      √ should handle API errors and return mock data
+    loadUserVideos
+      √ should load user videos successfully
+      √ should return empty array on API error
+    loadRecommendations
+      √ should load recommendations successfully
+      √ should return default message when no recommendations in response
+      √ should handle API errors and return default message
+    loadComparisonData
+      √ should load comparison data successfully
+      √ should throw error when API calls fail (9 ms)
+      √ should map different data types correctly
+    URL Path Parsing
+      √ should correctly identify comparison paths with different structures (1 ms)
+      √ should handle paths with extra segments
+    Mock Data Generation
+      √ should return appropriate mock data for unknown analysis type
+      √ should generate consistent mock data structure for all known types (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       24 passed, 24 total
+Snapshots:   0 total
+Time:        0.842 s, estimated 1 s
+Ran all test suites matching /dataloader.test.js/i.

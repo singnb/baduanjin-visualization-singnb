@@ -1,0 +1,32 @@
+{
+  "feedback": {
+    "exercise_id": 1,
+    "exercise_name": "Holding up the Sky (两手托天理三焦)",
+    "current_phase": "start",
+    "completion_percentage": 100.0,
+    "form_score": 100.0,
+    "feedback_messages": [],
+    "corrections": [],
+    "pose_quality": {
+      "shoulder_alignment": 53.642730712890625,
+      "hip_alignment": 52.2171630859375,
+      "spine_alignment": 62.343231201171875,
+      "stability": 3.013214111328125
+    },
+    "timestamp": "2025-06-30T22:09:48.944288"
+  },
+  "session_stats": {
+    "total_exercises_attempted": 2,
+    "exercises_completed": 1,
+    "average_form_score": 100.0,
+    "session_duration": 1091.2,
+    "movement_consistency": 100.0,
+    "recommendations": [
+      "Excellent form! Try increasing hold duration",
+      "Focus on the mind-body connection",
+      "Try completing more exercises for a full session"
+    ]
+  },
+  "timestamp": "2025-06-30T22:09:48.944486",
+  "tracking_enabled": true
+}

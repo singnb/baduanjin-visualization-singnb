@@ -1,0 +1,29 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.2, pytest-8.4.1, pluggy-1.6.0 -- /home/nbtai/baduanjin_analysis/baduanjin_env/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/nbtai/baduanjin_analysis/tests
+plugins: anyio-4.9.0, asyncio-1.0.0, mock-3.14.1, env-1.1.5
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 19 items
+
+test_main.py::TestCreateApp::test_create_app_basic_structure PASSED      [  5%]
+test_main.py::TestCreateApp::test_socketio_configuration PASSED          [ 10%]
+test_main.py::TestMainFunction::test_main_function_setup PASSED          [ 15%]
+test_main.py::TestMainFunction::test_main_function_server_configuration PASSED [ 21%]
+test_main.py::TestMainFunction::test_main_function_prints_startup_info PASSED [ 26%]
+test_main.py::TestDependencyAvailability::test_camera_available_is_boolean PASSED [ 31%]
+test_main.py::TestDependencyAvailability::test_yolo_available_is_boolean PASSED [ 36%]
+test_main.py::TestDependencyAvailability::test_enhanced_tracking_available_is_boolean PASSED [ 42%]
+test_main.py::TestDependencyAvailability::test_dependency_constants_exist PASSED [ 47%]
+test_main.py::TestDependencyAvailability::test_import_error_handling_concept PASSED [ 52%]
+test_main.py::TestAppConfiguration::test_flask_app_creation PASSED       [ 57%]
+test_main.py::TestAppConfiguration::test_cors_configuration PASSED       [ 63%]
+test_main.py::TestErrorHandling::test_analyzer_initialization_error_handling PASSED [ 68%]
+test_main.py::TestErrorHandling::test_app_creation_error_handling PASSED [ 73%]
+test_main.py::TestModuleConstants::test_constants_exist_and_are_boolean PASSED [ 78%]
+test_main.py::TestModuleConstants::test_constants_values_are_reasonable PASSED [ 84%]
+test_main.py::TestIntegration::test_complete_app_setup_flow PASSED       [ 89%]
+test_main.py::TestUtilityFunctions::test_sys_path_contains_user_site PASSED [ 94%]
+test_main.py::TestUtilityFunctions::test_sys_path_is_list PASSED         [100%]
+
+============================== 19 passed in 0.42s ==============================

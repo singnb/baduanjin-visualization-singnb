@@ -1,0 +1,26 @@
+{
+  "session_info": {
+    "start_time": "2025-07-11T19:53:59.661031",
+    "end_time": "2025-07-11T19:53:59.661140",
+    "duration_seconds": 0.000111
+  },
+  "video_session_stats": {
+    "current_fps": 30.0,
+    "total_frames": 0,
+    "persons_detected": 0
+  },
+  "exercise_tracking_data": {
+    "total_exercises": 2,
+    "completed_exercises": 1,
+    "session_duration": 300,
+    "average_form_score": 82.5,
+    "total_feedback_given": 45
+  },
+  "real_time_feedback_history": [],
+  "tracking_file_path": "baduanjin_session_123.json",
+  "recordings_list": [
+    "recording1.mp4",
+    "recording2.mp4"
+  ],
+  "export_timestamp": "2025-07-11T19:53:59.661148"
+}

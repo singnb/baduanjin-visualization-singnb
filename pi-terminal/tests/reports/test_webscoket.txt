@@ -1,0 +1,36 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.2, pytest-8.4.1, pluggy-1.6.0 -- /home/nbtai/baduanjin_analysis/baduanjin_env/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/nbtai/baduanjin_analysis/tests
+plugins: anyio-4.9.0, asyncio-1.0.0, mock-3.14.1, env-1.1.5
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 26 items
+
+test_websocket_handlers.py::TestRegisterWebSocketHandlers::test_register_websocket_handlers_function_exists PASSED [  3%]
+test_websocket_handlers.py::TestRegisterWebSocketHandlers::test_register_websocket_handlers_basic PASSED [  7%]
+test_websocket_handlers.py::TestRegisterWebSocketHandlers::test_register_websocket_handlers_adds_emit_function PASSED [ 11%]
+test_websocket_handlers.py::TestRegisterWebSocketHandlers::test_handler_registration_calls PASSED [ 15%]
+test_websocket_handlers.py::TestWebSocketEventHandlers::test_connect_handler_success_logic PASSED [ 19%]
+test_websocket_handlers.py::TestWebSocketEventHandlers::test_connect_handler_error_logic PASSED [ 23%]
+test_websocket_handlers.py::TestWebSocketEventHandlers::test_disconnect_handler_concept PASSED [ 26%]
+test_websocket_handlers.py::TestWebSocketEventHandlers::test_error_handler_concept PASSED [ 30%]
+test_websocket_handlers.py::TestEmitFrameSafely::test_emit_frame_safely_standalone_function PASSED [ 34%]
+test_websocket_handlers.py::TestEmitFrameSafely::test_emit_frame_safely_returns_false PASSED [ 38%]
+test_websocket_handlers.py::TestEmitFrameSafely::test_emit_frame_safely_with_mock_data PASSED [ 42%]
+test_websocket_handlers.py::TestEmitFrameSafely::test_emit_frame_safely_attached_to_analyzer PASSED [ 46%]
+test_websocket_handlers.py::TestNgrokCompatibility::test_websocket_disabled_for_ngrok PASSED [ 50%]
+test_websocket_handlers.py::TestNgrokCompatibility::test_http_polling_endpoints_mentioned PASSED [ 53%]
+test_websocket_handlers.py::TestNgrokCompatibility::test_frame_emission_disabled PASSED [ 57%]
+test_websocket_handlers.py::TestWebSocketConfiguration::test_minimal_handlers_registered PASSED [ 61%]
+test_websocket_handlers.py::TestWebSocketConfiguration::test_disabled_handlers_not_registered PASSED [ 65%]
+test_websocket_handlers.py::TestWebSocketConfiguration::test_socketio_instance_returned PASSED [ 69%]
+test_websocket_handlers.py::TestErrorHandling::test_connect_handler_exception_handling PASSED [ 73%]
+test_websocket_handlers.py::TestErrorHandling::test_emit_frame_safely_exception_handling PASSED [ 76%]
+test_websocket_handlers.py::TestErrorHandling::test_registration_error_handling PASSED [ 80%]
+test_websocket_handlers.py::TestModuleStructure::test_required_functions_exist PASSED [ 84%]
+test_websocket_handlers.py::TestModuleStructure::test_module_imports_available PASSED [ 88%]
+test_websocket_handlers.py::TestModuleStructure::test_flask_socketio_mockable PASSED [ 92%]
+test_websocket_handlers.py::TestNgrokCompatibilityMessages::test_compatibility_warning_printed PASSED [ 96%]
+test_websocket_handlers.py::TestNgrokCompatibilityMessages::test_alternative_endpoints_suggested PASSED [100%]
+
+============================== 26 passed in 0.30s ==============================

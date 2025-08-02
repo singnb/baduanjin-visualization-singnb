@@ -1,0 +1,11 @@
+# Coverage reports (frontend)
+frontend/coverage/
+frontend/*.lcov
+
+# Node modules  
+frontend/node_modules/
+
+# Environment files
+frontend/.env*
+backend/.env*
+.env*

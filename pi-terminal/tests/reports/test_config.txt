@@ -1,0 +1,45 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.2, pytest-8.4.1, pluggy-1.6.0 -- /home/nbtai/baduanjin_analysis/baduanjin_env/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/nbtai/baduanjin_analysis/tests
+plugins: anyio-4.9.0, asyncio-1.0.0, mock-3.14.1, env-1.1.5
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 35 items
+
+test_config.py::TestConfigClass::test_config_class_exists PASSED         [  2%]
+test_config.py::TestConfigClass::test_basic_configuration_constants PASSED [  5%]
+test_config.py::TestConfigClass::test_camera_configuration PASSED        [  8%]
+test_config.py::TestConfigClass::test_yolo_configuration PASSED          [ 11%]
+test_config.py::TestConfigClass::test_recording_configuration PASSED     [ 14%]
+test_config.py::TestEnhancedExerciseConfig::test_exercise_tracking_constants_exist PASSED [ 17%]
+test_config.py::TestEnhancedExerciseConfig::test_exercise_tracking_types PASSED [ 20%]
+test_config.py::TestEnhancedExerciseConfig::test_exercise_analysis_parameters PASSED [ 22%]
+test_config.py::TestEnhancedExerciseConfig::test_session_management_config PASSED [ 25%]
+test_config.py::TestEnhancedExerciseConfig::test_feedback_configuration PASSED [ 28%]
+test_config.py::TestNetworkConfiguration::test_ngrok_configuration PASSED [ 31%]
+test_config.py::TestNetworkConfiguration::test_stream_configuration PASSED [ 34%]
+test_config.py::TestNetworkConfiguration::test_mobile_network_config PASSED [ 37%]
+test_config.py::TestNetworkConfiguration::test_api_timeouts PASSED       [ 40%]
+test_config.py::TestConfigMethods::test_init_directories_method_exists PASSED [ 42%]
+test_config.py::TestConfigMethods::test_get_exercise_config_method_exists PASSED [ 45%]
+test_config.py::TestConfigMethods::test_get_display_config_method_exists PASSED [ 48%]
+test_config.py::TestConfigMethods::test_get_exercise_config_structure PASSED [ 51%]
+test_config.py::TestConfigMethods::test_get_display_config_structure PASSED [ 54%]
+test_config.py::TestDirectoryInitialization::test_init_directories_with_mocking PASSED [ 57%]
+test_config.py::TestDirectoryInitialization::test_init_directories_creates_required_dirs PASSED [ 60%]
+test_config.py::TestDirectoryInitialization::test_directory_paths_are_valid PASSED [ 62%]
+test_config.py::TestConfigurationValues::test_confidence_thresholds_valid PASSED [ 65%]
+test_config.py::TestConfigurationValues::test_quality_values_valid PASSED [ 68%]
+test_config.py::TestConfigurationValues::test_fps_values_reasonable PASSED [ 71%]
+test_config.py::TestConfigurationValues::test_timeout_values_reasonable PASSED [ 74%]
+test_config.py::TestEnvironmentVariables::test_secret_key_environment_variable PASSED [ 77%]
+test_config.py::TestEnvironmentVariables::test_secret_key_has_value PASSED [ 80%]
+test_config.py::TestConfigurationConsistency::test_mobile_quality_lower_than_standard PASSED [ 82%]
+test_config.py::TestConfigurationConsistency::test_ping_interval_less_than_timeout PASSED [ 85%]
+test_config.py::TestConfigurationConsistency::test_feedback_limits_reasonable PASSED [ 88%]
+test_config.py::TestConfigurationConsistency::test_history_limits_reasonable PASSED [ 91%]
+test_config.py::TestPathConfiguration::test_yolo_model_path_structure PASSED [ 94%]
+test_config.py::TestPathConfiguration::test_recordings_dir_structure PASSED [ 97%]
+test_config.py::TestPathConfiguration::test_baduanjin_data_dir_structure PASSED [100%]
+
+============================== 35 passed in 0.15s ==============================

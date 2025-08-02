@@ -1,0 +1,2642 @@
+
+> baduanjin-visualization@0.1.0 test:charts
+> react-scripts test SymmetryChart.test.js SmoothnessChart.test.js JointAngleChart.test.js BalanceChart.test.js --watchAll=false
+
+PASS src/__tests__/charts/JointAngleChart.test.js
+  ● Console
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.error
+      Error loading joint angle data: Error: Network error
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\charts\JointAngleChart.test.js:100:40)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at Object.worker (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\testWorker.js:133:12)
+
+    [0m [90m 44 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 45 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 46 |[39m         console[33m.[39merror([32m'Error loading joint angle data:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 47 |[39m         setError([32m'Failed to load joint angle data. Please try again later.'[39m)[33m;[39m
+     [90m 48 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 49 |[39m       }[0m
+
+      at fetchData (src/components/Charts/JointAngleChart.js:46:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: null
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 10, 25, 40, 30, 15 ],
+          right_hip: [ 15, 30, 45, 35, 20 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.error
+      Error loading joint angle data: Error: Learner data failed
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\charts\JointAngleChart.test.js:439:41)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at Object.worker (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\testWorker.js:133:12)
+
+    [0m [90m 44 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 45 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 46 |[39m         console[33m.[39merror([32m'Error loading joint angle data:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 47 |[39m         setError([32m'Failed to load joint angle data. Please try again later.'[39m)[33m;[39m
+     [90m 48 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 49 |[39m       }[0m
+
+      at fetchData (src/components/Charts/JointAngleChart.js:46:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: undefined,
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.error
+      An update to JointAngleChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 35 |[39m         [36mconst[39m masterResult [33m=[39m [36mawait[39m loadMasterData([32m'jointAngles'[39m)[33m;[39m
+     [90m 36 |[39m         console[33m.[39mlog([32m"Master data loaded:"[39m[33m,[39m masterResult)[33m;[39m
+    [31m[1m>[22m[39m[90m 37 |[39m         setMasterData(masterResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 38 |[39m         
+     [90m 39 |[39m         [90m// Load learner data using the dataLoader service[39m
+     [90m 40 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'jointAngles'[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setMasterData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/JointAngleChart.js:37:9)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.error
+      An update to JointAngleChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 40 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'jointAngles'[39m)[33m;[39m
+     [90m 41 |[39m         console[33m.[39mlog([32m"Learner data loaded:"[39m[33m,[39m learnerResult)[33m;[39m
+    [31m[1m>[22m[39m[90m 42 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 43 |[39m         
+     [90m 44 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 45 |[39m       } [36mcatch[39m (err) {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLearnerData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/JointAngleChart.js:42:9)
+
+    console.error
+      An update to JointAngleChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 42 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m 43 |[39m         
+    [31m[1m>[22m[39m[90m 44 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 45 |[39m       } [36mcatch[39m (err) {
+     [90m 46 |[39m         console[33m.[39merror([32m'Error loading joint angle data:'[39m[33m,[39m err)[33m;[39m
+     [90m 47 |[39m         setError([32m'Failed to load joint angle data. Please try again later.'[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/JointAngleChart.js:44:9)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: undefined
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: undefined,
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.error
+      An update to JointAngleChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 35 |[39m         [36mconst[39m masterResult [33m=[39m [36mawait[39m loadMasterData([32m'jointAngles'[39m)[33m;[39m
+     [90m 36 |[39m         console[33m.[39mlog([32m"Master data loaded:"[39m[33m,[39m masterResult)[33m;[39m
+    [31m[1m>[22m[39m[90m 37 |[39m         setMasterData(masterResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 38 |[39m         
+     [90m 39 |[39m         [90m// Load learner data using the dataLoader service[39m
+     [90m 40 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'jointAngles'[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setMasterData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/JointAngleChart.js:37:9)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.error
+      An update to JointAngleChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 40 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'jointAngles'[39m)[33m;[39m
+     [90m 41 |[39m         console[33m.[39mlog([32m"Learner data loaded:"[39m[33m,[39m learnerResult)[33m;[39m
+    [31m[1m>[22m[39m[90m 42 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 43 |[39m         
+     [90m 44 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 45 |[39m       } [36mcatch[39m (err) {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLearnerData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/JointAngleChart.js:42:9)
+
+    console.error
+      An update to JointAngleChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 42 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m 43 |[39m         
+    [31m[1m>[22m[39m[90m 44 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 45 |[39m       } [36mcatch[39m (err) {
+     [90m 46 |[39m         console[33m.[39merror([32m'Error loading joint angle data:'[39m[33m,[39m err)[33m;[39m
+     [90m 47 |[39m         setError([32m'Failed to load joint angle data. Please try again later.'[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/JointAngleChart.js:44:9)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: undefined,
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+    console.log
+      Fetching joint angle data using dataLoader...
+
+      at fetchData (src/components/Charts/JointAngleChart.js:32:17)
+
+    console.log
+      Master data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 90, 110, 130, 120, 95 ],
+          right_elbow: [ 95, 115, 135, 125, 100 ],
+          left_shoulder: [ 45, 60, 75, 65, 50 ],
+          right_shoulder: [ 50, 65, 80, 70, 55 ],
+          left_hip: [ 30, 45, 60, 50, 35 ],
+          right_hip: [ 35, 50, 65, 55, 40 ],
+          spine_top: [ 0, 10, 20, 15, 5 ],
+          spine_bottom: [ 5, 15, 25, 20, 10 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 85, max: 140, optimal: 115 },
+          right_elbow: { min: 90, max: 145, optimal: 120 },
+          left_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          right_shoulder: { min: 45, max: 90, optimal: 67.5 },
+          left_hip: { min: 25, max: 70, optimal: 47.5 },
+          right_hip: { min: 30, max: 75, optimal: 52.5 },
+          spine_top: { min: -5, max: 25, optimal: 10 },
+          spine_bottom: { min: 0, max: 30, optimal: 15 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:36:17)
+
+    console.log
+      Learner data loaded: {
+        frames: [ 0, 100, 200, 300, 400 ],
+        keyPoseFrames: [ 0, 100, 200, 300, 400 ],
+        keyPoseNames: [ 'Initial', 'Mid1', 'Peak', 'Mid2', 'Final' ],
+        angles: {
+          left_elbow: [ 85, 105, 125, 115, 90 ],
+          right_elbow: [ 90, 110, 130, 120, 95 ],
+          left_shoulder: [ 40, 55, 70, 60, 45 ],
+          right_shoulder: [ 45, 60, 75, 65, 50 ],
+          left_hip: [ 25, 40, 55, 45, 30 ],
+          right_hip: [ 30, 45, 60, 50, 35 ],
+          spine_top: [ 5, 15, 25, 20, 10 ],
+          spine_bottom: [ 10, 20, 30, 25, 15 ]
+        },
+        rangeOfMotion: {
+          left_elbow: { min: 80, max: 135, optimal: 110 },
+          right_elbow: { min: 85, max: 140, optimal: 115 },
+          left_shoulder: { min: 35, max: 80, optimal: 57.5 },
+          right_shoulder: { min: 40, max: 85, optimal: 62.5 },
+          left_hip: { min: 20, max: 65, optimal: 42.5 },
+          right_hip: { min: 25, max: 70, optimal: 47.5 },
+          spine_top: { min: 0, max: 30, optimal: 15 },
+          spine_bottom: { min: 5, max: 35, optimal: 20 }
+        }
+      }
+
+      at fetchData (src/components/Charts/JointAngleChart.js:41:17)
+
+PASS src/__tests__/charts/BalanceChart.test.js
+  ● Console
+
+    console.error
+      Error loading balance data: Error: Network error
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\charts\BalanceChart.test.js:87:40)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at Object.worker (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\testWorker.js:133:12)
+
+    [0m [90m 26 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 27 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 28 |[39m         console[33m.[39merror([32m'Error loading balance data:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 29 |[39m         setError([32m'Failed to load balance data'[39m)[33m;[39m
+     [90m 30 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 31 |[39m       }[0m
+
+      at fetchData (src/components/Charts/BalanceChart.js:28:17)
+
+    console.error
+      Error loading balance data: Error: Learner data failed
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\charts\BalanceChart.test.js:419:41)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at Object.worker (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\testWorker.js:133:12)
+
+    [0m [90m 26 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 27 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 28 |[39m         console[33m.[39merror([32m'Error loading balance data:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 29 |[39m         setError([32m'Failed to load balance data'[39m)[33m;[39m
+     [90m 30 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 31 |[39m       }[0m
+
+      at fetchData (src/components/Charts/BalanceChart.js:28:17)
+
+    console.error
+      An update to BalanceChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 19 |[39m         setLoading([36mtrue[39m)[33m;[39m
+     [90m 20 |[39m         [36mconst[39m masterResult [33m=[39m [36mawait[39m loadMasterData([32m'balance'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 21 |[39m         setMasterData(masterResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 22 |[39m         
+     [90m 23 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'balance'[39m)[33m;[39m
+     [90m 24 |[39m         setLearnerData(learnerResult)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setMasterData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/BalanceChart.js:21:9)
+
+    console.error
+      An update to BalanceChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 22 |[39m         
+     [90m 23 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'balance'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 24 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 25 |[39m         
+     [90m 26 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 27 |[39m       } [36mcatch[39m (err) {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLearnerData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/BalanceChart.js:24:9)
+
+    console.error
+      An update to BalanceChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 24 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m 25 |[39m         
+    [31m[1m>[22m[39m[90m 26 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 27 |[39m       } [36mcatch[39m (err) {
+     [90m 28 |[39m         console[33m.[39merror([32m'Error loading balance data:'[39m[33m,[39m err)[33m;[39m
+     [90m 29 |[39m         setError([32m'Failed to load balance data'[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/BalanceChart.js:26:9)
+
+    console.error
+      An update to BalanceChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 19 |[39m         setLoading([36mtrue[39m)[33m;[39m
+     [90m 20 |[39m         [36mconst[39m masterResult [33m=[39m [36mawait[39m loadMasterData([32m'balance'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 21 |[39m         setMasterData(masterResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 22 |[39m         
+     [90m 23 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'balance'[39m)[33m;[39m
+     [90m 24 |[39m         setLearnerData(learnerResult)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setMasterData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/BalanceChart.js:21:9)
+
+    console.error
+      An update to BalanceChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 22 |[39m         
+     [90m 23 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'balance'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 24 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 25 |[39m         
+     [90m 26 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 27 |[39m       } [36mcatch[39m (err) {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLearnerData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/BalanceChart.js:24:9)
+
+    console.error
+      An update to BalanceChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 24 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m 25 |[39m         
+    [31m[1m>[22m[39m[90m 26 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 27 |[39m       } [36mcatch[39m (err) {
+     [90m 28 |[39m         console[33m.[39merror([32m'Error loading balance data:'[39m[33m,[39m err)[33m;[39m
+     [90m 29 |[39m         setError([32m'Failed to load balance data'[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/BalanceChart.js:26:9)
+
+PASS src/__tests__/charts/SmoothnessChart.test.js
+  ● Console
+
+    console.error
+      Error loading smoothness data: Error: Network error
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\charts\SmoothnessChart.test.js:102:40)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at Object.worker (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\testWorker.js:133:12)
+
+    [0m [90m 25 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 26 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 27 |[39m         console[33m.[39merror([32m'Error loading smoothness data:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 28 |[39m         setError([32m'Failed to load smoothness data'[39m)[33m;[39m
+     [90m 29 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 30 |[39m       }[0m
+
+      at fetchData (src/components/Charts/SmoothnessChart.js:27:17)
+
+    console.error
+      Error loading smoothness data: Error: Learner data failed
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\charts\SmoothnessChart.test.js:436:41)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at Object.worker (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\testWorker.js:133:12)
+
+    [0m [90m 25 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 26 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 27 |[39m         console[33m.[39merror([32m'Error loading smoothness data:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 28 |[39m         setError([32m'Failed to load smoothness data'[39m)[33m;[39m
+     [90m 29 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 30 |[39m       }[0m
+
+      at fetchData (src/components/Charts/SmoothnessChart.js:27:17)
+
+    console.error
+      An update to SmoothnessChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 18 |[39m         setLoading([36mtrue[39m)[33m;[39m
+     [90m 19 |[39m         [36mconst[39m masterResult [33m=[39m [36mawait[39m loadMasterData([32m'smoothness'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 20 |[39m         setMasterData(masterResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 21 |[39m         
+     [90m 22 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'smoothness'[39m)[33m;[39m
+     [90m 23 |[39m         setLearnerData(learnerResult)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setMasterData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/SmoothnessChart.js:20:9)
+
+    console.error
+      An update to SmoothnessChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 21 |[39m         
+     [90m 22 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'smoothness'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 23 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 24 |[39m         
+     [90m 25 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 26 |[39m       } [36mcatch[39m (err) {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLearnerData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/SmoothnessChart.js:23:9)
+
+    console.error
+      An update to SmoothnessChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 23 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m 24 |[39m         
+    [31m[1m>[22m[39m[90m 25 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 26 |[39m       } [36mcatch[39m (err) {
+     [90m 27 |[39m         console[33m.[39merror([32m'Error loading smoothness data:'[39m[33m,[39m err)[33m;[39m
+     [90m 28 |[39m         setError([32m'Failed to load smoothness data'[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/SmoothnessChart.js:25:9)
+
+PASS src/__tests__/charts/SymmetryChart.test.js
+  ● Console
+
+    console.error
+      Error loading symmetry data: Error: Network error
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\charts\SymmetryChart.test.js:100:40)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at Object.worker (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\testWorker.js:133:12)
+
+    [0m [90m 25 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 26 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 27 |[39m         console[33m.[39merror([32m'Error loading symmetry data:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 28 |[39m         setError([32m'Failed to load symmetry data'[39m)[33m;[39m
+     [90m 29 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 30 |[39m       }[0m
+
+      at fetchData (src/components/Charts/SymmetryChart.js:27:17)
+
+    console.error
+      Error loading symmetry data: Error: Learner data failed
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\charts\SymmetryChart.test.js:386:41)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at Object.worker (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\testWorker.js:133:12)
+
+    [0m [90m 25 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 26 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 27 |[39m         console[33m.[39merror([32m'Error loading symmetry data:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 28 |[39m         setError([32m'Failed to load symmetry data'[39m)[33m;[39m
+     [90m 29 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 30 |[39m       }[0m
+
+      at fetchData (src/components/Charts/SymmetryChart.js:27:17)
+
+    console.error
+      An update to SymmetryChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 18 |[39m         setLoading([36mtrue[39m)[33m;[39m
+     [90m 19 |[39m         [36mconst[39m masterResult [33m=[39m [36mawait[39m loadMasterData([32m'symmetry'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 20 |[39m         setMasterData(masterResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 21 |[39m         
+     [90m 22 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'symmetry'[39m)[33m;[39m
+     [90m 23 |[39m         setLearnerData(learnerResult)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setMasterData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/SymmetryChart.js:20:9)
+
+    console.error
+      An update to SymmetryChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 21 |[39m         
+     [90m 22 |[39m         [36mconst[39m learnerResult [33m=[39m [36mawait[39m loadLearnerData([32m'symmetry'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 23 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 24 |[39m         
+     [90m 25 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m 26 |[39m       } [36mcatch[39m (err) {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLearnerData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/SymmetryChart.js:23:9)
+
+    console.error
+      An update to SymmetryChart inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 23 |[39m         setLearnerData(learnerResult)[33m;[39m
+     [90m 24 |[39m         
+    [31m[1m>[22m[39m[90m 25 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 26 |[39m       } [36mcatch[39m (err) {
+     [90m 27 |[39m         console[33m.[39merror([32m'Error loading symmetry data:'[39m[33m,[39m err)[33m;[39m
+     [90m 28 |[39m         setError([32m'Failed to load symmetry data'[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Charts/SymmetryChart.js:25:9)
+
+
+Test Suites: 4 passed, 4 total
+Tests:       131 passed, 131 total
+Snapshots:   0 total
+Time:        2.664 s, estimated 3 s
+Ran all test suites matching /SymmetryChart.test.js|SmoothnessChart.test.js|JointAngleChart.test.js|BalanceChart.test.js/i.

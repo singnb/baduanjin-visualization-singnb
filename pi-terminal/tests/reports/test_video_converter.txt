@@ -1,0 +1,29 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.2, pytest-8.4.1, pluggy-1.6.0 -- /home/nbtai/baduanjin_analysis/baduanjin_env/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/nbtai/baduanjin_analysis/tests
+plugins: anyio-4.9.0, asyncio-1.0.0, mock-3.14.1, env-1.1.5
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 19 items
+
+test_video_converter.py::TestConvertVideoForWeb::test_convert_video_blend_method PASSED [  5%]
+test_video_converter.py::TestConvertVideoForWeb::test_convert_video_command_structure PASSED [ 10%]
+test_video_converter.py::TestConvertVideoForWeb::test_convert_video_directory_creation PASSED [ 15%]
+test_video_converter.py::TestConvertVideoForWeb::test_convert_video_duplicate_method PASSED [ 21%]
+test_video_converter.py::TestConvertVideoForWeb::test_convert_video_ffmpeg_failure PASSED [ 26%]
+test_video_converter.py::TestConvertVideoForWeb::test_convert_video_ffmpeg_not_found PASSED [ 31%]
+test_video_converter.py::TestConvertVideoForWeb::test_convert_video_output_file_not_created PASSED [ 36%]
+test_video_converter.py::TestConvertVideoForWeb::test_convert_video_subprocess_timeout_parameter PASSED [ 42%]
+test_video_converter.py::TestConvertVideoForWeb::test_convert_video_timeout PASSED [ 47%]
+test_video_converter.py::TestConvertVideoForWeb::test_convert_video_zero_input_size PASSED [ 52%]
+test_video_converter.py::TestCheckFFmpegAvailable::test_check_ffmpeg_available_exception PASSED [ 57%]
+test_video_converter.py::TestCheckFFmpegAvailable::test_check_ffmpeg_available_failure PASSED [ 63%]
+test_video_converter.py::TestCheckFFmpegAvailable::test_check_ffmpeg_available_success PASSED [ 68%]
+test_video_converter.py::TestCheckFFmpegAvailable::test_check_ffmpeg_available_timeout PASSED [ 73%]
+test_video_converter.py::TestVideoConverterIntegration::test_complete_conversion_workflow PASSED [ 78%]
+test_video_converter.py::TestVideoConverterIntegration::test_conversion_with_ffmpeg_check PASSED [ 84%]
+test_video_converter.py::TestVideoConverterIntegration::test_error_handling_scenarios PASSED [ 89%]
+test_video_converter.py::TestFileSystemOperations::test_directory_creation_edge_cases PASSED [ 94%]
+test_video_converter.py::TestFileSystemOperations::test_path_operations PASSED [100%]
+
+============================== 19 passed in 0.06s ==============================

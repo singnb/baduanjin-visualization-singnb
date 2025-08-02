@@ -1,0 +1,50 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.2, pytest-8.4.1, pluggy-1.6.0 -- /home/nbtai/baduanjin_analysis/baduanjin_env/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/nbtai/baduanjin_analysis/tests
+plugins: anyio-4.9.0, asyncio-1.0.0, mock-3.14.1, env-1.1.5
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 40 items
+
+test_analyzer.py::TestBaduanjinWebAnalyzer::test_analyzer_class_exists PASSED [  2%]
+test_analyzer.py::TestBaduanjinWebAnalyzer::test_dependency_constants_exist PASSED [  5%]
+test_analyzer.py::TestBaduanjinWebAnalyzer::test_analyzer_initialization_no_camera PASSED [  7%]
+test_analyzer.py::TestBaduanjinWebAnalyzer::test_analyzer_initialization_with_camera PASSED [ 10%]
+test_analyzer.py::TestBaduanjinWebAnalyzer::test_analyzer_has_required_methods PASSED [ 12%]
+test_analyzer.py::TestAnalyzerSetup::test_setup_analyzer_no_camera PASSED [ 15%]
+test_analyzer.py::TestAnalyzerSetup::test_setup_analyzer_concept PASSED  [ 17%]
+test_analyzer.py::TestAnalyzerSetup::test_recordings_dir_configuration PASSED [ 20%]
+test_analyzer.py::TestStreamingFunctionality::test_start_stream_no_camera PASSED [ 22%]
+test_analyzer.py::TestStreamingFunctionality::test_stop_stream_basic PASSED [ 25%]
+test_analyzer.py::TestStreamingFunctionality::test_stop_stream_with_recording PASSED [ 27%]
+test_analyzer.py::TestRecordingFunctionality::test_start_recording_no_session PASSED [ 30%]
+test_analyzer.py::TestRecordingFunctionality::test_start_recording_no_camera PASSED [ 32%]
+test_analyzer.py::TestRecordingFunctionality::test_start_recording_already_recording PASSED [ 35%]
+test_analyzer.py::TestRecordingFunctionality::test_start_recording_success_logic PASSED [ 37%]
+test_analyzer.py::TestRecordingFunctionality::test_stop_recording_no_active_recording PASSED [ 40%]
+test_analyzer.py::TestFrameProcessing::test_process_frame_no_model PASSED [ 42%]
+test_analyzer.py::TestFrameProcessing::test_process_frame_with_model PASSED [ 45%]
+test_analyzer.py::TestFrameProcessing::test_apply_symmetry_correction_empty_keypoints PASSED [ 47%]
+test_analyzer.py::TestFrameProcessing::test_draw_pose_concept PASSED     [ 50%]
+test_analyzer.py::TestFileManagement::test_get_recordings_list_empty_directory PASSED [ 52%]
+test_analyzer.py::TestFileManagement::test_get_recordings_list_with_files PASSED [ 55%]
+test_analyzer.py::TestFileManagement::test_get_recordings_list_error_handling PASSED [ 57%]
+test_analyzer.py::TestStateManagement::test_initial_state PASSED         [ 60%]
+test_analyzer.py::TestStateManagement::test_session_stats_initialization PASSED [ 62%]
+test_analyzer.py::TestStateManagement::test_state_transitions PASSED     [ 65%]
+test_analyzer.py::TestConfigurationIntegration::test_config_usage PASSED [ 67%]
+test_analyzer.py::TestConfigurationIntegration::test_config_camera_dimensions PASSED [ 70%]
+test_analyzer.py::TestErrorHandling::test_initialization_with_missing_dependencies PASSED [ 72%]
+test_analyzer.py::TestErrorHandling::test_method_calls_with_no_camera PASSED [ 75%]
+test_analyzer.py::TestErrorHandling::test_recording_error_scenarios PASSED [ 77%]
+test_analyzer.py::TestErrorHandling::test_frame_processing_errors PASSED [ 80%]
+test_analyzer.py::TestThreadingSafety::test_stream_loop_existence PASSED [ 82%]
+test_analyzer.py::TestThreadingSafety::test_threading_state_concepts PASSED [ 85%]
+test_analyzer.py::TestDependencyHandling::test_dependency_constants_values PASSED [ 87%]
+test_analyzer.py::TestDependencyHandling::test_import_error_handling PASSED [ 90%]
+test_analyzer.py::TestDependencyHandling::test_optional_dependency_usage PASSED [ 92%]
+test_analyzer.py::TestModuleStructure::test_required_classes_exist PASSED [ 95%]
+test_analyzer.py::TestModuleStructure::test_required_constants_exist PASSED [ 97%]
+test_analyzer.py::TestModuleStructure::test_module_imports_work PASSED   [100%]
+
+============================== 40 passed in 0.26s ==============================

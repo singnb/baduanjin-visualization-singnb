@@ -1,0 +1,578 @@
+
+> baduanjin-visualization@0.1.0 test:layout
+> react-scripts test Masters.test.js Learners.test.js Header.test.js VideoUpload.test.js VideoView.test.js 
+VideoManagement.test.js LiveSessionManagement.test.js PiVideoTransfer.test.js --watchAll=false
+
+PASS src/__tests__/layout/Header.test.js
+  ● Console
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+    [0m [90m 41 |[39m
+     [90m 42 |[39m     test([32m'should render default title when no title prop is provided'[39m[33m,[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 43 |[39m       render(
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 44 |[39m         [33m<[39m[33mTestWrapper[39m[33m>[39m
+     [90m 45 |[39m           [33m<[39m[33mHeader[39m [33m/[39m[33m>[39m
+     [90m 46 |[39m         [33m<[39m[33m/[39m[33mTestWrapper[39m[33m>[39m[0m
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at Object.logV6DeprecationWarnings [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:26:5)
+      at node_modules/react-router-dom/index.tsx:816:25
+      at Object.react-stack-bottom-frame (node_modules/react-dom/cjs/react-dom-client.development.js:23949:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:11905:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:12028:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13841:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13815:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13834:11)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13815:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13853:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15737:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:15379:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:859:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (src/__tests__/layout/Header.test.js:43:13)
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+    [0m [90m 41 |[39m
+     [90m 42 |[39m     test([32m'should render default title when no title prop is provided'[39m[33m,[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 43 |[39m       render(
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 44 |[39m         [33m<[39m[33mTestWrapper[39m[33m>[39m
+     [90m 45 |[39m           [33m<[39m[33mHeader[39m [33m/[39m[33m>[39m
+     [90m 46 |[39m         [33m<[39m[33m/[39m[33mTestWrapper[39m[33m>[39m[0m
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at Object.logV6DeprecationWarnings [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:37:5)
+      at node_modules/react-router-dom/index.tsx:816:25
+      at Object.react-stack-bottom-frame (node_modules/react-dom/cjs/react-dom-client.development.js:23949:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:11905:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:12028:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13841:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13815:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13834:11)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13815:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13853:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15737:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:15379:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:859:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (src/__tests__/layout/Header.test.js:43:13)
+
+PASS src/__tests__/layout/LiveSessionManagement.test.js
+PASS src/__tests__/layout/Learners.test.js
+PASS src/__tests__/layout/VideoView.test.js
+  ● Console
+
+    console.error
+      An update to VideoView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 28 |[39m         })[33m;[39m
+     [90m 29 |[39m         
+    [31m[1m>[22m[39m[90m 30 |[39m         setVideo(response[33m.[39mdata)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 31 |[39m       } [36mcatch[39m (err) {
+     [90m 32 |[39m         console[33m.[39merror([32m'Error fetching video:'[39m[33m,[39m err)[33m;[39m
+     [90m 33 |[39m         [36mif[39m (err[33m.[39mresponse [33m&&[39m err[33m.[39mresponse[33m.[39mstatus [33m===[39m [35m404[39m) {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setVideo (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchVideo (src/components/Layout/VideoView.js:30:9)
+
+    console.error
+      An update to VideoView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 37 |[39m         }
+     [90m 38 |[39m       } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 39 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 40 |[39m       }
+     [90m 41 |[39m     }[33m;[39m
+     [90m 42 |[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchVideo (src/components/Layout/VideoView.js:39:9)
+
+    console.error
+      Error fetching video: { response: { status: 404, data: { detail: 'Video not found' } } }
+
+    [0m [90m 30 |[39m         setVideo(response[33m.[39mdata)[33m;[39m
+     [90m 31 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 32 |[39m         console[33m.[39merror([32m'Error fetching video:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 33 |[39m         [36mif[39m (err[33m.[39mresponse [33m&&[39m err[33m.[39mresponse[33m.[39mstatus [33m===[39m [35m404[39m) {
+     [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {[0m
+
+      at fetchVideo (src/components/Layout/VideoView.js:32:17)
+
+    console.error
+      Error fetching video: {
+        response: { status: 500, data: { detail: 'Internal server error' } }
+      }
+
+    [0m [90m 30 |[39m         setVideo(response[33m.[39mdata)[33m;[39m
+     [90m 31 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 32 |[39m         console[33m.[39merror([32m'Error fetching video:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 33 |[39m         [36mif[39m (err[33m.[39mresponse [33m&&[39m err[33m.[39mresponse[33m.[39mstatus [33m===[39m [35m404[39m) {
+     [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {[0m
+
+      at fetchVideo (src/components/Layout/VideoView.js:32:17)
+
+    console.error
+      Error fetching video: Error: Network Error
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\layout\VideoView.test.js:263:45)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at Object.worker (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\testWorker.js:133:12)
+
+    [0m [90m 30 |[39m         setVideo(response[33m.[39mdata)[33m;[39m
+     [90m 31 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 32 |[39m         console[33m.[39merror([32m'Error fetching video:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 33 |[39m         [36mif[39m (err[33m.[39mresponse [33m&&[39m err[33m.[39mresponse[33m.[39mstatus [33m===[39m [35m404[39m) {
+     [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {[0m
+
+      at fetchVideo (src/components/Layout/VideoView.js:32:17)
+
+    console.error
+      Error fetching video: { response: { status: 404 } }
+
+    [0m [90m 30 |[39m         setVideo(response[33m.[39mdata)[33m;[39m
+     [90m 31 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 32 |[39m         console[33m.[39merror([32m'Error fetching video:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 33 |[39m         [36mif[39m (err[33m.[39mresponse [33m&&[39m err[33m.[39mresponse[33m.[39mstatus [33m===[39m [35m404[39m) {
+     [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {[0m
+
+      at fetchVideo (src/components/Layout/VideoView.js:32:17)
+
+    console.error
+      Error fetching video: TypeError: Cannot read properties of undefined (reading 'data')
+          at fetchVideo (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\Layout\VideoView.js:30:27)
+
+    [0m [90m 30 |[39m         setVideo(response[33m.[39mdata)[33m;[39m
+     [90m 31 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 32 |[39m         console[33m.[39merror([32m'Error fetching video:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 33 |[39m         [36mif[39m (err[33m.[39mresponse [33m&&[39m err[33m.[39mresponse[33m.[39mstatus [33m===[39m [35m404[39m) {
+     [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {[0m
+
+      at fetchVideo (src/components/Layout/VideoView.js:32:17)
+
+    console.error
+      An update to VideoView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {
+    [31m[1m>[22m[39m[90m 36 |[39m           setError([32m'Failed to load video. Please try again.'[39m)[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m 37 |[39m         }
+     [90m 38 |[39m       } [36mfinally[39m {
+     [90m 39 |[39m         setLoading([36mfalse[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setError (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchVideo (src/components/Layout/VideoView.js:36:11)
+
+    console.error
+      An update to VideoView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 37 |[39m         }
+     [90m 38 |[39m       } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 39 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 40 |[39m       }
+     [90m 41 |[39m     }[33m;[39m
+     [90m 42 |[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchVideo (src/components/Layout/VideoView.js:39:9)
+
+    console.error
+      Error fetching video: TypeError: Cannot read properties of undefined (reading 'data')
+          at fetchVideo (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\Layout\VideoView.js:30:27)
+
+    [0m [90m 30 |[39m         setVideo(response[33m.[39mdata)[33m;[39m
+     [90m 31 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 32 |[39m         console[33m.[39merror([32m'Error fetching video:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 33 |[39m         [36mif[39m (err[33m.[39mresponse [33m&&[39m err[33m.[39mresponse[33m.[39mstatus [33m===[39m [35m404[39m) {
+     [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {[0m
+
+      at fetchVideo (src/components/Layout/VideoView.js:32:17)
+
+    console.error
+      An update to VideoView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {
+    [31m[1m>[22m[39m[90m 36 |[39m           setError([32m'Failed to load video. Please try again.'[39m)[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m 37 |[39m         }
+     [90m 38 |[39m       } [36mfinally[39m {
+     [90m 39 |[39m         setLoading([36mfalse[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setError (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchVideo (src/components/Layout/VideoView.js:36:11)
+
+    console.error
+      An update to VideoView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 37 |[39m         }
+     [90m 38 |[39m       } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 39 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 40 |[39m       }
+     [90m 41 |[39m     }[33m;[39m
+     [90m 42 |[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchVideo (src/components/Layout/VideoView.js:39:9)
+
+    console.error
+      Error fetching video: TypeError: Cannot read properties of undefined (reading 'data')
+          at fetchVideo (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\Layout\VideoView.js:30:27)
+
+    [0m [90m 30 |[39m         setVideo(response[33m.[39mdata)[33m;[39m
+     [90m 31 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 32 |[39m         console[33m.[39merror([32m'Error fetching video:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 33 |[39m         [36mif[39m (err[33m.[39mresponse [33m&&[39m err[33m.[39mresponse[33m.[39mstatus [33m===[39m [35m404[39m) {
+     [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {[0m
+
+      at fetchVideo (src/components/Layout/VideoView.js:32:17)
+
+    console.error
+      An update to VideoView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {
+    [31m[1m>[22m[39m[90m 36 |[39m           setError([32m'Failed to load video. Please try again.'[39m)[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m 37 |[39m         }
+     [90m 38 |[39m       } [36mfinally[39m {
+     [90m 39 |[39m         setLoading([36mfalse[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setError (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchVideo (src/components/Layout/VideoView.js:36:11)
+
+    console.error
+      An update to VideoView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 37 |[39m         }
+     [90m 38 |[39m       } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 39 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 40 |[39m       }
+     [90m 41 |[39m     }[33m;[39m
+     [90m 42 |[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchVideo (src/components/Layout/VideoView.js:39:9)
+
+    console.error
+      Error fetching video: TypeError: Cannot read properties of undefined (reading 'data')
+          at fetchVideo (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\Layout\VideoView.js:30:27)
+
+    [0m [90m 30 |[39m         setVideo(response[33m.[39mdata)[33m;[39m
+     [90m 31 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 32 |[39m         console[33m.[39merror([32m'Error fetching video:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 33 |[39m         [36mif[39m (err[33m.[39mresponse [33m&&[39m err[33m.[39mresponse[33m.[39mstatus [33m===[39m [35m404[39m) {
+     [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {[0m
+
+      at fetchVideo (src/components/Layout/VideoView.js:32:17)
+
+    console.error
+      An update to VideoView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {
+    [31m[1m>[22m[39m[90m 36 |[39m           setError([32m'Failed to load video. Please try again.'[39m)[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m 37 |[39m         }
+     [90m 38 |[39m       } [36mfinally[39m {
+     [90m 39 |[39m         setLoading([36mfalse[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setError (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchVideo (src/components/Layout/VideoView.js:36:11)
+
+    console.error
+      An update to VideoView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 37 |[39m         }
+     [90m 38 |[39m       } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 39 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 40 |[39m       }
+     [90m 41 |[39m     }[33m;[39m
+     [90m 42 |[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchVideo (src/components/Layout/VideoView.js:39:9)
+
+    console.error
+      Error fetching video: Error: Network Error
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\layout\VideoView.test.js:415:21)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at Object.worker (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\testWorker.js:133:12)
+
+    [0m [90m 30 |[39m         setVideo(response[33m.[39mdata)[33m;[39m
+     [90m 31 |[39m       } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 32 |[39m         console[33m.[39merror([32m'Error fetching video:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 33 |[39m         [36mif[39m (err[33m.[39mresponse [33m&&[39m err[33m.[39mresponse[33m.[39mstatus [33m===[39m [35m404[39m) {
+     [90m 34 |[39m           setError([32m'Video not found'[39m)[33m;[39m
+     [90m 35 |[39m         } [36melse[39m {[0m
+
+      at fetchVideo (src/components/Layout/VideoView.js:32:17)
+
+PASS src/__tests__/layout/PiVideoTransfer.test.js
+PASS src/__tests__/layout/VideoManagement.test.js
+  ● Console
+
+    console.log
+      VideoManagement - API_URL: https://baduanjin-backend-docker.azurewebsites.net
+
+      at Object.<anonymous> (src/components/Layout/VideoManagement.js:13:9)
+
+    console.log
+      VideoManagement - Environment REACT_APP_API_URL: undefined
+
+      at Object.<anonymous> (src/components/Layout/VideoManagement.js:14:9)
+
+PASS src/__tests__/layout/Masters.test.js
+PASS src/__tests__/layout/VideoUpload.test.js (6.642 s)
+  ● Console
+
+    console.error
+      Upload error: { response: { data: { detail: 'Upload failed due to server error' } } }
+
+    [0m [90m 60 |[39m       setUploading([36mfalse[39m)[33m;[39m
+     [90m 61 |[39m       setError(error[33m.[39mresponse[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdetail [33m||[39m [32m'Error uploading video'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 62 |[39m       console[33m.[39merror([32m'Upload error:'[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 63 |[39m     }
+     [90m 64 |[39m   }[33m;[39m
+     [90m 65 |[39m   [0m
+
+      at handleSubmit (src/components/Layout/VideoUpload.js:62:15)
+
+    console.error
+      Upload error: Error: Network error
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\layout\VideoUpload.test.js:316:46)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at Object.worker (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\testWorker.js:133:12)
+
+    [0m [90m 60 |[39m       setUploading([36mfalse[39m)[33m;[39m
+     [90m 61 |[39m       setError(error[33m.[39mresponse[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdetail [33m||[39m [32m'Error uploading video'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 62 |[39m       console[33m.[39merror([32m'Upload error:'[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 63 |[39m     }
+     [90m 64 |[39m   }[33m;[39m
+     [90m 65 |[39m   [0m
+
+      at handleSubmit (src/components/Layout/VideoUpload.js:62:15)
+
+
+Test Suites: 8 passed, 8 total
+Tests:       1 skipped, 200 passed, 201 total
+Snapshots:   0 total
+Time:        7.548 s
+Ran all test suites matching /Masters.test.js|Learners.test.js|Header.test.js|VideoUpload.test.js|VideoView.test.js
+|VideoManagement.test.js|LiveSessionManagement.test.js|PiVideoTransfer.test.js/i.

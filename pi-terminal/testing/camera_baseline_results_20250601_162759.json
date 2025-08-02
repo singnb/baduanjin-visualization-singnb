@@ -1,0 +1,136 @@
+{
+  "320x240_XRGB8888": {
+    "fps": 16.54,
+    "resolution": [
+      320,
+      240
+    ],
+    "format": "XRGB8888"
+  },
+  "320x240_YUV420": {
+    "fps": 16.55,
+    "resolution": [
+      320,
+      240
+    ],
+    "format": "YUV420"
+  },
+  "320x240_RGB888": {
+    "fps": 16.55,
+    "resolution": [
+      320,
+      240
+    ],
+    "format": "RGB888"
+  },
+  "640x480_XRGB8888": {
+    "fps": 16.55,
+    "resolution": [
+      640,
+      480
+    ],
+    "format": "XRGB8888"
+  },
+  "640x480_YUV420": {
+    "fps": 16.55,
+    "resolution": [
+      640,
+      480
+    ],
+    "format": "YUV420"
+  },
+  "640x480_RGB888": {
+    "fps": 16.55,
+    "resolution": [
+      640,
+      480
+    ],
+    "format": "RGB888"
+  },
+  "800x600_XRGB8888": {
+    "fps": 16.55,
+    "resolution": [
+      800,
+      600
+    ],
+    "format": "XRGB8888"
+  },
+  "800x600_YUV420": {
+    "fps": 16.55,
+    "resolution": [
+      800,
+      600
+    ],
+    "format": "YUV420"
+  },
+  "800x600_RGB888": {
+    "fps": 16.55,
+    "resolution": [
+      800,
+      600
+    ],
+    "format": "RGB888"
+  },
+  "1280x720_XRGB8888": {
+    "fps": 16.55,
+    "resolution": [
+      1280,
+      720
+    ],
+    "format": "XRGB8888"
+  },
+  "1280x720_YUV420": {
+    "fps": 16.55,
+    "resolution": [
+      1280,
+      720
+    ],
+    "format": "YUV420"
+  },
+  "1280x720_RGB888": {
+    "fps": 16.54,
+    "resolution": [
+      1280,
+      720
+    ],
+    "format": "RGB888"
+  },
+  "1920x1080_XRGB8888": {
+    "fps": 16.5,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "format": "XRGB8888"
+  },
+  "1920x1080_YUV420": {
+    "fps": 16.49,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "format": "YUV420"
+  },
+  "1920x1080_RGB888": {
+    "fps": 16.21,
+    "resolution": [
+      1920,
+      1080
+    ],
+    "format": "RGB888"
+  },
+  "latency": {
+    "avg_ms": 62.22,
+    "min_ms": 59.24,
+    "max_ms": 150.5
+  },
+  "cpu_usage": {
+    "avg_percent": 3.0,
+    "peak_percent": 7.0
+  },
+  "memory_usage": {
+    "initial_mb": 135.9,
+    "final_mb": 135.6,
+    "increase_mb": -0.3
+  }
+}

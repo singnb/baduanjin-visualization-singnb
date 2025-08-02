@@ -1,0 +1,1680 @@
+
+> baduanjin-visualization@0.1.0 test:pilive
+> react-scripts test PiControls.test.js PiLiveSession.test.js PiPoseData.test.js PiStatusPanel.test.js 
+PiVideoStream.test.js --watchAll=false
+
+PASS src/__tests__/pilive/PiControls.test.js
+  ● Console
+
+    console.log
+      Environment REACT_APP_API_URL: undefined
+
+      at Object.<anonymous> (src/auth/AuthContext.js:11:9)
+
+    console.log
+      Final API_URL being used: https://baduanjin-backend-docker.azurewebsites.net
+
+      at Object.<anonymous> (src/auth/AuthContext.js:12:9)
+
+    console.error
+      An update to PiControls inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 155 |[39m       
+     [90m 156 |[39m       [36mif[39m (response[33m.[39mdata[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 157 |[39m         setExerciseState(prev [33m=>[39m ({ [33m...[39mprev[33m,[39m exercises[33m:[39m response[33m.[39mdata[33m.[39mexercises }))[33m;[39m
+     [90m     |[39m         [31m[1m^[22m[39m
+     [90m 158 |[39m       }
+     [90m 159 |[39m     } [36mcatch[39m (error) {
+     [90m 160 |[39m       console[33m.[39merror([32m'Error loading exercises:'[39m[33m,[39m error)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setExerciseState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at loadExercises (src/components/PiLive/PiControls.js:157:9)
+
+    console.error
+      An update to PiControls inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 155 |[39m       
+     [90m 156 |[39m       [36mif[39m (response[33m.[39mdata[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 157 |[39m         setExerciseState(prev [33m=>[39m ({ [33m...[39mprev[33m,[39m exercises[33m:[39m response[33m.[39mdata[33m.[39mexercises }))[33m;[39m
+     [90m     |[39m         [31m[1m^[22m[39m
+     [90m 158 |[39m       }
+     [90m 159 |[39m     } [36mcatch[39m (error) {
+     [90m 160 |[39m       console[33m.[39merror([32m'Error loading exercises:'[39m[33m,[39m error)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setExerciseState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at loadExercises (src/components/PiLive/PiControls.js:157:9)
+
+    console.error
+      An update to PiControls inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 155 |[39m       
+     [90m 156 |[39m       [36mif[39m (response[33m.[39mdata[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 157 |[39m         setExerciseState(prev [33m=>[39m ({ [33m...[39mprev[33m,[39m exercises[33m:[39m response[33m.[39mdata[33m.[39mexercises }))[33m;[39m
+     [90m     |[39m         [31m[1m^[22m[39m
+     [90m 158 |[39m       }
+     [90m 159 |[39m     } [36mcatch[39m (error) {
+     [90m 160 |[39m       console[33m.[39merror([32m'Error loading exercises:'[39m[33m,[39m error)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setExerciseState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at loadExercises (src/components/PiLive/PiControls.js:157:9)
+
+    console.error
+      An update to PiControls inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 155 |[39m       
+     [90m 156 |[39m       [36mif[39m (response[33m.[39mdata[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 157 |[39m         setExerciseState(prev [33m=>[39m ({ [33m...[39mprev[33m,[39m exercises[33m:[39m response[33m.[39mdata[33m.[39mexercises }))[33m;[39m
+     [90m     |[39m         [31m[1m^[22m[39m
+     [90m 158 |[39m       }
+     [90m 159 |[39m     } [36mcatch[39m (error) {
+     [90m 160 |[39m       console[33m.[39merror([32m'Error loading exercises:'[39m[33m,[39m error)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setExerciseState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at loadExercises (src/components/PiLive/PiControls.js:157:9)
+
+    console.error
+      An update to PiControls inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 155 |[39m       
+     [90m 156 |[39m       [36mif[39m (response[33m.[39mdata[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 157 |[39m         setExerciseState(prev [33m=>[39m ({ [33m...[39mprev[33m,[39m exercises[33m:[39m response[33m.[39mdata[33m.[39mexercises }))[33m;[39m
+     [90m     |[39m         [31m[1m^[22m[39m
+     [90m 158 |[39m       }
+     [90m 159 |[39m     } [36mcatch[39m (error) {
+     [90m 160 |[39m       console[33m.[39merror([32m'Error loading exercises:'[39m[33m,[39m error)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setExerciseState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at loadExercises (src/components/PiLive/PiControls.js:157:9)
+
+    console.error
+      An update to PiControls inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 155 |[39m       
+     [90m 156 |[39m       [36mif[39m (response[33m.[39mdata[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 157 |[39m         setExerciseState(prev [33m=>[39m ({ [33m...[39mprev[33m,[39m exercises[33m:[39m response[33m.[39mdata[33m.[39mexercises }))[33m;[39m
+     [90m     |[39m         [31m[1m^[22m[39m
+     [90m 158 |[39m       }
+     [90m 159 |[39m     } [36mcatch[39m (error) {
+     [90m 160 |[39m       console[33m.[39merror([32m'Error loading exercises:'[39m[33m,[39m error)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setExerciseState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at loadExercises (src/components/PiLive/PiControls.js:157:9)
+
+    console.log
+      Exercise tracking started: Holding the Sky
+
+      at startExerciseTracking (src/components/PiLive/PiControls.js:182:17)
+
+    console.error
+      An update to PiControls inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 155 |[39m       
+     [90m 156 |[39m       [36mif[39m (response[33m.[39mdata[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 157 |[39m         setExerciseState(prev [33m=>[39m ({ [33m...[39mprev[33m,[39m exercises[33m:[39m response[33m.[39mdata[33m.[39mexercises }))[33m;[39m
+     [90m     |[39m         [31m[1m^[22m[39m
+     [90m 158 |[39m       }
+     [90m 159 |[39m     } [36mcatch[39m (error) {
+     [90m 160 |[39m       console[33m.[39merror([32m'Error loading exercises:'[39m[33m,[39m error)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setExerciseState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at loadExercises (src/components/PiLive/PiControls.js:157:9)
+
+    console.error
+      An update to PiControls inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 155 |[39m       
+     [90m 156 |[39m       [36mif[39m (response[33m.[39mdata[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 157 |[39m         setExerciseState(prev [33m=>[39m ({ [33m...[39mprev[33m,[39m exercises[33m:[39m response[33m.[39mdata[33m.[39mexercises }))[33m;[39m
+     [90m     |[39m         [31m[1m^[22m[39m
+     [90m 158 |[39m       }
+     [90m 159 |[39m     } [36mcatch[39m (error) {
+     [90m 160 |[39m       console[33m.[39merror([32m'Error loading exercises:'[39m[33m,[39m error)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setExerciseState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at loadExercises (src/components/PiLive/PiControls.js:157:9)
+
+    console.error
+      An update to PiControls inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 155 |[39m       
+     [90m 156 |[39m       [36mif[39m (response[33m.[39mdata[33m.[39msuccess) {
+    [31m[1m>[22m[39m[90m 157 |[39m         setExerciseState(prev [33m=>[39m ({ [33m...[39mprev[33m,[39m exercises[33m:[39m response[33m.[39mdata[33m.[39mexercises }))[33m;[39m
+     [90m     |[39m         [31m[1m^[22m[39m
+     [90m 158 |[39m       }
+     [90m 159 |[39m     } [36mcatch[39m (error) {
+     [90m 160 |[39m       console[33m.[39merror([32m'Error loading exercises:'[39m[33m,[39m error)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setExerciseState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at loadExercises (src/components/PiLive/PiControls.js:157:9)
+
+    console.error
+      Error starting exercise: TypeError: Cannot read properties of undefined (reading 'exercise_name')
+          at startExerciseTracking (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\PiLive\PiControls.js:182:79)
+          at changeExerciseDuringRecording (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\PiLive\PiControls.js:222:7)
+
+    [0m [90m 183 |[39m       }
+     [90m 184 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 185 |[39m       console[33m.[39merror([32m'Error starting exercise:'[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 186 |[39m       setExerciseState(prev [33m=>[39m ({ [33m...[39mprev[33m,[39m loading[33m:[39m [36mfalse[39m }))[33m;[39m
+     [90m 187 |[39m     }
+     [90m 188 |[39m   }[33m;[39m[0m
+
+      at startExerciseTracking (src/components/PiLive/PiControls.js:185:15)
+      at changeExerciseDuringRecording (src/components/PiLive/PiControls.js:222:7)
+
+    console.error
+      Error starting recording session: Error: Recording failed
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\pilive\PiControls.test.js:431:59)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+
+    [0m [90m 111 |[39m       
+     [90m 112 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 113 |[39m       console[33m.[39merror([32m'Error starting recording session:'[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 114 |[39m       alert([32m'Failed to start recording. Please try again.'[39m)[33m;[39m
+     [90m 115 |[39m     }
+     [90m 116 |[39m   }[33m;[39m[0m
+
+      at handleStartRecordingSession (src/components/PiLive/PiControls.js:113:15)
+
+PASS src/__tests__/pilive/PiStatusPanel.test.js
+PASS src/__tests__/pilive/PiVideoStream.test.js
+  ● Console
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: { activeSession: false, isConnected: false, sessionId: undefined }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Clearing video stream - no active session or not connected
+
+      at src/components/PiLive/PiVideoStream.js:182:15
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: false,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Clearing video stream - no active session or not connected
+
+      at src/components/PiLive/PiVideoStream.js:182:15
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: false,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Clearing video stream - no active session or not connected
+
+      at src/components/PiLive/PiVideoStream.js:182:15
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Trying frame fetch through Azure Pi Service...
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:73:15)
+
+    console.log
+      ✅ Frame received through Azure Pi Service
+
+      at src/components/PiLive/PiVideoStream.js:85:19
+
+    console.error
+      An update to PiVideoStream inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 139 |[39m
+     [90m 140 |[39m     [90m// Update image immediately[39m
+    [31m[1m>[22m[39m[90m 141 |[39m     setStreamImage(frame[33m.[39mimage)[33m;[39m
+     [90m     |[39m     [31m[1m^[22m[39m
+     [90m 142 |[39m     setStreamError([36mnull[39m)[33m;[39m [90m// Clear error when frame received[39m
+     [90m 143 |[39m
+     [90m 144 |[39m     [90m// Update stats less frequently[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setStreamImage (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at processNextFrame (src/components/PiLive/PiVideoStream.js:141:5)
+      at handleFrameUpdate (src/components/PiLive/PiVideoStream.js:131:5)
+      at src/components/PiLive/PiVideoStream.js:86:11
+
+    console.error
+      An update to PiVideoStream inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 140 |[39m     [90m// Update image immediately[39m
+     [90m 141 |[39m     setStreamImage(frame[33m.[39mimage)[33m;[39m
+    [31m[1m>[22m[39m[90m 142 |[39m     setStreamError([36mnull[39m)[33m;[39m [90m// Clear error when frame received[39m
+     [90m     |[39m     [31m[1m^[22m[39m
+     [90m 143 |[39m
+     [90m 144 |[39m     [90m// Update stats less frequently[39m
+     [90m 145 |[39m     [36mif[39m (now [33m-[39m lastFrameTime[33m.[39mcurrent [33m>[39m [35m1000[39m) {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setStreamError (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at processNextFrame (src/components/PiLive/PiVideoStream.js:142:5)
+      at handleFrameUpdate (src/components/PiLive/PiVideoStream.js:131:5)
+      at src/components/PiLive/PiVideoStream.js:86:11
+
+    console.error
+      An update to PiVideoStream inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 144 |[39m     [90m// Update stats less frequently[39m
+     [90m 145 |[39m     [36mif[39m (now [33m-[39m lastFrameTime[33m.[39mcurrent [33m>[39m [35m1000[39m) {
+    [31m[1m>[22m[39m[90m 146 |[39m       setFrameStats({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m 147 |[39m         fps[33m:[39m frame[33m.[39mstats[33m.[39mcurrent_fps [33m||[39m [35m0[39m[33m,[39m
+     [90m 148 |[39m         latency[33m:[39m frame[33m.[39mlatency[33m,[39m
+     [90m 149 |[39m         persons[33m:[39m frame[33m.[39mstats[33m.[39mpersons_detected [33m||[39m [35m0[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setFrameStats (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at processNextFrame (src/components/PiLive/PiVideoStream.js:146:7)
+      at handleFrameUpdate (src/components/PiLive/PiVideoStream.js:131:5)
+      at src/components/PiLive/PiVideoStream.js:86:11
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: { activeSession: false, isConnected: false, sessionId: undefined }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Clearing video stream - no active session or not connected
+
+      at src/components/PiLive/PiVideoStream.js:182:15
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: false,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Clearing video stream - no active session or not connected
+
+      at src/components/PiLive/PiVideoStream.js:182:15
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: { activeSession: true, isConnected: true, sessionId: 'custom-123' }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+
+    console.log
+      🎥 Video stream effect triggered: { activeSession: false, isConnected: false, sessionId: undefined }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Clearing video stream - no active session or not connected
+
+      at src/components/PiLive/PiVideoStream.js:182:15
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://localhost:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Trying frame fetch through Azure Pi Service...
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:73:15)
+
+    console.log
+      ✅ Frame received through Azure Pi Service
+
+      at src/components/PiLive/PiVideoStream.js:85:19
+
+    console.error
+      An update to PiVideoStream inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 139 |[39m
+     [90m 140 |[39m     [90m// Update image immediately[39m
+    [31m[1m>[22m[39m[90m 141 |[39m     setStreamImage(frame[33m.[39mimage)[33m;[39m
+     [90m     |[39m     [31m[1m^[22m[39m
+     [90m 142 |[39m     setStreamError([36mnull[39m)[33m;[39m [90m// Clear error when frame received[39m
+     [90m 143 |[39m
+     [90m 144 |[39m     [90m// Update stats less frequently[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setStreamImage (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at processNextFrame (src/components/PiLive/PiVideoStream.js:141:5)
+      at handleFrameUpdate (src/components/PiLive/PiVideoStream.js:131:5)
+      at src/components/PiLive/PiVideoStream.js:86:11
+
+    console.error
+      An update to PiVideoStream inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 140 |[39m     [90m// Update image immediately[39m
+     [90m 141 |[39m     setStreamImage(frame[33m.[39mimage)[33m;[39m
+    [31m[1m>[22m[39m[90m 142 |[39m     setStreamError([36mnull[39m)[33m;[39m [90m// Clear error when frame received[39m
+     [90m     |[39m     [31m[1m^[22m[39m
+     [90m 143 |[39m
+     [90m 144 |[39m     [90m// Update stats less frequently[39m
+     [90m 145 |[39m     [36mif[39m (now [33m-[39m lastFrameTime[33m.[39mcurrent [33m>[39m [35m1000[39m) {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setStreamError (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at processNextFrame (src/components/PiLive/PiVideoStream.js:142:5)
+      at handleFrameUpdate (src/components/PiLive/PiVideoStream.js:131:5)
+      at src/components/PiLive/PiVideoStream.js:86:11
+
+    console.error
+      An update to PiVideoStream inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 144 |[39m     [90m// Update stats less frequently[39m
+     [90m 145 |[39m     [36mif[39m (now [33m-[39m lastFrameTime[33m.[39mcurrent [33m>[39m [35m1000[39m) {
+    [31m[1m>[22m[39m[90m 146 |[39m       setFrameStats({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m 147 |[39m         fps[33m:[39m frame[33m.[39mstats[33m.[39mcurrent_fps [33m||[39m [35m0[39m[33m,[39m
+     [90m 148 |[39m         latency[33m:[39m frame[33m.[39mlatency[33m,[39m
+     [90m 149 |[39m         persons[33m:[39m frame[33m.[39mstats[33m.[39mpersons_detected [33m||[39m [35m0[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setFrameStats (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at processNextFrame (src/components/PiLive/PiVideoStream.js:146:7)
+      at handleFrameUpdate (src/components/PiLive/PiVideoStream.js:131:5)
+      at src/components/PiLive/PiVideoStream.js:86:11
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+    console.log
+      🎥 Video stream effect triggered: {
+        activeSession: true,
+        isConnected: true,
+        sessionId: 'test-session-123'
+      }
+
+      at src/components/PiLive/PiVideoStream.js:157:13
+
+    console.log
+      🎥 Starting video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:164:15
+
+    console.log
+      🎥 Fetching frame from direct Pi: http://test-pi:8001
+
+      at fetchVideoFrame (src/components/PiLive/PiVideoStream.js:28:17)
+
+    console.log
+      🎥 Stopping video frame polling...
+
+      at src/components/PiLive/PiVideoStream.js:174:19
+          at Array.forEach (<anonymous>)
+
+PASS src/__tests__/pilive/PiPoseData.test.js
+PASS src/__tests__/pilive/PiLiveSession.test.js
+  ● Console
+
+    console.log
+      Environment REACT_APP_API_URL: undefined
+
+      at Object.<anonymous> (src/auth/AuthContext.js:11:9)
+
+    console.log
+      Final API_URL being used: https://baduanjin-backend-docker.azurewebsites.net
+
+      at Object.<anonymous> (src/auth/AuthContext.js:12:9)
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      ❌ Pi status check failed: Error: API Error
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\pilive\PiLiveSession.test.js:220:41)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+          at TestRunner.runTests (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\index.js:101:12)
+          at TestScheduler.scheduleTests (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\@jest\core\build\TestScheduler.js:333:13)
+          at runJest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\@jest\core\build\runJest.js:404:19)
+          at _run10000 (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\@jest\core\build\cli\index.js:320:7)
+          at runCLI (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\@jest\core\build\cli\index.js:173:3)
+          at Object.run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-cli\build\cli\index.js:155:37)
+
+    [0m [90m 105 |[39m       
+     [90m 106 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 107 |[39m       console[33m.[39merror([32m'❌ Pi status check failed:'[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m               [31m[1m^[22m[39m
+     [90m 108 |[39m       setPiState(prev [33m=>[39m ({
+     [90m 109 |[39m         [33m...[39mprev[33m,[39m
+     [90m 110 |[39m         isConnected[33m:[39m [36mfalse[39m[33m,[39m[0m
+
+      at src/components/PiLive/PiLiveSession.js:107:15
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 106 |[39m     } [36mcatch[39m (error) {
+     [90m 107 |[39m       console[33m.[39merror([32m'❌ Pi status check failed:'[39m[33m,[39m error)[33m;[39m
+    [31m[1m>[22m[39m[90m 108 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m 109 |[39m         [33m...[39mprev[33m,[39m
+     [90m 110 |[39m         isConnected[33m:[39m [36mfalse[39m[33m,[39m
+     [90m 111 |[39m         status[33m:[39m { pi_connected[33m:[39m [36mfalse[39m[33m,[39m error[33m:[39m error[33m.[39mmessage }[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:108:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+    console.error
+      An update to PiLiveSession inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m  95 |[39m       })[33m;[39m
+     [90m  96 |[39m       
+    [31m[1m>[22m[39m[90m  97 |[39m       setPiState(prev [33m=>[39m ({
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m  98 |[39m         [33m...[39mprev[33m,[39m
+     [90m  99 |[39m         isConnected[33m:[39m response[33m.[39mdata[33m.[39mpi_connected [33m||[39m [36mfalse[39m[33m,[39m
+     [90m 100 |[39m         status[33m:[39m response[33m.[39mdata[33m,[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setPiState (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/PiLive/PiLiveSession.js:97:7
+
+
+Test Suites: 5 passed, 5 total
+Tests:       129 passed, 129 total
+Snapshots:   0 total
+Time:        2.209 s
+Ran all test suites matching /PiControls.test.js|PiLiveSession.test.js|PiPoseData.test.js|PiStatusPanel.test.js
+|PiVideoStream.test.js/i.

@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../auth/AuthContext';
-import Dashboard from '../Layout/Dashboard';
-import Sidebar from '../Layout/Sidebar';
+// import Dashboard from '../Layout/Dashboard';
+// import Sidebar from '../Layout/Sidebar';
 import './Analysis.css'; 
 
 const BACKEND_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
+const API_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
 
 const AnalysisView = () => {
   const { videoId } = useParams();
@@ -19,8 +20,8 @@ const AnalysisView = () => {
   const { token } = useAuth();
   
   // For controlling the sidebar and analysis type
-  const [selectedAnalysis, setSelectedAnalysis] = useState('overview');
-  const [comparisonMode, setComparisonMode] = useState('sideBySide');
+  // const [selectedAnalysis, setSelectedAnalysis] = useState('overview');
+  // const [comparisonMode, setComparisonMode] = useState('sideBySide');
   
   useEffect(() => {
     const fetchVideoAndAnalysis = async () => {
@@ -57,21 +58,21 @@ const AnalysisView = () => {
     }
   }, [videoId, token]);
 
-  const getAnalysisFileUrl = (filename, fileType) => {
-    return `${BACKEND_URL}/api/analysis/${videoId}/files/${fileType}/${filename}?token=${encodeURIComponent(token)}`;
-  };
+  // const getAnalysisFileUrl = (filename, fileType) => {
+  //   return `${BACKEND_URL}/api/analysis/${videoId}/files/${fileType}/${filename}?token=${encodeURIComponent(token)}`;
+  // };
 
-  const getAnalyzedVideoUrl = () => {
-    if (videoData && videoData.analyzed_video_path) {
-      // If it's an Azure URL, use the streaming endpoint
-      if (videoData.analyzed_video_path.startsWith('https://')) {
-        return `${BACKEND_URLL}/api/videos/${videoId}/stream-video?type=analyzed&token=${encodeURIComponent(token)}`;
-      }
-      // Fallback for local files
-      return videoData.analyzed_video_path;
-    }
-    return null;
-  };
+  // const getAnalyzedVideoUrl = () => {
+  //   if (videoData && videoData.analyzed_video_path) {
+  //     // If it's an Azure URL, use the streaming endpoint
+  //     if (videoData.analyzed_video_path.startsWith('https://')) {
+  //       return `${BACKEND_URL}/api/videos/${videoId}/stream-video?type=analyzed&token=${encodeURIComponent(token)}`;
+  //     }
+  //     // Fallback for local files
+  //     return videoData.analyzed_video_path;
+  //   }
+  //   return null;
+  // };
     
   if (loading) {
     return <div className="loading">Loading analysis data...</div>;
@@ -103,7 +104,7 @@ const AnalysisView = () => {
         <p>Brocade Type: {videoData.brocade_type}</p>
       </div>
       
-      <div className="analysis-content">
+  {/* <div className="analysis-content">
         <Sidebar 
           selectedAnalysis={selectedAnalysis}
           setSelectedAnalysis={setSelectedAnalysis}
@@ -118,7 +119,7 @@ const AnalysisView = () => {
           videoData={videoData}
           videoId={videoId}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

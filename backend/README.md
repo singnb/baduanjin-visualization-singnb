@@ -2,19 +2,6 @@
 
 > A FastAPI-based backend service for Baduanjin exercise analysis, user authentication, and audio processing capabilities.
 
-## Table of Contents
-
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [Environment Setup](#environment-setup)
-- [Development](#development)
-- [API Documentation](#api-documentation)
-- [Troubleshooting](#troubleshooting)
-- [Additional Resources](#additional-resources)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
@@ -113,7 +100,7 @@ pip install -r requirements.txt
 
 ## Project Structure
 
-```
+```bash
 backend/
 ├── auth/                  # Authentication module
 │   └── router.py          # Authentication routes and endpoints
@@ -143,6 +130,9 @@ backend/
 │   └── 📄 video_processor.py # Video processing service
 ├── utils/                 # Utility functions
 │   └── security.py        # Security and authentication utilities
+├── tests/                 # tests folder
+│   ├── {components}/      # All the test code container folders
+│   └── reports/           # Testing report according to their filenames
 ├── uploads/               # User uploaded files storage
 │   ├── 1/                 # User session uploads
 │   └── 2/                 # User session uploads
@@ -184,6 +174,7 @@ DB_PORT=5432
 DB_NAME=baduanjin_db
 DB_USER=your_username
 DB_PASSWORD=your_password
+```
 
 ## Development
 
@@ -211,7 +202,7 @@ Once the server is running, you can access:
 
 ### Main API Endpoints
 
-```
+```bash
 POST   /auth/login                    # User authentication
 POST   /auth/register                 # User registration
 POST   /analysis/upload               # Upload Baduanjin exercise video
@@ -221,6 +212,26 @@ POST   /video/process                 # Process video files
 POST   /video/english                 # Process video with English output
 GET    /relationships                 # Get learner-master relationships
 POST   /relationships                 # Create learner-master relationship
+```
+
+### Test
+```bash
+# Move to test directory
+cd backend\tests
+
+# Activate virtual environment (in my localhost as example)
+conda activate C:\Users\singn\.conda\envs\mmpose_env
+
+# Install testing packages
+pip install pytest pytest-asyncio pytest-mock httpx pytest-cov
+
+# Capture both stdout and stderr with examples
+pytest {testFilename} -v > reports\{testReportFilename} 2>&1
+pytest .\auth\test_auth_router.py -v --disable-warnings > reports\test_auth_router.txt 2>&1
+pytest .\routers\test_video_english.py -v --disable-warnings > reports\test_routers.txt 2>&1
+pytest .\services\test_video_processor.py -v --disable-warnings > reports\test_services.txt 2>&1
+pytest .\utils\test_security.py -v --disable-warnings > reports\test_utils.txt 2>&1
+
 ```
 
 ## Additional Resources

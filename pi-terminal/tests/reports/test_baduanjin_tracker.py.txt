@@ -1,0 +1,50 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.2, pytest-8.4.1, pluggy-1.6.0 -- /home/nbtai/baduanjin_analysis/baduanjin_env/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/nbtai/baduanjin_analysis/tests
+plugins: anyio-4.9.0, asyncio-1.0.0, mock-3.14.1, env-1.1.5
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 40 items
+
+test_baduanjin_tracker.py::TestPoseKeypoints::test_pose_keypoints_initialization_custom PASSED [  2%]
+test_baduanjin_tracker.py::TestPoseKeypoints::test_pose_keypoints_initialization_default PASSED [  5%]
+test_baduanjin_tracker.py::TestPoseKeypoints::test_pose_keypoints_to_dict PASSED [  7%]
+test_baduanjin_tracker.py::TestExerciseFeedback::test_exercise_feedback_creation PASSED [ 10%]
+test_baduanjin_tracker.py::TestSessionStats::test_session_stats_creation PASSED [ 12%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_analyze_drawing_bow_exercise PASSED [ 15%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_analyze_holding_sky_exercise PASSED [ 17%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_analyze_pose_for_exercise_all_exercises PASSED [ 20%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_analyze_pose_for_invalid_exercise PASSED [ 22%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_calculate_completion_percentage PASSED [ 25%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_calculate_movement_consistency PASSED [ 27%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_calculate_pose_quality_metrics PASSED [ 30%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_define_baduanjin_exercises PASSED [ 32%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_end_exercise_no_active_session PASSED [ 35%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_end_exercise_with_active_session PASSED [ 37%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_export_session_data_custom_filename PASSED [ 40%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_export_session_data_default_filename PASSED [ 42%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_extract_pose_keypoints_exception_handling PASSED [ 45%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_extract_pose_keypoints_insufficient_data PASSED [ 47%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_extract_pose_keypoints_low_confidence PASSED [ 50%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_extract_pose_keypoints_mixed_confidence PASSED [ 52%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_extract_pose_keypoints_valid PASSED [ 55%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_generate_recommendations PASSED [ 57%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_get_session_statistics PASSED [ 60%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_initialization PASSED [ 62%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_pose_history_management PASSED [ 65%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_process_real_time_pose_no_exercise PASSED [ 67%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_process_real_time_pose_poor_detection PASSED [ 70%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_process_real_time_pose_valid PASSED [ 72%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_start_exercise_invalid PASSED [ 75%]
+test_baduanjin_tracker.py::TestBaduanjinTracker::test_start_exercise_valid PASSED [ 77%]
+test_baduanjin_tracker.py::TestPositionVarianceCalculation::test_calculate_position_variance_empty_poses PASSED [ 80%]
+test_baduanjin_tracker.py::TestPositionVarianceCalculation::test_calculate_position_variance_missing_joints PASSED [ 82%]
+test_baduanjin_tracker.py::TestPositionVarianceCalculation::test_calculate_position_variance_multiple_poses PASSED [ 85%]
+test_baduanjin_tracker.py::TestPositionVarianceCalculation::test_calculate_position_variance_single_pose PASSED [ 87%]
+test_baduanjin_tracker.py::TestFactoryFunction::test_create_baduanjin_tracker PASSED [ 90%]
+test_baduanjin_tracker.py::TestIntegrationScenarios::test_complete_exercise_session_workflow PASSED [ 92%]
+test_baduanjin_tracker.py::TestIntegrationScenarios::test_error_handling_scenarios PASSED [ 95%]
+test_baduanjin_tracker.py::TestIntegrationScenarios::test_multiple_exercise_session PASSED [ 97%]
+test_baduanjin_tracker.py::TestIntegrationScenarios::test_session_statistics_evolution PASSED [100%]
+
+============================== 40 passed in 0.10s ==============================

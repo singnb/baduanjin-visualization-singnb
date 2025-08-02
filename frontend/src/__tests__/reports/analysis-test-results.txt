@@ -1,0 +1,3291 @@
+
+> baduanjin-visualization@0.1.0 test:analysis
+> react-scripts test VideoAnalysis.test.js ComparisonView.test.js ComparisonSelection.test.js --watchAll=false
+
+PASS src/__tests__/analysis/ComparisonView.test.js
+  ● Console
+
+    console.log
+      Fetching comparison data for user video user123 and master video master456
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:36:17)
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+    [0m [90m 70 |[39m
+     [90m 71 |[39m   [36mconst[39m renderComponent [33m=[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 72 |[39m     [36mreturn[39m render(
+     [90m    |[39m                  [31m[1m^[22m[39m
+     [90m 73 |[39m       [33m<[39m[33mBrowserRouter[39m[33m>[39m
+     [90m 74 |[39m         [33m<[39m[33mComparisonView[39m [33m/[39m[33m>[39m
+     [90m 75 |[39m       [33m<[39m[33m/[39m[33mBrowserRouter[39m[33m>[39m[0m
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at Object.logV6DeprecationWarnings [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:26:5)
+      at node_modules/react-router-dom/index.tsx:816:25
+      at Object.react-stack-bottom-frame (node_modules/react-dom/cjs/react-dom-client.development.js:23949:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:11905:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:12028:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13841:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13815:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13853:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15737:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:15379:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:859:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderComponent (src/__tests__/analysis/ComparisonView.test.js:72:18)
+      at Object.<anonymous> (src/__tests__/analysis/ComparisonView.test.js:80:5)
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+    [0m [90m 70 |[39m
+     [90m 71 |[39m   [36mconst[39m renderComponent [33m=[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 72 |[39m     [36mreturn[39m render(
+     [90m    |[39m                  [31m[1m^[22m[39m
+     [90m 73 |[39m       [33m<[39m[33mBrowserRouter[39m[33m>[39m
+     [90m 74 |[39m         [33m<[39m[33mComparisonView[39m [33m/[39m[33m>[39m
+     [90m 75 |[39m       [33m<[39m[33m/[39m[33mBrowserRouter[39m[33m>[39m[0m
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at Object.logV6DeprecationWarnings [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:37:5)
+      at node_modules/react-router-dom/index.tsx:816:25
+      at Object.react-stack-bottom-frame (node_modules/react-dom/cjs/react-dom-client.development.js:23949:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:11905:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:12028:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13841:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13815:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13853:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15737:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:15379:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:859:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderComponent (src/__tests__/analysis/ComparisonView.test.js:72:18)
+      at Object.<anonymous> (src/__tests__/analysis/ComparisonView.test.js:80:5)
+
+    console.warn
+      Backend comparison endpoint failed: TypeError: Cannot read properties of undefined (reading 'data')
+          at fetchComparisonData (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\Analysis\ComparisonView.js:46:64)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+    [0m [90m 47 |[39m           setComparisonData(response[33m.[39mdata)[33m;[39m
+     [90m 48 |[39m         } [36mcatch[39m (backendError) {
+    [31m[1m>[22m[39m[90m 49 |[39m           console[33m.[39mwarn([32m'Backend comparison endpoint failed:'[39m[33m,[39m backendError)[33m;[39m
+     [90m    |[39m                   [31m[1m^[22m[39m
+     [90m 50 |[39m           [90m// Continue to try individual data loading[39m
+     [90m 51 |[39m         }
+     [90m 52 |[39m         [0m
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:49:19)
+
+    console.log
+      Loaded jointAngles comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 0)
+
+    console.log
+      Loaded smoothness comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 1)
+
+    console.log
+      Loaded symmetry comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 2)
+
+    console.log
+      Loaded balance comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 3)
+
+    console.log
+      Combined chart data: {
+        jointAngles: undefined,
+        smoothness: undefined,
+        symmetry: undefined,
+        balance: undefined
+      }
+
+      at loadChartData (src/components/Analysis/ComparisonView.js:70:19)
+
+    console.error
+      An update to ComparisonView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 69 |[39m           
+     [90m 70 |[39m           console[33m.[39mlog([32m'Combined chart data:'[39m[33m,[39m combinedChartData)[33m;[39m
+    [31m[1m>[22m[39m[90m 71 |[39m           setChartData(combinedChartData)[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m 72 |[39m         }[33m;[39m
+     [90m 73 |[39m         
+     [90m 74 |[39m         [36mawait[39m loadChartData()[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setChartData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at loadChartData (src/components/Analysis/ComparisonView.js:71:11)
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:74:9)
+
+    console.error
+      An update to ComparisonView inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 79 |[39m         setError([32m`Failed to load comparison data: ${err.response?.data?.detail || err.message}`[39m)[33m;[39m
+     [90m 80 |[39m       } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 81 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 82 |[39m       }
+     [90m 83 |[39m     }[33m;[39m
+     [90m 84 |[39m     [0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:81:9)
+
+    console.log
+      Fetching comparison data for user video user123 and master video master456
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:36:17)
+
+    console.warn
+      Backend comparison endpoint failed: TypeError: Cannot read properties of undefined (reading 'data')
+          at fetchComparisonData (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\Analysis\ComparisonView.js:46:64)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+    [0m [90m 47 |[39m           setComparisonData(response[33m.[39mdata)[33m;[39m
+     [90m 48 |[39m         } [36mcatch[39m (backendError) {
+    [31m[1m>[22m[39m[90m 49 |[39m           console[33m.[39mwarn([32m'Backend comparison endpoint failed:'[39m[33m,[39m backendError)[33m;[39m
+     [90m    |[39m                   [31m[1m^[22m[39m
+     [90m 50 |[39m           [90m// Continue to try individual data loading[39m
+     [90m 51 |[39m         }
+     [90m 52 |[39m         [0m
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:49:19)
+
+    console.log
+      Loaded jointAngles comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 0)
+
+    console.log
+      Loaded smoothness comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 1)
+
+    console.log
+      Loaded symmetry comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 2)
+
+    console.log
+      Loaded balance comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 3)
+
+    console.log
+      Combined chart data: {
+        jointAngles: undefined,
+        smoothness: undefined,
+        symmetry: undefined,
+        balance: undefined
+      }
+
+      at loadChartData (src/components/Analysis/ComparisonView.js:70:19)
+
+    console.log
+      Fetching comparison data for user video user123 and master video master456
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:36:17)
+
+    console.warn
+      Backend comparison endpoint failed: TypeError: Cannot read properties of undefined (reading 'data')
+          at fetchComparisonData (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\Analysis\ComparisonView.js:46:64)
+
+    [0m [90m 47 |[39m           setComparisonData(response[33m.[39mdata)[33m;[39m
+     [90m 48 |[39m         } [36mcatch[39m (backendError) {
+    [31m[1m>[22m[39m[90m 49 |[39m           console[33m.[39mwarn([32m'Backend comparison endpoint failed:'[39m[33m,[39m backendError)[33m;[39m
+     [90m    |[39m                   [31m[1m^[22m[39m
+     [90m 50 |[39m           [90m// Continue to try individual data loading[39m
+     [90m 51 |[39m         }
+     [90m 52 |[39m         [0m
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:49:19)
+
+    console.log
+      Loaded jointAngles comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 0)
+
+    console.log
+      Loaded smoothness comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 1)
+
+    console.log
+      Loaded symmetry comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 2)
+
+    console.log
+      Loaded balance comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 3)
+
+    console.log
+      Combined chart data: {
+        jointAngles: undefined,
+        smoothness: undefined,
+        symmetry: undefined,
+        balance: undefined
+      }
+
+      at loadChartData (src/components/Analysis/ComparisonView.js:70:19)
+
+    console.log
+      Fetching comparison data for user video user123 and master video master456
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:36:17)
+
+    console.warn
+      Backend comparison endpoint failed: TypeError: Cannot read properties of undefined (reading 'data')
+          at fetchComparisonData (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\Analysis\ComparisonView.js:46:64)
+
+    [0m [90m 47 |[39m           setComparisonData(response[33m.[39mdata)[33m;[39m
+     [90m 48 |[39m         } [36mcatch[39m (backendError) {
+    [31m[1m>[22m[39m[90m 49 |[39m           console[33m.[39mwarn([32m'Backend comparison endpoint failed:'[39m[33m,[39m backendError)[33m;[39m
+     [90m    |[39m                   [31m[1m^[22m[39m
+     [90m 50 |[39m           [90m// Continue to try individual data loading[39m
+     [90m 51 |[39m         }
+     [90m 52 |[39m         [0m
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:49:19)
+
+    console.log
+      Loaded jointAngles comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 0)
+
+    console.log
+      Loaded smoothness comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 1)
+
+    console.log
+      Loaded symmetry comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 2)
+
+    console.log
+      Loaded balance comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 3)
+
+    console.log
+      Combined chart data: {
+        jointAngles: undefined,
+        smoothness: undefined,
+        symmetry: undefined,
+        balance: undefined
+      }
+
+      at loadChartData (src/components/Analysis/ComparisonView.js:70:19)
+
+    console.log
+      Fetching comparison data for user video user123 and master video master456
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:36:17)
+
+    console.warn
+      Backend comparison endpoint failed: TypeError: Cannot read properties of undefined (reading 'data')
+          at fetchComparisonData (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\Analysis\ComparisonView.js:46:64)
+
+    [0m [90m 47 |[39m           setComparisonData(response[33m.[39mdata)[33m;[39m
+     [90m 48 |[39m         } [36mcatch[39m (backendError) {
+    [31m[1m>[22m[39m[90m 49 |[39m           console[33m.[39mwarn([32m'Backend comparison endpoint failed:'[39m[33m,[39m backendError)[33m;[39m
+     [90m    |[39m                   [31m[1m^[22m[39m
+     [90m 50 |[39m           [90m// Continue to try individual data loading[39m
+     [90m 51 |[39m         }
+     [90m 52 |[39m         [0m
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:49:19)
+
+    console.log
+      Loaded jointAngles comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 0)
+
+    console.log
+      Loaded smoothness comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 1)
+
+    console.log
+      Loaded symmetry comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 2)
+
+    console.log
+      Loaded balance comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 3)
+
+    console.log
+      Combined chart data: {
+        jointAngles: undefined,
+        smoothness: undefined,
+        symmetry: undefined,
+        balance: undefined
+      }
+
+      at loadChartData (src/components/Analysis/ComparisonView.js:70:19)
+
+    console.log
+      Fetching comparison data for user video user123 and master video master456
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:36:17)
+
+    console.warn
+      Backend comparison endpoint failed: TypeError: Cannot read properties of undefined (reading 'data')
+          at fetchComparisonData (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\components\Analysis\ComparisonView.js:46:64)
+
+    [0m [90m 47 |[39m           setComparisonData(response[33m.[39mdata)[33m;[39m
+     [90m 48 |[39m         } [36mcatch[39m (backendError) {
+    [31m[1m>[22m[39m[90m 49 |[39m           console[33m.[39mwarn([32m'Backend comparison endpoint failed:'[39m[33m,[39m backendError)[33m;[39m
+     [90m    |[39m                   [31m[1m^[22m[39m
+     [90m 50 |[39m           [90m// Continue to try individual data loading[39m
+     [90m 51 |[39m         }
+     [90m 52 |[39m         [0m
+
+      at fetchComparisonData (src/components/Analysis/ComparisonView.js:49:19)
+
+    console.log
+      Loaded jointAngles comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 0)
+
+    console.log
+      Loaded smoothness comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 1)
+
+    console.log
+      Loaded symmetry comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 2)
+
+    console.log
+      Loaded balance comparison data: undefined
+
+      at src/components/Analysis/ComparisonView.js:59:23
+          at async Promise.all (index 3)
+
+    console.log
+      Combined chart data: {
+        jointAngles: undefined,
+        smoothness: undefined,
+        symmetry: undefined,
+        balance: undefined
+      }
+
+      at loadChartData (src/components/Analysis/ComparisonView.js:70:19)
+
+PASS src/__tests__/analysis/VideoAnalysis.test.js
+  ● Console
+
+    console.log
+      Environment REACT_APP_API_URL: undefined
+
+      at Object.<anonymous> (src/auth/AuthContext.js:11:9)
+
+    console.log
+      Final API_URL being used: https://baduanjin-backend-docker.azurewebsites.net
+
+      at Object.<anonymous> (src/auth/AuthContext.js:12:9)
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+    [0m [90m 23 |[39m [90m// Helper function to render component[39m
+     [90m 24 |[39m [36mconst[39m renderComponent [33m=[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 25 |[39m   [36mreturn[39m render(
+     [90m    |[39m                [31m[1m^[22m[39m
+     [90m 26 |[39m     [33m<[39m[33mBrowserRouter[39m[33m>[39m
+     [90m 27 |[39m       [33m<[39m[33mVideoAnalysis[39m [33m/[39m[33m>[39m
+     [90m 28 |[39m     [33m<[39m[33m/[39m[33mBrowserRouter[39m[33m>[39m[0m
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at Object.logV6DeprecationWarnings [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:26:5)
+      at node_modules/react-router-dom/index.tsx:816:25
+      at Object.react-stack-bottom-frame (node_modules/react-dom/cjs/react-dom-client.development.js:23949:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:11905:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:12028:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13841:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13815:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13853:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15737:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:15379:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:859:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderComponent (src/__tests__/analysis/VideoAnalysis.test.js:25:16)
+      at Object.<anonymous> (src/__tests__/analysis/VideoAnalysis.test.js:84:5)
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+    [0m [90m 23 |[39m [90m// Helper function to render component[39m
+     [90m 24 |[39m [36mconst[39m renderComponent [33m=[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 25 |[39m   [36mreturn[39m render(
+     [90m    |[39m                [31m[1m^[22m[39m
+     [90m 26 |[39m     [33m<[39m[33mBrowserRouter[39m[33m>[39m
+     [90m 27 |[39m       [33m<[39m[33mVideoAnalysis[39m [33m/[39m[33m>[39m
+     [90m 28 |[39m     [33m<[39m[33m/[39m[33mBrowserRouter[39m[33m>[39m[0m
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at Object.logV6DeprecationWarnings [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:37:5)
+      at node_modules/react-router-dom/index.tsx:816:25
+      at Object.react-stack-bottom-frame (node_modules/react-dom/cjs/react-dom-client.development.js:23949:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:11905:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:12028:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13841:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13815:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13853:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15737:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:15379:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:859:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderComponent (src/__tests__/analysis/VideoAnalysis.test.js:25:16)
+      at Object.<anonymous> (src/__tests__/analysis/VideoAnalysis.test.js:84:5)
+
+    console.log
+      Analysis data received: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.error
+      An update to VideoAnalysis inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 33 |[39m       
+     [90m 34 |[39m       console[33m.[39mlog([32m'Analysis data received:'[39m[33m,[39m response[33m.[39mdata)[33m;[39m
+    [31m[1m>[22m[39m[90m 35 |[39m       setAnalysisData(response[33m.[39mdata)[33m;[39m
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 36 |[39m       setError([36mnull[39m)[33m;[39m
+     [90m 37 |[39m       
+     [90m 38 |[39m     } [36mcatch[39m (err) {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setAnalysisData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/Analysis/VideoAnalysis.js:35:7
+
+    console.error
+      An update to VideoAnalysis inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 34 |[39m       console[33m.[39mlog([32m'Analysis data received:'[39m[33m,[39m response[33m.[39mdata)[33m;[39m
+     [90m 35 |[39m       setAnalysisData(response[33m.[39mdata)[33m;[39m
+    [31m[1m>[22m[39m[90m 36 |[39m       setError([36mnull[39m)[33m;[39m
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 37 |[39m       
+     [90m 38 |[39m     } [36mcatch[39m (err) {
+     [90m 39 |[39m       console[33m.[39merror([32m'Error fetching analysis data:'[39m[33m,[39m err)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setError (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/Analysis/VideoAnalysis.js:36:7
+
+    console.error
+      An update to VideoAnalysis inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 40 |[39m       setError([32m'Failed to load analysis data: '[39m [33m+[39m (err[33m.[39mresponse[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdetail [33m||[39m err[33m.[39mmessage))[33m;[39m
+     [90m 41 |[39m     } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 42 |[39m       setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 43 |[39m     }
+     [90m 44 |[39m   }[33m,[39m [videoId[33m,[39m token])[33m;[39m
+     [90m 45 |[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/Analysis/VideoAnalysis.js:42:7
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering analysis results
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:343:11)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/key_poses.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/joint_angles.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/smoothness.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/symmetry.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/com.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/balance.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+          at Array.forEach (<anonymous>)
+
+    console.log
+      Current analysis data: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+          at Array.forEach (<anonymous>)
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+          at Array.forEach (<anonymous>)
+
+    console.log
+      Should auto-run? false
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+          at Array.forEach (<anonymous>)
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering analysis results
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:343:11)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/key_poses.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/joint_angles.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/smoothness.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/symmetry.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/com.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/balance.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? false
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering analysis results
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:343:11)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/key_poses.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/joint_angles.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/smoothness.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/symmetry.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/com.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/balance.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? false
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering analysis results
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:343:11)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/key_poses.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/joint_angles.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/smoothness.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/symmetry.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/com.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/balance.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? false
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering analysis results
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:343:11)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/key_poses.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/joint_angles.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/smoothness.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/symmetry.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/com.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/balance.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? false
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering analysis results
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:343:11)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/key_poses.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/joint_angles.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/smoothness.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/symmetry.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/com.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/balance.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? false
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'not_analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed'
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering not-analyzed state, isAnalyzing: false
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:282:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'not_analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed'
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? true
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Auto-starting analysis...
+
+      at src/components/Analysis/VideoAnalysis.js:147:15
+
+    console.log
+      runAnalysis called, current state: { isAnalyzing: false, autoRunAttempted: false }
+
+      at runAnalysis (src/components/Analysis/VideoAnalysis.js:48:13)
+
+    console.log
+      Starting analysis for video: video123
+
+      at runAnalysis (src/components/Analysis/VideoAnalysis.js:57:13)
+
+    console.log
+      Analysis started successfully: { message: 'Analysis started' }
+
+      at src/components/Analysis/VideoAnalysis.js:66:15
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'not_analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed'
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering not-analyzed state, isAnalyzing: false
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:282:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'not_analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed'
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? true
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Auto-starting analysis...
+
+      at src/components/Analysis/VideoAnalysis.js:147:15
+
+    console.log
+      runAnalysis called, current state: { isAnalyzing: false, autoRunAttempted: false }
+
+      at runAnalysis (src/components/Analysis/VideoAnalysis.js:48:13)
+
+    console.log
+      Starting analysis for video: video123
+
+      at runAnalysis (src/components/Analysis/VideoAnalysis.js:57:13)
+
+    console.log
+      Analysis started successfully: { message: 'Analysis started' }
+
+      at src/components/Analysis/VideoAnalysis.js:66:15
+
+    console.log
+      runAnalysis called, current state: { isAnalyzing: false, autoRunAttempted: false }
+
+      at src/components/Analysis/VideoAnalysis.js:48:13
+
+    console.log
+      Starting analysis for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:57:13
+
+    console.log
+      Rendering not-analyzed state, isAnalyzing: true
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:282:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'not_analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed'
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: true, autoRunAttempted: true, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? false
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis started successfully: { message: 'Analysis started' }
+
+      at src/components/Analysis/VideoAnalysis.js:66:15
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'not_analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed'
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering not-analyzed state, isAnalyzing: false
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:282:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'not_analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed'
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? true
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Auto-starting analysis...
+
+      at src/components/Analysis/VideoAnalysis.js:147:15
+
+    console.log
+      runAnalysis called, current state: { isAnalyzing: false, autoRunAttempted: false }
+
+      at runAnalysis (src/components/Analysis/VideoAnalysis.js:48:13)
+
+    console.log
+      Starting analysis for video: video123
+
+      at runAnalysis (src/components/Analysis/VideoAnalysis.js:57:13)
+
+    console.log
+      Analysis started successfully: { message: 'Analysis started' }
+
+      at src/components/Analysis/VideoAnalysis.js:66:15
+
+    console.log
+      runAnalysis called, current state: { isAnalyzing: false, autoRunAttempted: false }
+
+      at src/components/Analysis/VideoAnalysis.js:48:13
+
+    console.log
+      Starting analysis for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:57:13
+
+    console.log
+      Rendering not-analyzed state, isAnalyzing: true
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:282:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'not_analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed'
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: true, autoRunAttempted: true, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? false
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis started successfully: { message: 'Analysis started' }
+
+      at src/components/Analysis/VideoAnalysis.js:66:15
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering analysis results
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:343:11)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/key_poses.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/joint_angles.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/smoothness.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/symmetry.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/com.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/balance.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? false
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.error
+      Error fetching analysis data: Error: Network error
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\analysis\VideoAnalysis.test.js:218:33)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+
+    [0m [90m 37 |[39m       
+     [90m 38 |[39m     } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 39 |[39m       console[33m.[39merror([32m'Error fetching analysis data:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 40 |[39m       setError([32m'Failed to load analysis data: '[39m [33m+[39m (err[33m.[39mresponse[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdetail [33m||[39m err[33m.[39mmessage))[33m;[39m
+     [90m 41 |[39m     } [36mfinally[39m {
+     [90m 42 |[39m       setLoading([36mfalse[39m)[33m;[39m[0m
+
+      at src/components/Analysis/VideoAnalysis.js:39:15
+
+    console.log
+      Rendering error state: Failed to load analysis data: Network error
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:260:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.error
+      Error fetching analysis data: Error: Network error
+          at Object.<anonymous> (W:\coding\clone\baduanjin-visualization-singnb\frontend\src\__tests__\analysis\VideoAnalysis.test.js:231:37)
+          at Promise.then.completed (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:391:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\utils.js:316:10)
+          at _callCircusTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:218:40)
+          at _runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:155:3)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:66:9)
+          at _runTestsForDescribeBlock (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:60:9)
+          at run (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\run.js:25:3)
+          at runAndTransformResultsToJestFormat (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:170:21)
+          at jestAdapter (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:82:19)
+          at runTestInternal (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:389:16)
+          at runTest (W:\coding\clone\baduanjin-visualization-singnb\frontend\node_modules\jest-runner\build\runTest.js:475:34)
+
+    [0m [90m 37 |[39m       
+     [90m 38 |[39m     } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 39 |[39m       console[33m.[39merror([32m'Error fetching analysis data:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 40 |[39m       setError([32m'Failed to load analysis data: '[39m [33m+[39m (err[33m.[39mresponse[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdetail [33m||[39m err[33m.[39mmessage))[33m;[39m
+     [90m 41 |[39m     } [36mfinally[39m {
+     [90m 42 |[39m       setLoading([36mfalse[39m)[33m;[39m[0m
+
+      at src/components/Analysis/VideoAnalysis.js:39:15
+
+    console.log
+      Rendering error state: Failed to load analysis data: Network error
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:260:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.error
+      An update to VideoAnalysis inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 33 |[39m       
+     [90m 34 |[39m       console[33m.[39mlog([32m'Analysis data received:'[39m[33m,[39m response[33m.[39mdata)[33m;[39m
+    [31m[1m>[22m[39m[90m 35 |[39m       setAnalysisData(response[33m.[39mdata)[33m;[39m
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 36 |[39m       setError([36mnull[39m)[33m;[39m
+     [90m 37 |[39m       
+     [90m 38 |[39m     } [36mcatch[39m (err) {[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setAnalysisData (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/Analysis/VideoAnalysis.js:35:7
+
+    console.error
+      An update to VideoAnalysis inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 34 |[39m       console[33m.[39mlog([32m'Analysis data received:'[39m[33m,[39m response[33m.[39mdata)[33m;[39m
+     [90m 35 |[39m       setAnalysisData(response[33m.[39mdata)[33m;[39m
+    [31m[1m>[22m[39m[90m 36 |[39m       setError([36mnull[39m)[33m;[39m
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 37 |[39m       
+     [90m 38 |[39m     } [36mcatch[39m (err) {
+     [90m 39 |[39m       console[33m.[39merror([32m'Error fetching analysis data:'[39m[33m,[39m err)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setError (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/Analysis/VideoAnalysis.js:36:7
+
+    console.error
+      An update to VideoAnalysis inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 40 |[39m       setError([32m'Failed to load analysis data: '[39m [33m+[39m (err[33m.[39mresponse[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdetail [33m||[39m err[33m.[39mmessage))[33m;[39m
+     [90m 41 |[39m     } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 42 |[39m       setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 43 |[39m     }
+     [90m 44 |[39m   }[33m,[39m [videoId[33m,[39m token])[33m;[39m
+     [90m 45 |[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at src/components/Analysis/VideoAnalysis.js:42:7
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'not_analyzed',
+        video_title: 'Test Video',
+        video_status: 'processing'
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering not-analyzed state, isAnalyzing: false
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:282:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'not_analyzed',
+        video_title: 'Test Video',
+        video_status: 'processing'
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? false
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Analysis data received: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:34:15
+
+    console.log
+      Rendering analysis results
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:343:11)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/key_poses.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/joint_angles.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/smoothness.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/symmetry.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/com.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Using backend image proxy URL: https://baduanjin-backend-docker.azurewebsites.net/api/analysis/video123/images/balance.png
+
+      at getImageUrl (src/components/Analysis/VideoAnalysis.js:164:17)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: {
+        status: 'analyzed',
+        video_title: 'Test Video',
+        video_status: 'completed',
+        key_poses: [
+          { pose: 'Standing', frame: 1 },
+          { pose: 'Raising Arms', frame: 50 }
+        ],
+        movement_smoothness: { left_elbow: 0.1234, right_elbow: 0.1456 },
+        movement_symmetry: { 'left_arm-right_arm': 0.8567 },
+        balance_metrics: { sway_area: 12.34, mean_velocity: 5.67 },
+        images: {
+          key_poses: '/api/analysis/video123/images/key_poses.png',
+          joint_angles: '/api/analysis/video123/images/joint_angles.png',
+          movement_smoothness: '/api/analysis/video123/images/smoothness.png',
+          movement_symmetry: '/api/analysis/video123/images/symmetry.png',
+          com_trajectory: '/api/analysis/video123/images/com.png',
+          balance_metrics: '/api/analysis/video123/images/balance.png'
+        }
+      }
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? false
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.log
+      Rendering loading state
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:247:13)
+
+    console.log
+      Initial fetch triggered for video: video123
+
+      at src/components/Analysis/VideoAnalysis.js:125:13
+
+    console.log
+      Fetching analysis data for video: video123
+
+      at fetchAnalysisData (src/components/Analysis/VideoAnalysis.js:24:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: true }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+    console.error
+      Error fetching analysis data: { response: { data: { detail: 'Video not found' } } }
+
+    [0m [90m 37 |[39m       
+     [90m 38 |[39m     } [36mcatch[39m (err) {
+    [31m[1m>[22m[39m[90m 39 |[39m       console[33m.[39merror([32m'Error fetching analysis data:'[39m[33m,[39m err)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 40 |[39m       setError([32m'Failed to load analysis data: '[39m [33m+[39m (err[33m.[39mresponse[33m?[39m[33m.[39mdata[33m?[39m[33m.[39mdetail [33m||[39m err[33m.[39mmessage))[33m;[39m
+     [90m 41 |[39m     } [36mfinally[39m {
+     [90m 42 |[39m       setLoading([36mfalse[39m)[33m;[39m[0m
+
+      at src/components/Analysis/VideoAnalysis.js:39:15
+
+    console.log
+      Rendering error state: Failed to load analysis data: Video not found
+
+      at VideoAnalysis (src/components/Analysis/VideoAnalysis.js:260:13)
+
+    console.log
+      Auto-run check triggered
+
+      at src/components/Analysis/VideoAnalysis.js:131:13
+
+    console.log
+      Current analysis data: null
+
+      at src/components/Analysis/VideoAnalysis.js:132:13
+
+    console.log
+      Current state: { isAnalyzing: false, autoRunAttempted: false, loading: false }
+
+      at src/components/Analysis/VideoAnalysis.js:133:13
+
+    console.log
+      Should auto-run? null
+
+      at src/components/Analysis/VideoAnalysis.js:144:13
+
+PASS src/__tests__/analysis/ComparisonSelection.test.js
+  ● Console
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+    [0m [90m  98 |[39m   [90m// Helper function[39m
+     [90m  99 |[39m   [36mconst[39m renderComponent [33m=[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 100 |[39m     [36mreturn[39m render(
+     [90m     |[39m                  [31m[1m^[22m[39m
+     [90m 101 |[39m       [33m<[39m[33mBrowserRouter[39m[33m>[39m
+     [90m 102 |[39m         [33m<[39m[33mComparisonSelection[39m [33m/[39m[33m>[39m
+     [90m 103 |[39m       [33m<[39m[33m/[39m[33mBrowserRouter[39m[33m>[39m[0m
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at Object.logV6DeprecationWarnings [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:26:5)
+      at node_modules/react-router-dom/index.tsx:816:25
+      at Object.react-stack-bottom-frame (node_modules/react-dom/cjs/react-dom-client.development.js:23949:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:11905:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:12028:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13841:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13815:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13853:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15737:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:15379:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:859:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderComponent (src/__tests__/analysis/ComparisonSelection.test.js:100:18)
+      at Object.<anonymous> (src/__tests__/analysis/ComparisonSelection.test.js:108:5)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+    [0m [90m  98 |[39m   [90m// Helper function[39m
+     [90m  99 |[39m   [36mconst[39m renderComponent [33m=[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m 100 |[39m     [36mreturn[39m render(
+     [90m     |[39m                  [31m[1m^[22m[39m
+     [90m 101 |[39m       [33m<[39m[33mBrowserRouter[39m[33m>[39m
+     [90m 102 |[39m         [33m<[39m[33mComparisonSelection[39m [33m/[39m[33m>[39m
+     [90m 103 |[39m       [33m<[39m[33m/[39m[33mBrowserRouter[39m[33m>[39m[0m
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at Object.logV6DeprecationWarnings [as UNSAFE_logV6DeprecationWarnings] (node_modules/react-router/lib/deprecations.ts:37:5)
+      at node_modules/react-router-dom/index.tsx:816:25
+      at Object.react-stack-bottom-frame (node_modules/react-dom/cjs/react-dom-client.development.js:23949:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:11905:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:12028:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13841:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13815:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:13853:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15737:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:15379:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:566:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:859:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderComponent (src/__tests__/analysis/ComparisonSelection.test.js:100:18)
+      at Object.<anonymous> (src/__tests__/analysis/ComparisonSelection.test.js:108:5)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.error
+      An update to ComparisonSelection inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 80 |[39m         
+     [90m 81 |[39m         console[33m.[39mlog([32m'Fetched user videos:'[39m[33m,[39m userVideosResponse[33m.[39mdata)[33m;[39m
+    [31m[1m>[22m[39m[90m 82 |[39m         setUserVideos(userVideosResponse[33m.[39mdata)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 83 |[39m         
+     [90m 84 |[39m         [90m// Fetch video counts for masters[39m
+     [90m 85 |[39m         [36mawait[39m fetchMastersWithVideoCounts(mastersResponse[33m.[39mdata)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setUserVideos (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Analysis/ComparisonSelection.js:82:9)
+
+    console.error
+      An update to ComparisonSelection inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 25 |[39m   [90m// FIXED: Fetch masters with actual video counts[39m
+     [90m 26 |[39m   [36mconst[39m fetchMastersWithVideoCounts [33m=[39m [36masync[39m (mastersList) [33m=>[39m {
+    [31m[1m>[22m[39m[90m 27 |[39m     setLoadingVideoCounts([36mtrue[39m)[33m;[39m
+     [90m    |[39m     [31m[1m^[22m[39m
+     [90m 28 |[39m     [36mtry[39m {
+     [90m 29 |[39m       [90m// Fetch video counts for each master[39m
+     [90m 30 |[39m       [36mconst[39m mastersWithCounts [33m=[39m [36mawait[39m [33mPromise[39m[33m.[39mall([0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoadingVideoCounts (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:27:5)
+      at fetchData (src/components/Analysis/ComparisonSelection.js:85:15)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+    console.error
+      An update to ComparisonSelection inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 53 |[39m       
+     [90m 54 |[39m       console[33m.[39mlog([32m'Masters with video counts:'[39m[33m,[39m mastersWithCounts)[33m;[39m
+    [31m[1m>[22m[39m[90m 55 |[39m       setMasters(mastersWithCounts)[33m;[39m
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 56 |[39m     } [36mcatch[39m (error) {
+     [90m 57 |[39m       console[33m.[39merror([32m'Error fetching masters with video counts:'[39m[33m,[39m error)[33m;[39m
+     [90m 58 |[39m       setMasters(mastersList)[33m;[39m [90m// Use original list without counts if fetch fails[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setMasters (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:55:7)
+      at fetchData (src/components/Analysis/ComparisonSelection.js:85:9)
+
+    console.error
+      An update to ComparisonSelection inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 58 |[39m       setMasters(mastersList)[33m;[39m [90m// Use original list without counts if fetch fails[39m
+     [90m 59 |[39m     } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 60 |[39m       setLoadingVideoCounts([36mfalse[39m)[33m;[39m
+     [90m    |[39m       [31m[1m^[22m[39m
+     [90m 61 |[39m     }
+     [90m 62 |[39m   }[33m;[39m
+     [90m 63 |[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoadingVideoCounts (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:60:7)
+      at fetchData (src/components/Analysis/ComparisonSelection.js:85:9)
+
+    console.error
+      An update to ComparisonSelection inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 89 |[39m         setError([32m'Failed to load data'[39m)[33m;[39m
+     [90m 90 |[39m       } [36mfinally[39m {
+    [31m[1m>[22m[39m[90m 91 |[39m         setLoading([36mfalse[39m)[33m;[39m
+     [90m    |[39m         [31m[1m^[22m[39m
+     [90m 92 |[39m       }
+     [90m 93 |[39m     }[33m;[39m
+     [90m 94 |[39m     [0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setLoading (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at fetchData (src/components/Analysis/ComparisonSelection.js:91:9)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+    console.log
+      Fetched videos for master master1: [
+        {
+          id: 'master_video1',
+          title: 'Perfect Form Demo',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-10T08:00:00Z'
+        },
+        {
+          id: 'master_video2',
+          title: 'Advanced Techniques',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-12T09:00:00Z'
+        }
+      ]
+
+      at handleMasterSelect (src/components/Analysis/ComparisonSelection.js:110:15)
+
+    console.error
+      An update to ComparisonSelection inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+    [0m [90m 109 |[39m       )[33m;[39m
+     [90m 110 |[39m       console[33m.[39mlog([32m`Fetched videos for master ${master.id}:`[39m[33m,[39m response[33m.[39mdata)[33m;[39m
+    [31m[1m>[22m[39m[90m 111 |[39m       setMasterVideos(response[33m.[39mdata)[33m;[39m
+     [90m     |[39m       [31m[1m^[22m[39m
+     [90m 112 |[39m     } [36mcatch[39m (err) {
+     [90m 113 |[39m       console[33m.[39merror([32m'Error fetching master videos:'[39m[33m,[39m err)[33m;[39m
+     [90m 114 |[39m       alert([32m'Failed to load master videos'[39m)[33m;[39m[0m
+
+      at node_modules/react-dom/cjs/react-dom-client.development.js:16023:19
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:1522:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:16022:9)
+      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:14396:11)
+      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:6969:13)
+      at setMasterVideos (node_modules/react-dom/cjs/react-dom-client.development.js:6927:7)
+      at handleMasterSelect (src/components/Analysis/ComparisonSelection.js:111:7)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+    console.log
+      Fetched videos for master master1: [
+        {
+          id: 'master_video1',
+          title: 'Perfect Form Demo',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-10T08:00:00Z'
+        },
+        {
+          id: 'master_video2',
+          title: 'Advanced Techniques',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-12T09:00:00Z'
+        }
+      ]
+
+      at handleMasterSelect (src/components/Analysis/ComparisonSelection.js:110:15)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+    console.log
+      Fetched videos for master master1: [
+        {
+          id: 'master_video1',
+          title: 'Perfect Form Demo',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-10T08:00:00Z'
+        },
+        {
+          id: 'master_video2',
+          title: 'Advanced Techniques',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-12T09:00:00Z'
+        }
+      ]
+
+      at handleMasterSelect (src/components/Analysis/ComparisonSelection.js:110:15)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+    console.log
+      Fetched videos for master master1: [
+        {
+          id: 'master_video1',
+          title: 'Perfect Form Demo',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-10T08:00:00Z'
+        },
+        {
+          id: 'master_video2',
+          title: 'Advanced Techniques',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-12T09:00:00Z'
+        }
+      ]
+
+      at handleMasterSelect (src/components/Analysis/ComparisonSelection.js:110:15)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+    console.log
+      Fetched masters: [
+        { id: 'master1', name: 'Master Zhang' },
+        { id: 'master2', name: 'Master Li' }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:74:17)
+
+    console.log
+      Fetched user videos: [
+        {
+          id: 'user_video1',
+          title: 'My First Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-15T10:00:00Z'
+        },
+        {
+          id: 'user_video2',
+          title: 'My Second Practice',
+          brocade_type: 'Eight_Pieces',
+          upload_timestamp: '2024-01-20T15:30:00Z'
+        }
+      ]
+
+      at fetchData (src/components/Analysis/ComparisonSelection.js:81:17)
+
+    console.log
+      Masters with video counts: [
+        { id: 'master1', name: 'Master Zhang', video_count: 2 },
+        { id: 'master2', name: 'Master Li', video_count: 1 }
+      ]
+
+      at fetchMastersWithVideoCounts (src/components/Analysis/ComparisonSelection.js:54:15)
+
+
+Test Suites: 3 passed, 3 total
+Tests:       34 passed, 34 total
+Snapshots:   0 total
+Time:        2.395 s
+Ran all test suites matching /VideoAnalysis.test.js|ComparisonView.test.js|ComparisonSelection.test.js/i.

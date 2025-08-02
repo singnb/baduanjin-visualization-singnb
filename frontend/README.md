@@ -2,18 +2,6 @@
 
 > A React-based frontend application for visualizing Baduanjin exercise data and analytics.
 
-## Table of Contents
-
-- [Prerequisites](https://claude.ai/chat/5ddff26e-0532-40d5-9772-36b0b88f0691#prerequisites)
-- [Getting Started](https://claude.ai/chat/5ddff26e-0532-40d5-9772-36b0b88f0691#getting-started)
-- [Project Structure](https://claude.ai/chat/5ddff26e-0532-40d5-9772-36b0b88f0691#project-structure)
-- [Development](https://claude.ai/chat/5ddff26e-0532-40d5-9772-36b0b88f0691#development)
-- [Environment Setup](https://claude.ai/chat/5ddff26e-0532-40d5-9772-36b0b88f0691#environment-setup)
-- [Troubleshooting](https://claude.ai/chat/5ddff26e-0532-40d5-9772-36b0b88f0691#troubleshooting)
-- [Additional Resources](https://claude.ai/chat/5ddff26e-0532-40d5-9772-36b0b88f0691#additional-resources)
-- [Contributing](https://claude.ai/chat/5ddff26e-0532-40d5-9772-36b0b88f0691#contributing)
-- [License](https://claude.ai/chat/5ddff26e-0532-40d5-9772-36b0b88f0691#license)
-
 ## Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
@@ -84,32 +72,34 @@ After setup, your project structure will look like this:
 
 ```
 baduanjin-visualization/
-├── node_modules/          		# All installed packages (auto-generated)
+├── node_modules/          	# All installed packages (auto-generated)
 ├── public/               		# Static files served by the web server
 │   ├── index.html       		# Main HTML template
 │   ├── favicon.ico      		# Website icon
 │   └── manifest.json    		# Web app manifest
 ├── src/                 		# Source code directory
-│   ├── App.js          			# Main React component
-│   ├── App.css         			# Main stylesheet
-│   ├── index.js        			# Application entry point
-│   ├── index.css       			# Global styles
-│   └── auth/     			  # Folder for login and authentication functionality
-│   └── components/     		  # with five specialized subfolders
-│   │   └── Analysis/     	  # Views for displaying Baduanjin analysis results
-│   │   └── Charts/     		  # Plotly-based chart visualizations
-│   │   └── Layout/     		  # UI components for Learner-Master account interfaces
-│   │   └── Relationships/     # Components for managing Learner-Master relationships
-│   │   └── UserAgreement/     # User agreement form components
-│   └── services/     		  # Data loading and API service functions
+│   ├── App.js          		# Main React component
+│   ├── App.css         		# Main stylesheet
+│   ├── index.js        		# Application entry point
+│   ├── index.css       		# Global styles
+│   └── auth/     			   # Folder for login and authentication functionality
+│   └── components/     		# with five specialized subfolders
+│   │   └── Analysis/     	   # Views for displaying Baduanjin analysis results
+│   │   └── Charts/     		# Plotly-based chart visualizations
+│   │   └── Layout/     		# UI components for Learner-Master account interfaces
+│   │   └── Relationships/    # Components for managing Learner-Master relationships
+│   │   └── UserAgreement/    # User agreement form components
+│   |── services/     		   # Data loading and API service functions
+│   |── __tests__/            # Testing folder
+│   |     └── auth/           # Authication unit testing folder
 ├── package.json         		# Project configuration and dependencies
 ├── package-lock.json    		# Dependency lock file
-└── README.md           			# Project documentation
+└── README.md           		# Project documentation
 ```
 
 ## Development
 
-### Start the Development Server
+### Start the Development Server for localhost
 
 ```bash
 npm start
@@ -129,6 +119,28 @@ npm start
 | `npm run build` | Creates production build         |
 | `npm test`      | Runs test suite                  |
 | `npm run eject` | Ejects from CRA (irreversible)   |
+
+### Unit Testing
+- Clear Jest cache before the test
+```bash
+# Clear the cache
+npm test -- --clearCache
+
+# Individual unit testing
+npm test -- --testPathPattern={unittestfilename}
+npm test -- --testPathPattern=PiStatusPanel.test.js 
+
+# Components testing stdout and stderr
+npm run test:auth > src/__tests__/reports/authentication-test-results.txt 2>&1
+npm run test:services > src/__tests__/reports/services-test-results.txt 2>&1
+npm run test:analysis > src/__tests__/reports/analysis-test-results.txt 2>&1
+npm run test:charts > src/__tests__/reports/chart-test-results.txt 2>&1
+npm run test:layout > src/__tests__/reports/layout-test-results.txt 2>&1
+npm run test:pilive > src/__tests__/reports/pilive-test-results.txt 2>&1
+
+# All unit testing stdout and stderr
+npm run test:unit > src/__tests__/reports/unit-test-results.txt 2>&1
+```
 
 ## Development Workflow
 
@@ -158,7 +170,7 @@ npm start
 
 | Resource                | Link                                                         |
 | ----------------------- | ------------------------------------------------------------ |
-| React Documentation     | [reactjs.org/docs](https://reactjs.org/docs)                 |
+| React Documentation     | [reactjs.org/docs](https://legacy.reactjs.org/docs/getting-started.html) |
 | Create React App Docs   | [create-react-app.dev](https://create-react-app.dev/docs/getting-started) |
 | React Router            | [reactrouter.com](https://reactrouter.com/)                  |
 | Plotly.js Documentation | [plotly.com/javascript](https://plotly.com/javascript/)      |

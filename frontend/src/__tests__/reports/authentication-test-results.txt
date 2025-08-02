@@ -1,0 +1,138 @@
+
+> baduanjin-visualization@0.1.0 test:auth
+> react-scripts test AuthContext.test.js LoginForm.test.js RegisterForm.test.js ProtectedRoute.test.js --watchAll=false
+
+PASS src/__tests__/auth/ProtectedRoute.test.js
+  ● Console
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+PASS src/__tests__/auth/AuthContext.test.js
+  ● Console
+
+    console.log
+      Environment REACT_APP_API_URL: undefined
+
+      at Object.<anonymous> (src/auth/AuthContext.js:11:9)
+
+    console.log
+      Final API_URL being used: https://baduanjin-backend-docker.azurewebsites.net
+
+      at Object.<anonymous> (src/auth/AuthContext.js:12:9)
+
+    console.log
+      Auth check starting...
+
+      at src/auth/AuthContext.js:82:13
+
+    console.log
+      No token found
+
+      at checkLoggedIn (src/auth/AuthContext.js:107:17)
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+    console.log
+      Auth check starting...
+
+      at src/auth/AuthContext.js:82:13
+
+    console.log
+      No token found
+
+      at checkLoggedIn (src/auth/AuthContext.js:107:17)
+
+    console.log
+      Attempting login for: test@test.com
+
+      at login (src/auth/AuthContext.js:119:15)
+
+    console.log
+      Login response received: {
+        access_token: 'test-token',
+        user: {
+          id: 1,
+          email: 'test@test.com',
+          role: 'learner',
+          agreement_required: false
+        }
+      }
+
+      at login (src/auth/AuthContext.js:126:15)
+
+    console.log
+      Saving token and user data
+
+      at login (src/auth/AuthContext.js:142:15)
+
+    console.log
+      Attempting to navigate to videos
+
+      at login (src/auth/AuthContext.js:153:15)
+
+    console.log
+      Navigation function called
+
+      at login (src/auth/AuthContext.js:155:15)
+
+    console.log
+      Auth check starting...
+
+      at src/auth/AuthContext.js:82:13
+
+    console.log
+      No token found
+
+      at checkLoggedIn (src/auth/AuthContext.js:107:17)
+
+    console.log
+      Logging out user
+
+      at src/auth/AuthContext.js:36:13
+
+    console.log
+      Auth check starting...
+
+      at src/auth/AuthContext.js:82:13
+
+    console.log
+      No token found
+
+      at checkLoggedIn (src/auth/AuthContext.js:107:17)
+
+    console.log
+      Attempting login for: test@test.com
+
+      at login (src/auth/AuthContext.js:119:15)
+
+PASS src/__tests__/auth/LoginForm.test.js
+  ● Console
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+PASS src/__tests__/auth/RegisterForm.test.js
+  ● Console
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+Test Suites: 4 passed, 4 total
+Tests:       14 passed, 14 total
+Snapshots:   0 total
+Time:        3.329 s
+Ran all test suites matching /AuthContext.test.js|LoginForm.test.js|RegisterForm.test.js|ProtectedRoute.test.js/i.
