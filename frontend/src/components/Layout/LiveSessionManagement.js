@@ -14,7 +14,7 @@ const LiveSessionManagement = () => {
   const [error, setError] = useState(null);
   const [selectedSession, setSelectedSession] = useState(null);
   const [showWorkflowGuide, setShowWorkflowGuide] = useState(false);
-  const { token, user } = useAuth();
+  const { token } = useAuth();
 
   // Helper function to detect live sessions
   const isLiveSession = (video) => {

@@ -9,7 +9,7 @@ import './ComparisonSelection.css';
 const BACKEND_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
 
 const ComparisonSelection = () => {
-  const { token, user } = useAuth();
+  const { token } = useAuth();
   const navigate = useNavigate();
   
   const [masters, setMasters] = useState([]);
@@ -93,7 +93,7 @@ const ComparisonSelection = () => {
     };
     
     fetchData();
-  }, [token]);
+  }, [fetchMastersWithVideoCounts, token]);
 
   // Fetch master's videos when a master is selected
   const handleMasterSelect = async (master) => {

@@ -285,15 +285,15 @@ function SmoothnessChart({ comparisonMode, compact = false }) {
 }
 
 // Helper function to determine color based on score
-function getScoreColor(score, optimalRange) {
-  if (score >= optimalRange[0] && score <= optimalRange[1]) {
-    return '#2ecc71'; // Good - green
-  } else if (score >= optimalRange[0] - 0.1 || score <= optimalRange[1] + 0.1) {
-    return '#f39c12'; // Marginal - yellow/orange
-  } else {
-    return '#e74c3c'; // Needs improvement - red
-  }
-}
+// function getScoreColor(score, optimalRange) {
+//   if (score >= optimalRange[0] && score <= optimalRange[1]) {
+//     return '#2ecc71'; // Good - green
+//   } else if (score >= optimalRange[0] - 0.1 || score <= optimalRange[1] + 0.1) {
+//     return '#f39c12'; // Marginal - yellow/orange
+//   } else {
+//     return '#e74c3c'; // Needs improvement - red
+//   }
+// }
 
 // Helper function to compare master and learner values
 function compareValues(masterValue, learnerValue) {

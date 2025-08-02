@@ -10,7 +10,7 @@ import './Masters.css';
 const BACKEND_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
 
 function Masters() {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   const navigate = useNavigate();
   const [masters, setMasters] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,6 +56,7 @@ function Masters() {
     };
     
     fetchMasters();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   // Check if user is following a specific master

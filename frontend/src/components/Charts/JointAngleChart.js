@@ -316,7 +316,7 @@ function JointAngleChart({ comparisonMode = 'sideBySide', compact = false }) {
     const numJoints = selectedJoints.length;
     
     // Use heightPerPlot from state instead of fixed value
-    const height = numJoints * heightPerPlot;
+    // const height = numJoints * heightPerPlot;
     
     const plotData = [];
     const annotations = [];
