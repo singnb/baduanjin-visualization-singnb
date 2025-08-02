@@ -9,6 +9,14 @@ import './ComparisonSelection.css';
 
 const BACKEND_URL = 'https://baduanjin-backend-docker.azurewebsites.net';
 
+// Create axios instance with custom timeout
+const apiClient = axios.create({
+  timeout: 30000, // 30 seconds timeout
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
 const ComparisonSelection = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -22,72 +30,178 @@ const ComparisonSelection = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [loadingVideoCounts, setLoadingVideoCounts] = useState(false);
+  const [videoCountErrors, setVideoCountErrors] = useState(new Set());
 
-  // FIXED: Fetch masters with actual video counts
+  // IMPROVED: Fetch masters with video counts (with better error handling)
   const fetchMastersWithVideoCounts = async (mastersList) => {
     setLoadingVideoCounts(true);
+    setVideoCountErrors(new Set());
+    
     try {
-      // Fetch video counts for each master
-      const mastersWithCounts = await Promise.all(
-        mastersList.map(async (master) => {
-          try {
-            const response = await axios.get(
-              `${BACKEND_URL}/api/analysis-master/master-extracted-videos/${master.id}`,
-              {
-                headers: { 'Authorization': `Bearer ${token}` }
-              }
-            );
-            
-            return {
-              ...master,
-              video_count: response.data.length || 0
-            };
-          } catch (error) {
-            console.error(`Error fetching video count for master ${master.id}:`, error);
-            return {
-              ...master,
-              video_count: 0
-            };
-          }
-        })
-      );
+      // Process masters in smaller batches to avoid overwhelming the server
+      const batchSize = 3;
+      const batches = [];
       
-      console.log('Masters with video counts:', mastersWithCounts);
-      setMasters(mastersWithCounts);
+      for (let i = 0; i < mastersList.length; i += batchSize) {
+        batches.push(mastersList.slice(i, i + batchSize));
+      }
+      
+      let mastersWithCounts = [...mastersList];
+      const errors = new Set();
+      
+      // Process each batch with delay
+      for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+        const batch = batches[batchIndex];
+        
+        console.log(`Processing batch ${batchIndex + 1}/${batches.length} with ${batch.length} masters`);
+        
+        // Process batch in parallel
+        const batchResults = await Promise.allSettled(
+          batch.map(async (master) => {
+            try {
+              console.log(`Fetching video count for master ${master.id} (${master.name})`);
+              
+              const controller = new AbortController();
+              const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout per request
+              
+              const response = await apiClient.get(
+                `${BACKEND_URL}/api/analysis-master/master-extracted-videos/${master.id}`,
+                {
+                  headers: { 'Authorization': `Bearer ${token}` },
+                  signal: controller.signal
+                }
+              );
+              
+              clearTimeout(timeoutId);
+              
+              const videoCount = response.data.length || 0;
+              console.log(`✅ Master ${master.id} has ${videoCount} videos`);
+              
+              return {
+                ...master,
+                video_count: videoCount,
+                video_count_loaded: true
+              };
+            } catch (error) {
+              console.error(`❌ Error fetching video count for master ${master.id}:`, error.message);
+              errors.add(master.id);
+              
+              return {
+                ...master,
+                video_count: 0,
+                video_count_loaded: false,
+                video_count_error: error.code === 'ECONNABORTED' ? 'Timeout' : 'Error'
+              };
+            }
+          })
+        );
+        
+        // Update results from this batch
+        batchResults.forEach((result, index) => {
+          if (result.status === 'fulfilled') {
+            const masterIndex = mastersWithCounts.findIndex(m => m.id === batch[index].id);
+            if (masterIndex !== -1) {
+              mastersWithCounts[masterIndex] = result.value;
+            }
+          }
+        });
+        
+        // Update state with current progress
+        setMasters([...mastersWithCounts]);
+        setVideoCountErrors(new Set(errors));
+        
+        // Small delay between batches to avoid overwhelming server
+        if (batchIndex < batches.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+      }
+      
+      console.log('✅ Finished loading video counts for all masters');
+      
     } catch (error) {
-      console.error('Error fetching masters with video counts:', error);
-      setMasters(mastersList); // Use original list without counts if fetch fails
+      console.error('Error in fetchMastersWithVideoCounts:', error);
+      // Keep the original masters list if batch processing fails
+      setMasters(mastersList.map(master => ({ ...master, video_count: '?', video_count_loaded: false })));
     } finally {
       setLoadingVideoCounts(false);
     }
   };
 
-  // Fetch available masters
+  // IMPROVED: Fetch master videos with timeout handling
+  const fetchMasterVideos = async (masterId) => {
+    try {
+      console.log(`Fetching videos for master ${masterId}`);
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+      
+      const response = await apiClient.get(
+        `${BACKEND_URL}/api/analysis-master/master-extracted-videos/${masterId}`,
+        {
+          headers: { 'Authorization': `Bearer ${token}` },
+          signal: controller.signal
+        }
+      );
+      
+      clearTimeout(timeoutId);
+      
+      console.log(`✅ Fetched ${response.data.length} videos for master ${masterId}`);
+      return response.data;
+      
+    } catch (error) {
+      console.error(`❌ Error fetching videos for master ${masterId}:`, error);
+      
+      if (error.code === 'ECONNABORTED') {
+        throw new Error('Request timed out. The master may have many videos to process.');
+      } else if (error.response?.status === 404) {
+        throw new Error('Master not found');
+      } else if (error.response?.status >= 500) {
+        throw new Error('Server error. Please try again later.');
+      } else {
+        throw new Error('Failed to load master videos. Please try again.');
+      }
+    }
+  };
+
+  // Fetch available masters and user videos
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Get masters
-        const mastersResponse = await axios.get(`${BACKEND_URL}/api/relationships/masters`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        console.log('🔄 Fetching masters and user videos...');
         
-        console.log('Fetched masters:', mastersResponse.data);
+        // Get masters and user videos in parallel
+        const [mastersResponse, userVideosResponse] = await Promise.all([
+          apiClient.get(`${BACKEND_URL}/api/relationships/masters`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          }),
+          apiClient.get(`${BACKEND_URL}/api/analysis-master/user-extracted-videos`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          })
+        ]);
         
-        // Get user's own videos with extracted JSON
-        const userVideosResponse = await axios.get(`${BACKEND_URL}/api/analysis-master/user-extracted-videos`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        console.log('✅ Fetched masters:', mastersResponse.data.length);
+        console.log('✅ Fetched user videos:', userVideosResponse.data.length);
         
-        console.log('Fetched user videos:', userVideosResponse.data);
         setUserVideos(userVideosResponse.data);
         
-        // Fetch video counts for masters
-        await fetchMastersWithVideoCounts(mastersResponse.data);
+        // Set masters initially without video counts
+        const mastersWithoutCounts = mastersResponse.data.map(master => ({
+          ...master,
+          video_count: '...',
+          video_count_loaded: false
+        }));
+        setMasters(mastersWithoutCounts);
+        
+        // Then fetch video counts in background
+        if (mastersResponse.data.length > 0) {
+          console.log('🔄 Starting background fetch of video counts...');
+          await fetchMastersWithVideoCounts(mastersResponse.data);
+        }
         
       } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Failed to load data');
+        console.error('❌ Error fetching initial data:', err);
+        setError('Failed to load data. Please refresh the page.');
       } finally {
         setLoading(false);
       }
@@ -96,23 +210,18 @@ const ComparisonSelection = () => {
     fetchData();
   }, [token]);
 
-  // Fetch master's videos when a master is selected
+  // Handle master selection with improved loading
   const handleMasterSelect = async (master) => {
     setSelectedMaster(master);
     setSelectedMasterVideo(null);
+    setMasterVideos([]);
     
     try {
-      const response = await axios.get(
-        `${BACKEND_URL}/api/analysis-master/master-extracted-videos/${master.id}`,
-        {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }
-      );
-      console.log(`Fetched videos for master ${master.id}:`, response.data);
-      setMasterVideos(response.data);
+      const videos = await fetchMasterVideos(master.id);
+      setMasterVideos(videos);
     } catch (err) {
-      console.error('Error fetching master videos:', err);
-      alert('Failed to load master videos');
+      alert(`Failed to load videos for ${master.name}: ${err.message}`);
+      setMasterVideos([]);
     }
   };
 
@@ -137,7 +246,12 @@ const ComparisonSelection = () => {
   }
 
   if (error) {
-    return <div className="error-container">{error}</div>;
+    return (
+      <div className="error-container">
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>Retry</button>
+      </div>
+    );
   }
 
   return (
@@ -145,6 +259,17 @@ const ComparisonSelection = () => {
       <div className="section-header">
         <h1>Select Videos for Comparison</h1>
         <p>Choose your exercise video and a master's video to compare</p>
+        {loadingVideoCounts && (
+          <div className="loading-banner" style={{ 
+            background: '#e3f2fd', 
+            padding: '8px 16px', 
+            borderRadius: '4px', 
+            marginTop: '10px',
+            color: '#1976d2'
+          }}>
+            🔄 Loading video counts in background... This may take a moment.
+          </div>
+        )}
       </div>
 
       <div className="selection-grid">
@@ -174,11 +299,6 @@ const ComparisonSelection = () => {
         {/* Masters Section */}
         <div className="selection-section">
           <h2>Select a Master</h2>
-          {loadingVideoCounts && (
-            <div className="loading-info">
-              <small>Loading video counts...</small>
-            </div>
-          )}
           <div className="master-list">
             {masters.length === 0 ? (
               <p className="empty-message">No masters available</p>
@@ -194,15 +314,23 @@ const ComparisonSelection = () => {
                   </div>
                   <div className="master-info">
                     <h4>{master.name}</h4>
-                    {/* FIXED: Show actual video count or loading state */}
                     <p>
-                      {loadingVideoCounts ? (
-                        <span className="loading-text">Loading...</span>
+                      {!master.video_count_loaded ? (
+                        <span className="loading-text">
+                          {videoCountErrors.has(master.id) ? (
+                            <span style={{ color: '#f44336' }}>
+                              ⚠️ {master.video_count_error || 'Error loading'}
+                            </span>
+                          ) : (
+                            <span style={{ color: '#ff9800' }}>
+                              ⏳ Loading...
+                            </span>
+                          )}
+                        </span>
                       ) : (
                         `${master.video_count || 0} videos`
                       )}
                     </p>
-                    {/* Add master ID for debugging */}
                     {process.env.NODE_ENV === 'development' && (
                       <small style={{ color: '#666' }}>ID: {master.id}</small>
                     )}
@@ -233,7 +361,6 @@ const ComparisonSelection = () => {
                     <p>Type: {video.brocade_type}</p>
                     <p>Date: {new Date(video.upload_timestamp).toLocaleDateString()}</p>
                     <div className="status-badge extracted">Data Extracted</div>
-                    {/* Add video ID for debugging */}
                     {process.env.NODE_ENV === 'development' && (
                       <small style={{ color: '#666' }}>Video ID: {video.id}</small>
                     )}
@@ -293,6 +420,21 @@ const ComparisonSelection = () => {
         </div>
       )}
 
+      {/* Performance Tips */}
+      {videoCountErrors.size > 0 && (
+        <div className="performance-tips" style={{
+          marginTop: '20px',
+          padding: '15px',
+          background: '#fff3cd',
+          border: '1px solid #ffeaa7',
+          borderRadius: '4px'
+        }}>
+          <h4>🔧 Performance Notice</h4>
+          <p>Some masters have many videos to process, causing timeouts. Video counts will load when you select individual masters.</p>
+          <p>Affected masters: {Array.from(videoCountErrors).join(', ')}</p>
+        </div>
+      )}
+
       {/* Debug Information */}
       {process.env.NODE_ENV === 'development' && (
         <div className="debug-section" style={{ 
@@ -309,6 +451,8 @@ const ComparisonSelection = () => {
           <p>Selected Master ID: {selectedMaster?.id || 'None'}</p>
           <p>Selected Master Video ID: {selectedMasterVideo?.id || 'None'}</p>
           <p>Master Videos for Selected Master: {masterVideos.length}</p>
+          <p>Loading Video Counts: {loadingVideoCounts ? 'Yes' : 'No'}</p>
+          <p>Video Count Errors: {Array.from(videoCountErrors).join(', ') || 'None'}</p>
         </div>
       )}
     </div>
