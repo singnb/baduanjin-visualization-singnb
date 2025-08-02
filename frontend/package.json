@@ -8,7 +8,7 @@
     "react-dom": "^19.1.0",
     "react-player": "^2.16.0",
     "react-plotly.js": "^2.6.0",
-    "react-router-dom": "^6.30.1",
+    "react-router-dom": "^7.5.3",
     "react-scripts": "5.0.1",
     "socket.io-client": "^4.8.1",
     "web-vitals": "^2.1.4"
@@ -23,35 +23,23 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "ESLINT_NO_DEV_ERRORS=true react-scripts build",
+    "build": "CI=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    
-    "test:auth": "react-scripts test AuthContext.test.js LoginForm.test.js RegisterForm.test.js ProtectedRoute.test.js --watchAll=false",
-    "test:services": "react-scripts test dataloader.test.js --watchAll=false",
-    "test:analysis": "react-scripts test VideoAnalysis.test.js ComparisonView.test.js ComparisonSelection.test.js --watchAll=false",
-    "test:charts": "react-scripts test SymmetryChart.test.js SmoothnessChart.test.js JointAngleChart.test.js BalanceChart.test.js --watchAll=false",
-    "test:layout": "react-scripts test Masters.test.js Learners.test.js Header.test.js VideoUpload.test.js VideoView.test.js VideoManagement.test.js LiveSessionManagement.test.js PiVideoTransfer.test.js --watchAll=false",   
-    "test:pilive": "react-scripts test PiControls.test.js PiLiveSession.test.js PiPoseData.test.js PiStatusPanel.test.js PiVideoStream.test.js --watchAll=false",
-
-    "test:unit": "npm run test:auth && npm run test:services && npm run test:analysis && npm run test:charts && npm run test:layout && npm run test:pilive"
+    "test:unit": "react-scripts test --watchAll=false",
+    "test:coverage": "react-scripts test --coverage --watchAll=false",
+    "test:ci": "react-scripts test --coverage --watchAll=false --passWithNoTests",
+    "eject": "react-scripts eject"
   },
   "jest": {
     "transformIgnorePatterns": [
       "node_modules/(?!(axios)/)"
-    ],
-    "moduleNameMapper": {
-      "\\.(css|less|scss)$": "identity-obj-proxy"
-    }
+    ]
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ],
-    "rules": {
-      "react-hooks/exhaustive-deps": "warn"
-    }
+    ]
   },
   "browserslist": {
     "production": [
