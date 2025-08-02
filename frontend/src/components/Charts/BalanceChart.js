@@ -33,6 +33,42 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
     
     fetchData();
   }, []);
+
+  // Helper function to safely get numeric values with fallbacks
+  const getNumericValue = (value, fallback = 0) => {
+    if (typeof value === 'number' && !isNaN(value)) {
+      return value;
+    }
+    return fallback;
+  };
+
+  // Helper function to safely get balance metrics
+  const getBalanceMetrics = (data, metricName, fallback = 0) => {
+    try {
+      if (data && data.balanceMetrics && typeof data.balanceMetrics[metricName] === 'number') {
+        return data.balanceMetrics[metricName];
+      }
+      console.warn(`Balance metric '${metricName}' not found or invalid, using fallback value: ${fallback}`);
+      return fallback;
+    } catch (error) {
+      console.warn(`Error accessing balance metric '${metricName}':`, error);
+      return fallback;
+    }
+  };
+
+  // Helper function to safely get stability score
+  const getStabilityScore = (data, fallback = 0) => {
+    try {
+      if (data && typeof data.overallStability === 'number') {
+        return Math.round(data.overallStability * 100);
+      }
+      console.warn('Overall stability not found, using fallback value:', fallback);
+      return fallback;
+    } catch (error) {
+      console.warn('Error calculating stability score:', error);
+      return fallback;
+    }
+  };
   
   if (loading) {
     return (
@@ -58,18 +94,26 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
     );
   }
 
-  // Calculate master stability score as a percentage (0-100)
-  const masterStabilityScore = Math.round(masterData.overallStability * 100);
-  
-  // Calculate learner stability score as a percentage (0-100)
-  const learnerStabilityScore = Math.round(learnerData.overallStability * 100);
+  // Calculate stability scores with error handling
+  const masterStabilityScore = getStabilityScore(masterData, 0);
+  const learnerStabilityScore = getStabilityScore(learnerData, 0);
+
+  // Get balance metrics with error handling
+  const masterStabilityX = getBalanceMetrics(masterData, 'com_stability_x', 0);
+  const masterStabilityY = getBalanceMetrics(masterData, 'com_stability_y', 0);
+  const learnerStabilityX = getBalanceMetrics(learnerData, 'com_stability_x', 0);
+  const learnerStabilityY = getBalanceMetrics(learnerData, 'com_stability_y', 0);
 
   // Render the trajectory plot
   const renderTrajectoryPlot = () => {
     const data = [];
     
-    // Add master data if selected
-    if (displayMode === 'both' || displayMode === 'masterOnly') {
+    // Add master data if selected and available
+    if ((displayMode === 'both' || displayMode === 'masterOnly') && 
+        masterData && masterData.comTrajectory && 
+        Array.isArray(masterData.comTrajectory.x) && 
+        Array.isArray(masterData.comTrajectory.y)) {
+      
       // Master line
       data.push({
         x: masterData.comTrajectory.x,
@@ -103,8 +147,12 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
       data.push(...timeMarkers);
     }
     
-    // Add learner data if selected
-    if (displayMode === 'both' || displayMode === 'learnerOnly') {
+    // Add learner data if selected and available
+    if ((displayMode === 'both' || displayMode === 'learnerOnly') && 
+        learnerData && learnerData.comTrajectory && 
+        Array.isArray(learnerData.comTrajectory.x) && 
+        Array.isArray(learnerData.comTrajectory.y)) {
+      
       data.push({
         x: learnerData.comTrajectory.x,
         y: learnerData.comTrajectory.y,
@@ -116,8 +164,12 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
       });
     }
     
-    // Add key pose markers if showing body positions
-    if (showBodyPosition && (displayMode === 'both' || displayMode === 'learnerOnly')) {
+    // Add key pose markers if showing body positions and data is available
+    if (showBodyPosition && 
+        (displayMode === 'both' || displayMode === 'learnerOnly') &&
+        learnerData && learnerData.keyPoseBalance && 
+        Array.isArray(learnerData.keyPoseBalance)) {
+      
       // Regular key poses
       const keyPoseData = {
         x: [],
@@ -155,14 +207,22 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
       };
       
       learnerData.keyPoseBalance.forEach((pose, index) => {
-        if (selectedPose === index) {
-          selectedPoseData.x.push(pose.comPosition.x);
-          selectedPoseData.y.push(pose.comPosition.y);
-          selectedPoseData.text.push(`${index + 1}: ${pose.poseName}`);
-        } else {
-          keyPoseData.x.push(pose.comPosition.x);
-          keyPoseData.y.push(pose.comPosition.y);
-          keyPoseData.text.push(`${index + 1}: ${pose.poseName}`);
+        // Safely access pose data
+        if (pose && pose.comPosition && 
+            typeof pose.comPosition.x === 'number' && 
+            typeof pose.comPosition.y === 'number') {
+          
+          const poseName = pose.poseName || `Pose ${index + 1}`;
+          
+          if (selectedPose === index) {
+            selectedPoseData.x.push(pose.comPosition.x);
+            selectedPoseData.y.push(pose.comPosition.y);
+            selectedPoseData.text.push(`${index + 1}: ${poseName}`);
+          } else {
+            keyPoseData.x.push(pose.comPosition.x);
+            keyPoseData.y.push(pose.comPosition.y);
+            keyPoseData.text.push(`${index + 1}: ${poseName}`);
+          }
         }
       });
       
@@ -218,27 +278,41 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
     return <Plot data={data} layout={layout} config={{ displayModeBar: false }} />;
   };
   
-  // Render the circular gauge for stability score
+  // Render the circular gauge for stability score with proper error handling
   const renderStabilityGauge = (score, title, xValue, yValue, color) => {
+    // Ensure we have valid numeric values
+    const safeScore = getNumericValue(score, 0);
+    const safeXValue = getNumericValue(xValue, 0);
+    const safeYValue = getNumericValue(yValue, 0);
+    
     return (
       <div className="stability-gauge">
         <h4>{title}</h4>
         <div className="gauge-container">
-          <div className="gauge" style={{ background: `conic-gradient(${color} 0% ${score}%, #e0e0e0 ${score}% 100%)` }}>
+          <div className="gauge" style={{ background: `conic-gradient(${color} 0% ${safeScore}%, #e0e0e0 ${safeScore}% 100%)` }}>
             <div className="gauge-center">
-              <span className="gauge-value">{score}</span>
+              <span className="gauge-value">{safeScore}</span>
             </div>
           </div>
         </div>
         <div className="stability-metrics">
-          <p>X: {xValue.toFixed(2)} Y: {yValue.toFixed(2)}</p>
+          <p>X: {safeXValue.toFixed(2)} Y: {safeYValue.toFixed(2)}</p>
         </div>
       </div>
     );
   };
 
-  // Render key pose indicators
+  // Render key pose indicators with error handling
   const renderKeyPoses = () => {
+    if (!learnerData || !learnerData.keyPoseBalance || !Array.isArray(learnerData.keyPoseBalance)) {
+      return (
+        <div className="key-poses">
+          <h4>Key Poses (for learner)</h4>
+          <p>No key pose data available</p>
+        </div>
+      );
+    }
+
     return (
       <div className="key-poses">
         <h4>Key Poses (for learner)</h4>
@@ -255,7 +329,7 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
               >
                 {index + 1}
               </div>
-              <div className="pose-name">{getShortPoseName(pose.poseName)}</div>
+              <div className="pose-name">{getShortPoseName(pose ? pose.poseName : `Pose ${index + 1}`)}</div>
             </div>
           ))}
         </div>
@@ -275,6 +349,10 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
 
   // Helper function to get shorter pose names for the circles
   const getShortPoseName = (poseName) => {
+    if (!poseName || typeof poseName !== 'string') {
+      return 'Unknown';
+    }
+    
     switch(poseName) {
       case "Initial Position": return "Starting";
       case "Transition Phase": return "Transition";
@@ -284,7 +362,7 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
       case "Final Position": return "Final";
       case "Stabilization Phase": return "Stabilization";
       case "Ready Position": return "Ending";
-      default: return poseName;
+      default: return poseName.length > 8 ? poseName.substring(0, 8) + '...' : poseName;
     }
   };
   
@@ -352,8 +430,8 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
           {renderStabilityGauge(
             masterStabilityScore, 
             "Master Stability Score", 
-            masterData.balanceMetrics.com_stability_x, 
-            masterData.balanceMetrics.com_stability_y,
+            masterStabilityX,
+            masterStabilityY,
             '#3498db'
           )}
         </div>
@@ -366,8 +444,8 @@ function BalanceChart({ comparisonMode = 'both', compact = false }) {
           {renderStabilityGauge(
             learnerStabilityScore, 
             "Your Stability Score", 
-            learnerData.balanceMetrics.com_stability_x, 
-            learnerData.balanceMetrics.com_stability_y,
+            learnerStabilityX,
+            learnerStabilityY,
             '#e74c3c'
           )}
         </div>
