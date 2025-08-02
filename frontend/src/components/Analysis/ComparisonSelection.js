@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // src/components/Analysis/ComparisonSelection.js
 
 import React, { useState, useEffect } from 'react';
@@ -93,7 +94,7 @@ const ComparisonSelection = () => {
     };
     
     fetchData();
-  }, [fetchMastersWithVideoCounts, token]);
+  }, [token]);
 
   // Fetch master's videos when a master is selected
   const handleMasterSelect = async (master) => {

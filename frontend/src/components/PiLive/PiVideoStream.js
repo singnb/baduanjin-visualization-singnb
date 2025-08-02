@@ -1,5 +1,6 @@
 // src/components/PiLive/PiVideoStream.js 
 // CLEANED VERSION - Uses centralized state, removed redundant polling
+// eslint-disable-next-line react-hooks/exhaustive-deps
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { PI_CONFIG, getPiUrl, isDirectPiAvailable } from '../../config/piConfig';
