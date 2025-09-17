@@ -1,5 +1,4 @@
 // src/auth/ProtectedRoute.js
-// This component will prevent unauthorized access to routes that require authentication:
 
 import React from 'react';
 import { Navigate } from 'react-router-dom';

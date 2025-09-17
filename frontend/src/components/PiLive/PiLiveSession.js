@@ -1,5 +1,4 @@
 // src/components/PiLive/PiLiveSession.js
-// CLEANED VERSION - Consolidated state management and polling
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';

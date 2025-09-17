@@ -1,5 +1,4 @@
 // src/components/PiLive/PiStatusPanel.js
-// CLEANED VERSION - No redundant state management
 
 const PiStatusPanel = ({ status, isConnected, loading, onRefresh }) => {
   return (

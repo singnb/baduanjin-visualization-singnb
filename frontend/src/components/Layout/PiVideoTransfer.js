@@ -1,5 +1,4 @@
 // src/components/Layout/PiVideoTransfer.js
-// Routes video transfers to main backend
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';

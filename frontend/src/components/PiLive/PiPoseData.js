@@ -1,5 +1,4 @@
 // src/components/PiLive/PiPoseData.js
-// CLEANED VERSION - Display only, no redundant processing
 
 const PiPoseData = ({ poseData, activeSession }) => {
   if (!activeSession) {

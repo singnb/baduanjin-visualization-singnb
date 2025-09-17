@@ -1,5 +1,4 @@
 // src/components/PiLive/PiControls.js
-// CLEANED VERSION - Uses centralized state, simplified logic
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';

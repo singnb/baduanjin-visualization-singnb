@@ -1,5 +1,4 @@
 // src/config/piConfig.js
-// Centralized configuration for all Pi services
 
 export const PI_CONFIG = {
   // Azure Pi Service (primary API)

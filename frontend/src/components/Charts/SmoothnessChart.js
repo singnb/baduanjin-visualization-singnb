@@ -1,4 +1,5 @@
 // src/components/Charts/SmoothnessChart.js
+
 import React, { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
 import { loadMasterData, loadLearnerData } from '../../services/dataLoader';
@@ -283,17 +284,6 @@ function SmoothnessChart({ comparisonMode, compact = false }) {
     </div>
   );
 }
-
-// Helper function to determine color based on score
-// function getScoreColor(score, optimalRange) {
-//   if (score >= optimalRange[0] && score <= optimalRange[1]) {
-//     return '#2ecc71'; // Good - green
-//   } else if (score >= optimalRange[0] - 0.1 || score <= optimalRange[1] + 0.1) {
-//     return '#f39c12'; // Marginal - yellow/orange
-//   } else {
-//     return '#e74c3c'; // Needs improvement - red
-//   }
-// }
 
 // Helper function to compare master and learner values
 function compareValues(masterValue, learnerValue) {

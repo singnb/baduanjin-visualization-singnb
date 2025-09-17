@@ -1,5 +1,4 @@
 // src/auth/LoginForm.js
-// Create basic authentication forms
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
